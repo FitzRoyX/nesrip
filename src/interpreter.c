@@ -9,6 +9,8 @@
 char* hashString;
 char* tempHashString;
 int foundRom = false;
+char* tokenContextStack[2];
+char** tokenContext = &tokenContextStack[0];
 
 #define CHECK_COMMAND(command, callback) \
 if (strcmp(token, command) == 0) \
@@ -31,8 +33,18 @@ if (token == NULL) \
 
 char* updateToken(char* string)
 {
-	char* token = strtok(string, " \n");
+	char* token = stringTokenize(string, " \n", tokenContext);
 	return token;
+}
+
+void pushTokenContext(void)
+{
+	++tokenContext;
+}
+
+void popTokenContext(void)
+{
+	--tokenContext;
 }
 
 int removeCarriageReturns(char* string, int length)
@@ -49,6 +61,110 @@ int removeCarriageReturns(char* string, int length)
 
 	memset(string + length - hits - 1, 0, hits);
 	return length - hits;
+}
+
+int handleColorizerPaletteCommand()
+{
+	char* indexString, * name, * colors[4];
+	PULL_TOKEN("Palette", indexString);
+	PULL_TOKEN("Palette", name);
+	PULL_TOKEN("Palette", colors[0]);
+	PULL_TOKEN("Palette", colors[1]);
+	PULL_TOKEN("Palette", colors[2]);
+	PULL_TOKEN("Palette", colors[3]);
+
+	int index;
+	if (str2int(&index, indexString, 0) != STR2INT_SUCCESS || index < 0 || index >= MAX_PALETTES)
+	{
+		printf("Error: Palette index out of range.\n");
+		return 1;
+	}
+
+	ColorizerPalette* palette = &palettes[index];
+	palette->valid = true;
+	palette->name = strdup(name);
+	for (int i = 0; i < 4; i++)
+	{
+		int color;
+		str2int(&color, colors[i], 16);
+		palette->colors[i][0] = color >> 16 & 255;
+		palette->colors[i][1] = color >> 8 & 255;
+		palette->colors[i][2] = color & 255;
+		palette->colors[i][3] = 255;
+	};
+
+	return 0;
+}
+
+int handleColorizerSheetCommand()
+{
+	char* indexString, * width, * height, * paletteString;
+	PULL_TOKEN("Sheet", indexString);
+	PULL_TOKEN("Sheet", width);
+	PULL_TOKEN("Sheet", height);
+
+	int index;
+	if (str2int(&index, indexString, 0) != STR2INT_SUCCESS || index < 0 || index >= MAX_SHEETS)
+	{
+		printf("Error: Sheet index out of range.\n");
+		return 1;
+	}
+
+	ColorizerSheet* sheet = &sheets[index];
+	sheet->valid = true;
+	str2int(&sheet->width, width, 0);
+	str2int(&sheet->height, height, 0);
+	sheet->tiles = malloc(sheet->width * sheet->height);
+
+	for (int y = 0; y < sheet->height; y++)
+	{
+		for (int x = 0; x < sheet->width; x++)
+		{
+			PULL_TOKEN("Sheet", paletteString);
+
+			int palette;
+			if (str2int(&palette, paletteString, 0) != STR2INT_SUCCESS || palette < 0 || palette >= MAX_PALETTES)
+			{
+				printf("Error: Palette index out of range.\n");
+				return 1;
+			}
+
+			sheet->tiles[y * sheet->width + x] = palette;
+		}
+	}
+
+	return 0;
+}
+
+void interpretColorizer(char* colorizerFilename)
+{
+	char* database;
+	int databaseLength = readAllBytesFromFile(colorizerFilename, &database, true);
+	if (databaseLength <= 0)
+		return;
+
+	databaseLength = removeCarriageReturns(database, databaseLength);
+
+	pushTokenContext();
+
+	char* token = updateToken(database);
+	while (token != NULL)
+	{
+		CHECK_COMMAND("p", handleColorizerPaletteCommand);
+		CHECK_COMMAND("s", handleColorizerSheetCommand);
+
+		if (strcmp(token, "end") == 0)
+			break;
+
+		printf("Invalid database token: ");
+		printf(token);
+		printf("\n");
+		break;
+	}
+
+	popTokenContext();
+
+	free(database);
 }
 
 int handleHashCommand()
@@ -73,6 +189,10 @@ int handleHashCommand()
 	{
 		printf("Matched hash!\n");
 		foundRom = true;
+
+		char colorizerFilename[32];
+		sprintf(colorizerFilename, "colorizer/%.8s.txt", hashString);
+		interpretColorizer(colorizerFilename);
 	}
 
 	return 0;

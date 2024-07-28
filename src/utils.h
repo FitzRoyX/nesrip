@@ -18,5 +18,6 @@ int numDigits(int n);
 int readAllBytesFromFile(char* filename, char** output, int zeroTerminate);
 char* getFilename(char* path);
 int getFilenameLengthWithoutExtension(char* filename);
+char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p);
 
 #endif
