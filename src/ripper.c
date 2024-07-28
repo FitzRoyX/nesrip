@@ -4,6 +4,7 @@
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb/stb_image_write.h"
+#include "globals.h"
 #include "logger.h"
 #include "utils.h"
 #include "ripper.h"
@@ -61,6 +62,9 @@ typedef struct
 } ExtractionContext;
 
 Pattern* patterns[BPP_COUNT];
+ColorizerPalette palettes[MAX_PALETTES];
+ColorizerSheet sheets[MAX_SHEETS];
+int sheetIndex = -1;
 
 int allocTilesheet(ExtractionContext* context, int tileCount)
 {
@@ -303,7 +307,21 @@ int writeLine(ExtractionContext* context, int y, unsigned int data)
 		data = (data >> 1) & 0x7F7F7F7F;
 
 		px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
-		drawPixel(context->sheet, px, py, getColor(c, context->args->paletteDescription));
+
+		char color[4];
+		memcpy(color, getColor(c, context->args->paletteDescription), sizeof(color));
+
+		ColorizerSheet* sheet = &sheets[sheetIndex];
+		if (sheet->valid && context->tx < sheet->width && context->ty < sheet->height)
+		{
+			ColorizerPalette* palette = &palettes[sheet->tiles[context->ty * sheet->width + context->tx]];
+			if (palette->valid)
+			{
+				memcpy(color, palette->colors[c], sizeof(color));
+			}
+		}
+
+		drawPixel(context->sheet, px, py, color);
 	}
 
 	if (px + 7 > context->maxX)
@@ -461,6 +479,8 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 	printf(" to ");
 	printf(context->args->sectionEndString);
 	printf(" in ROM.\n");
+
+	sheetIndex++;
 
 	if (!getSectionDetails(rom, context))
 		return 0;
