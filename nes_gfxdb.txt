@@ -1,4 +1,4 @@
-//3-D WorldRunner (USA) //prg
+//3-D WorldRunner (USA).prg
 hash c457644ccfb93f8978326e728931800283821e531edc409fca9c0167495319c4
 p 1 h
 i btow
@@ -16,7 +16,7 @@ s sheet06(1h) 16000 17fff
 end
 
 
-//4 Nin Uchi Mahjong (Japan) //prg+chr //sheets 1 and 3 need 1bpp
+//4 Nin Uchi Mahjong (Japan).chr
 hash 3841ff3e5e2fc98f14c7ef4bdc8361fee2dd47cecb2ee21417515124e1f2a5b9
 p 1 h
 i towb
@@ -29,7 +29,7 @@ s sheet03(1h) 5800 5fff
 end
 
 
-//8 Eyes (Japan) //prg+chr
+//8 Eyes (Japan).chr
 hash c4b1bde698c2090646d967392052a9b3e5c911dcbc5b88b8d1b05e9324f11396
 p 2 v
 i botw
@@ -46,7 +46,7 @@ s sheet05(2v) 30000 3ffff
 end
 
 
-//8 Eyes (USA) //prg+chr
+//8 Eyes (USA).chr
 hash 3493f7621d964af7a56c407718ef1d056c6c46d4e4c6b3c48364d58a1b97a06a
 p 2 v
 i botw
@@ -63,7 +63,7 @@ s sheet05(2v) 30000 3ffff
 end
 
 
-//10-Yard Fight (USA, Europe) //prg+chr
+//10-Yard Fight (USA, Europe).chr
 hash 8e844d77da01f86ace52823f1f974c9230f09e6a6cbf33a07abfe9beeff00292
 p 1 h
 i botw
@@ -71,7 +71,7 @@ s sheet01(1h) 8000 9fff
 end
 
 
-//'89 Dennou Kyuusei Uranai (Japan).nes //prg
+//'89 Dennou Kyuusei Uranai (Japan).prg
 hash 4f6fa63277b7a114a24e8d67175ff3f7b993fa5db569d8b689ec20ccf1b0c0d3
 p 1 h
 i bowt
@@ -83,7 +83,7 @@ s sheet03(1h) 18000 191cf
 end
 
 
-//100 Man Dollar Kid - Maboroshi no Teiou Hen (Japan). //prg
+//100 Man Dollar Kid - Maboroshi no Teiou Hen (Japan).prg
 hash bd578147b15c610e0ceafc7e27a87a3bf96e65af3b31aa98ae6924fc27a2d797
 p 1 h
 i btwo
@@ -113,7 +113,7 @@ s sheet12(1h) 2477f 248de
 end
 
 
-//720 Degrees (USA) //prg //compressedgfx?
+//720 Degrees (USA).prg {hascompressedgfx}
 hash df696ce2af90b18ca2b57468bdc525afce371bb1868152eb2cbbe1d62252f617
 p 1 h
 i btwo
@@ -126,7 +126,7 @@ s sheet05(4v) c000 13fff
 end
 
 
-//1942 (Japan, USA) //prg+chr
+//1942 (Japan, USA).chr
 hash e868400409c70876b98dad2cca87b8e9ee31877b0cccbbd8405be5c54922722a
 p 1 h
 i btow
@@ -134,7 +134,7 @@ s sheet01(1h) 8000 9fff
 end
 
 
-//1943 - The Battle of Midway (USA) //prg
+//1943 - The Battle of Midway (USA).prg
 hash 9f54aafa367247b99c344ba9a0c58ad8fa8aceeeae1c304b8fefc9985c3c118c
 p 2 v
 i btow
@@ -143,7 +143,7 @@ s sheet02(2v) 8000 ffff
 end
 
 
-//1943 - The Battle of Valhalla (Japan) //prg
+//1943 - The Battle of Valhalla (Japan).prg
 hash 28cdd5af3c441f361cfa3a21ec97a1ab08691dd5d73f7a10a372fbd1fffb8ba7
 p 2 v
 i btow
@@ -152,7 +152,7 @@ s sheet02(2v) 8000 ffff
 end
 
 
-//1999 - Hore, Mitakotoka! Seikimatsu (Japan) //prg
+//1999 - Hore, Mitakotoka! Seikimatsu (Japan).prg
 hash 3a3708c4bf67ff54ea95204b15adb6cac5358a4b722f45a9fa735d6ec0da3b49
 p 1 h
 i btwo
@@ -160,7 +160,7 @@ s sheet01(1h) 40000 5ffff
 end
 
 
-//2010 Street Fighter (Japan) //prg+chr
+//2010 Street Fighter (Japan).chr
 hash 8aed01a409fd1e6f61fbe41421fe4a1da7242c7d6d6e26594bc026669d561247
 p 1 h
 i btwo
@@ -172,7 +172,7 @@ s sheet03(1h) 3f800 3ffff
 end
 
 
-//A Ressha de Ikou (Japan) //prg+chr
+//A Ressha de Ikou (Japan).chr
 hash 9040f16eb22946f3b505dc9ccd7ac7ee5c6544580cfdc3f9f71cbc07755d1fc9
 p 1 h
 i btwo
@@ -180,12 +180,12 @@ s sheet01(1h) 20000 23fff
 end
 
 
-//Aa Yakyuu Jinsei Icchokusen (Japan) //prg //allcompressed
+//Aa Yakyuu Jinsei Icchokusen (Japan.prg {allcompressed}
 hash 134c0575a417a986cdae33a0f9ca5eb38d269e028416752db6c6a5dc0db8ef7f
 end
 
 
-//Abadox - The Deadly Inner War (USA) //prg+chr
+//Abadox - The Deadly Inner War (USA).chr
 hash c4d4ff0bd283656c63d9a30dfc7dc6d2956744730a3641ba2c8f9f8e7204d9a1
 p 1 h
 i btow
@@ -193,7 +193,7 @@ s sheet01(1h) 20000 3ffff
 end
 
 
-//Abadox (Japan) //prg+chr
+//Abadox (Japan).chr
 hash 7934c8620f90ace5cd357d233a7c68687efb78cca7f3f95be48f3965f9e24c9a
 p 1 h
 i btow
@@ -201,7 +201,7 @@ s sheet01(1h) 20000 3ffff
 end
 
 
-//Abarenbou Tengu (Japan) //prg+chr
+//Abarenbou Tengu (Japan).chr
 hash 35fff8fa349361f879e419d303edd371d4f2f9d7a7912421343baa694fd471e9
 p 1 h
 i btow
@@ -213,7 +213,7 @@ s sheet03(1h) 3b000 3ffff
 end
 
 
-//Aces - Iron Eagle III (Japan) //prg+chr
+//Aces - Iron Eagle III (Japan).chr
 hash 3b6055cedd2afb75ddf56f9100c9c9d393d42e18afa5e3c9b24454a0f995fe28
 p 1 h
 i btow
@@ -225,7 +225,7 @@ s sheet04(1h) 7e000 7ffff
 end
 
 
-//Action in New York (Europe) //prg+chr
+//Action in New York (Europe).chr
 hash 6da6c8ac123df0f51e6f1b2ba79cb067d3352262532604ab08cf5dd587e84006
 p 1 h
 i btow
@@ -249,7 +249,7 @@ s sheet07(1h) 3f000 3ffff
 end
 
 
-//Addams Family, The - Pugsley's Scavenger Hunt (Europe) //prg+chr
+//Addams Family, The - Pugsley's Scavenger Hunt (Europe).chr
 hash d272fd3f15a3eb1f191fc488551373486f77bc7d39fad246bd4cea5eb1c91440
 p 1 h
 i btow
@@ -276,7 +276,7 @@ s sheet08(1h) 3c000 3efff
 end
 
 
-//Addams Family, The - Pugsley's Scavenger Hunt (USA) //prg+chr
+//Addams Family, The - Pugsley's Scavenger Hunt (USA).chr
 hash b3e09c94e33e0293672c1405c60fc69b2ab1564c8a4ee988e3ab6ada51484eea
 p 1 h
 i btow
@@ -303,7 +303,7 @@ s sheet08(1h) 3c000 3efff
 end
 
 
-//Addams Family, The (Europe) //prg+chr
+//Addams Family, The (Europe).chr
 hash e92938b2379008222e093d0b9674607f4483da931061946e675c8a1ed6c8254e
 p 1 h
 i btwo
@@ -323,7 +323,7 @@ s sheet03(1h) 3e000 3efff
 end
 
 
-//Advanced Dungeons & Dragons - Dragons of Flame (Japan) //prg+chr
+//Advanced Dungeons & Dragons - Dragons of Flame (Japan).prg
 hash 314a546c20d6aa44e699c011bf04afd4f9d472d2af40d82836f76612cc606da8
 p 1 h
 i btow
@@ -358,7 +358,7 @@ s sheet14(1h) 3f000 3ffff
 end
 
 
-//Adventure Island (USA) //prg+chr
+//Adventure Island (USA).prg
 hash 53bfc94fce46a25188f84f102810406f686a7fb13fb5e4ae8f13760106acb969
 p 1 h
 i botw
@@ -366,7 +366,7 @@ s sheet01(1h) 8000 ffff
 end
 
 
-//Arkanoid (USA) //prg+chr
+//Arkanoid (USA).chr
 hash a3763e702f8ae0818480cf0a8b2395d3f928c539f75e230ed43fa6b904fe6365
 p 1 h
 i bwot
@@ -374,7 +374,7 @@ s sheet01(1h) 8000 bfff
 end
 
 
-//Castlevania (USA) //prg
+//Castlevania (USA).prg
 hash a35e846379ff252594ace83da2a1a1cb0692717b931055d1f6603812f18ad5cd
 p 2 v
 i bowt
@@ -387,7 +387,7 @@ s sheet03(2v) 1b117 1b636
 end
 
 
-//Excitebike (Japan, USA) //prg+chr
+//Excitebike (Japan, USA).chr
 hash e9f4c9d1b7c66c6af83f2db5d4f704cf5f4b3c86e26a49c05539237807d8875e
 p 1 h
 i bwot
@@ -397,7 +397,7 @@ s sheet02(1h) 5000 5fff
 end
 
 
-//Legend of Zelda, The (USA) //prg
+//Legend of Zelda, The (USA).prg
 hash 085e5397a3487357c263dfa159fb0fe20a5f3ea8ef82d7af6a7e848d3b9364e8
 p 2 v
 i btwo
@@ -423,12 +423,8 @@ s sheet09(2v) d15b ebda
 end
 
 
-//Super Mario Bros (World) //prg+chr
+//Super Mario Bros (World).chr {8000-9fff}
 hash fcb6a0ef3a20c19b356005fbb21dc8009563b1cb5a9aaebc8e9386b4a8c5912e
 p 1 h
-i btwo
-s sheet01(1h) 8000 8fff
-p 1 h
-i bwot
-s sheet02(1h) 9000 9fff
+s sheet01(1h) 8000 9fff
 end
