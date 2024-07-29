@@ -51,6 +51,7 @@ typedef struct
 	int tileLength;
 
 	char* sheet;
+	int index;
 	int tx;
 	int ty;
 	int stx;
@@ -275,6 +276,8 @@ int getSectionDetails(Rom* rom, ExtractionContext* context)
 
 void incrementTilePos(ExtractionContext* context)
 {
+	context->index++;
+	
 	context->stx++;
 	if (context->stx < context->patternSize)
 		return;
@@ -312,9 +315,11 @@ int writeLine(ExtractionContext* context, int y, unsigned int data)
 		memcpy(color, getColor(c, context->args->paletteDescription), sizeof(color));
 
 		ColorizerSheet* sheet = &sheets[sheetIndex];
-		if (sheet->valid && context->tx < sheet->width && context->ty < sheet->height)
+		int cx = context->index % 16;
+		int cy = context->index / 16;
+		if (sheet->valid && cx < sheet->width && cy < sheet->height)
 		{
-			ColorizerPalette* palette = &palettes[sheet->tiles[context->ty * sheet->width + context->tx]];
+			ColorizerPalette* palette = &palettes[sheet->tiles[cy * sheet->width + cx]];
 			if (palette->valid)
 			{
 				memcpy(color, palette->colors[c], sizeof(color));
