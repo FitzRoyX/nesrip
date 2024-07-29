@@ -64,8 +64,8 @@ typedef struct
 
 Pattern* patterns[BPP_COUNT];
 ColorizerPalette palettes[MAX_PALETTES];
-ColorizerSheet sheets[MAX_SHEETS];
-int sheetIndex = -1;
+ColorizerSheet colorSheet;
+int colorSheetRow = 0;
 
 int allocTilesheet(ExtractionContext* context, int tileCount)
 {
@@ -314,9 +314,9 @@ int writeLine(ExtractionContext* context, int y, unsigned int data)
 		char color[4];
 		memcpy(color, getColor(c, context->args->paletteDescription), sizeof(color));
 
-		ColorizerSheet* sheet = &sheets[sheetIndex];
+		ColorizerSheet* sheet = &colorSheet;
 		int cx = context->index % 16;
-		int cy = context->index / 16;
+		int cy = context->index / 16 + colorSheetRow;
 		if (sheet->valid && cx < sheet->width && cy < sheet->height)
 		{
 			ColorizerPalette* palette = &palettes[sheet->tiles[cy * sheet->width + cx]];
@@ -485,8 +485,6 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 	printf(context->args->sectionEndString);
 	printf(" in ROM.\n");
 
-	sheetIndex++;
-
 	if (!getSectionDetails(rom, context))
 		return 0;
 
@@ -496,7 +494,9 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 		context->sectionEnd -= (context->sectionEnd - context->sectionStart + 1) % context->tileLength;
 	}
 
-	if (allocTilesheet(context, (context->sectionEnd - context->sectionStart + 1) / context->tileLength))
+	int tileCount = (context->sectionEnd - context->sectionStart + 1) / context->tileLength;
+
+	if (allocTilesheet(context, tileCount))
 		return 0;
 
 	if (context->sheet == NULL)
@@ -531,6 +531,8 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 		incrementTilePos(context);
 		sectionData += context->tileLength;
 	}
+
+	colorSheetRow += (tileCount + 15) / 16;
 
 	writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);

@@ -47,80 +47,90 @@ void popTokenContext(void)
 	--tokenContext;
 }
 
-int removeCarriageReturns(char* string, int length)
+int removeTails(char* string, int length, const char* pattern)
 {
-	int hits = 0;
-	char* carriageReturn = strchr(string, 13);
+	int removed = 0;
+	char* match = strstr(string, pattern);
 
-	while (carriageReturn != NULL)
+	while (match != NULL)
 	{
-		memcpy(carriageReturn, carriageReturn + 1, strlen(carriageReturn + 1));
-		carriageReturn = strchr(string, 13);
-		hits++;
+		int length = strcspn(match, "\n");
+		memmove(match, match + length, strlen(match + length));
+		match = strstr(match, pattern);
+		removed += length;
 	}
 
-	memset(string + length - hits - 1, 0, hits);
-	return length - hits;
+	memset(string + length - removed - 1, 0, removed);
+	return length - removed;
+}
+
+int removeCarriageReturns(char* string, int length)
+{
+	return removeTails(string, length, "\r");
+}
+
+int removeComments(char* string, int length)
+{
+	return removeTails(string, length, "//");
 }
 
 int handleColorizerPaletteCommand()
 {
-	char* indexString, * name, * colors[4];
-	PULL_TOKEN("Palette", indexString);
-	PULL_TOKEN("Palette", name);
-	PULL_TOKEN("Palette", colors[0]);
-	PULL_TOKEN("Palette", colors[1]);
-	PULL_TOKEN("Palette", colors[2]);
-	PULL_TOKEN("Palette", colors[3]);
-
-	int index;
-	if (str2int(&index, indexString, 0) != STR2INT_SUCCESS || index < 0 || index >= MAX_PALETTES)
+	while (true)
 	{
-		printf("Error: Palette index out of range.\n");
-		return 1;
+		char* indexString, * name, * colors[4];
+		PULL_TOKEN("Palette", indexString);
+
+		if (strcmp(indexString, "end") == 0)
+			break;
+
+		PULL_TOKEN("Palette", name);
+		PULL_TOKEN("Palette", colors[0]);
+		PULL_TOKEN("Palette", colors[1]);
+		PULL_TOKEN("Palette", colors[2]);
+		PULL_TOKEN("Palette", colors[3]);
+
+		int index;
+		if (str2int(&index, indexString, 0) != STR2INT_SUCCESS || index < 0 || index >= MAX_PALETTES)
+		{
+			printf("Error: Palette index out of range.\n");
+			return 1;
+		}
+
+		ColorizerPalette* palette = &palettes[index];
+		palette->valid = true;
+		palette->name = strdup(name);
+		for (int i = 0; i < 4; i++)
+		{
+			int color;
+			str2int(&color, colors[i], 16);
+			palette->colors[i][0] = color >> 16 & 255;
+			palette->colors[i][1] = color >> 8 & 255;
+			palette->colors[i][2] = color & 255;
+			palette->colors[i][3] = 255;
+		};
 	}
-
-	ColorizerPalette* palette = &palettes[index];
-	palette->valid = true;
-	palette->name = strdup(name);
-	for (int i = 0; i < 4; i++)
-	{
-		int color;
-		str2int(&color, colors[i], 16);
-		palette->colors[i][0] = color >> 16 & 255;
-		palette->colors[i][1] = color >> 8 & 255;
-		palette->colors[i][2] = color & 255;
-		palette->colors[i][3] = 255;
-	};
 
 	return 0;
 }
 
 int handleColorizerSheetCommand()
 {
-	char* indexString, * width, * height, * paletteString;
-	PULL_TOKEN("Sheet", indexString);
-	PULL_TOKEN("Sheet", width);
-	PULL_TOKEN("Sheet", height);
-
-	int index;
-	if (str2int(&index, indexString, 0) != STR2INT_SUCCESS || index < 0 || index >= MAX_SHEETS)
-	{
-		printf("Error: Sheet index out of range.\n");
-		return 1;
-	}
-
-	ColorizerSheet* sheet = &sheets[index];
+	ColorizerSheet* sheet = &colorSheet;
 	sheet->valid = true;
-	str2int(&sheet->width, width, 0);
-	str2int(&sheet->height, height, 0);
+	sheet->width = 16;
+	sheet->height = MAX_COLOR_ROWS;
 	sheet->tiles = malloc(sheet->width * sheet->height);
 
-	for (int y = 0; y < sheet->height; y++)
+	for (int y = 0; y < MAX_COLOR_ROWS; y++)
 	{
 		for (int x = 0; x < sheet->width; x++)
 		{
+			char* paletteString;
 			PULL_TOKEN("Sheet", paletteString);
+
+			if (strcmp(paletteString, "end") == 0)
+				goto end;
 
 			int palette;
 			if (str2int(&palette, paletteString, 0) != STR2INT_SUCCESS || palette < 0 || palette >= MAX_PALETTES)
@@ -129,10 +139,12 @@ int handleColorizerSheetCommand()
 				return 1;
 			}
 
+			sheet->height = y + 1;
 			sheet->tiles[y * sheet->width + x] = palette;
 		}
 	}
 
+end:
 	return 0;
 }
 
@@ -144,6 +156,7 @@ void interpretColorizer(char* colorizerFilename)
 		return;
 
 	databaseLength = removeCarriageReturns(database, databaseLength);
+	databaseLength = removeComments(database, databaseLength);
 
 	pushTokenContext();
 
@@ -325,6 +338,7 @@ void interpretDatabase()
 	foundRom = false;
 
 	databaseLength = removeCarriageReturns(database, databaseLength);
+	databaseLength = removeComments(database, databaseLength);
 
 	char* token = updateToken(database);
 	while (token != NULL)
