@@ -397,25 +397,20 @@ s sheet02(1h) 5000 5fff
 end
 
 
-//Legend of Zelda, The (USA).prg
+//Legend of Zelda, The (USA) //prg
 hash 085e5397a3487357c263dfa159fb0fe20a5f3ea8ef82d7af6a7e848d3b9364e8
-p 2 v
-i btwo
+r false
+p 1 h
 s sheet00(2v) 4db4 56b3
 p 1 h
-i towb
 s sheet01(1h) 56c4 5ec3
-p 2 v
-i btow
+p 1 h
 s sheet02(2v) 807f 877e
 p 1 h
-i bwot
 s sheet03(1h) 877f 8a7e
-i btow
-p 2 v
+p 1 h
 s sheet04(2v) 8d8f 8f5e
-i btow
-s sheet05(2v) c11b c83a
+s sheet05(1h) c11b c83a
 s sheet06(2v) c83b c93a
 s sheet07(2v) c93b d08a
 s sheet08(2v) d08b d15a
