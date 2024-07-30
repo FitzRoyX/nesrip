@@ -64,7 +64,7 @@ typedef struct
 
 Pattern* patterns[BPP_COUNT];
 ColorizerPalette palettes[MAX_PALETTES];
-ColorizerSheet colorSheet;
+int colorSheetIndex = 0;
 int colorSheetRow = 0;
 
 int allocTilesheet(ExtractionContext* context, int tileCount)
@@ -315,8 +315,8 @@ int writeLine(ExtractionContext* context, int y, unsigned int data)
 		memcpy(color, getColor(c, context->args->paletteDescription), sizeof(color));
 
 		ColorizerSheet* sheet = &colorSheet;
-		int cx = context->index % 16;
-		int cy = context->index / 16 + colorSheetRow;
+		int cx = (colorSheetIndex + context->index) % 16;
+		int cy = (colorSheetIndex + context->index) / 16;
 		if (sheet->valid && cx < sheet->width && cy < sheet->height)
 		{
 			ColorizerPalette* palette = &palettes[sheet->tiles[cy * sheet->width + cx]];
@@ -532,7 +532,7 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 		sectionData += context->tileLength;
 	}
 
-	colorSheetRow += (tileCount + 15) / 16;
+	colorSheetIndex += tileCount;
 
 	writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);
