@@ -34,9 +34,9 @@ typedef struct
 } ColorizerSheet;
 
 #define MAX_PALETTES    256
-#define MAX_SHEETS      256
+#define MAX_COLOR_ROWS  16384
 
 extern ColorizerPalette palettes[MAX_PALETTES];
-extern ColorizerSheet sheets[MAX_SHEETS];
+extern ColorizerSheet colorSheet;
 
 #endif
