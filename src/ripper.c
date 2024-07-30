@@ -64,8 +64,8 @@ typedef struct
 
 Pattern* patterns[BPP_COUNT];
 ColorizerPalette palettes[MAX_PALETTES];
+ColorizerSheet colorSheet;
 int colorSheetIndex = 0;
-int colorSheetRow = 0;
 
 int allocTilesheet(ExtractionContext* context, int tileCount)
 {
