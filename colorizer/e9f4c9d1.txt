@@ -1,11 +1,12 @@
+//excitebike
 p
-0  biker      00ffff fffeff b53120 000000
-1  track      88d800 ea9e22 6b6d00 feccc5
-2  tracknum   1412a7 1412a7 1412a7 fffeff
-3  hud        000000 9290ff 000000 fffeff
-4  bleachers  88d800 ea9e22 9290ff fffeff
-5  trophy     1412a7 fffeff fffeff ea9e22
-6  star       1412a7 000000 fffeff 64b0ff
+0  spr_biker     00ffff fffeff b53120 000000
+1  bg_track      88d800 ea9e22 6b6d00 feccc5
+2  bg_tracknum   1412a7 1412a7 1412a7 fffeff
+3  bg_hud        000000 9290ff 000000 fffeff
+4  bg_bleachers  88d800 ea9e22 9290ff fffeff
+5  bg_trophy     1412a7 fffeff fffeff ea9e22
+6  bg_star       1412a7 000000 fffeff 64b0ff
 end
 
 s
