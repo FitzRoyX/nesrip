@@ -1,20 +1,21 @@
+//smb1
 p
-0  mario      00ffff b53120 ea9e22 6b6d00
-1  fire       00ffff b53120 fffeff ea9e22
-2  turtle     00ffff 0c9300 fffeff ea9e22
-3  goomba     00ffff 000000 ffcec5 9c4a00
-4  squid      00ffff 636363 fffeff adadad
-5  cloud      00ffff fffeff 63adff 000000
-6  mushroom   00ffff ea9e22 b53120 000000
-7  pipe       00ffff 8cd600 109400 000000
-8  stone      00ffff ffcec5 9c4a00 000000
-9  coin       00ffff ea9e22 9c4a00 000000
-10 castle     00ffff fffeff adadad 636363
-11 bridge     00ffff fffeff b53120 636363
-12 axe        00ffff ea9e22 9c4a00 636363
-13 waterblock 00ffff bdf4ab 109400 000000
-14 seaweed    00ffff b5217b 4242ff ff6bce
-15 watercoin  00ffff ea9e22 4242ff 000000
+0 spr_mario       00ffff b53120 ea9e22 6b6d00
+1 spr_fire        00ffff b53120 fffeff ea9e22
+2 spr_turtle      00ffff 0c9300 fffeff ea9e22
+3 spr_goomba      00ffff 000000 ffcec5 9c4a00
+4 spr_squid       00ffff 636363 fffeff adadad
+5 bg_cloud        9290ff fffeff 63adff 000000
+6 bg_mushroomplat 9290ff ea9e22 b53120 000000
+7 bg_pipe         9290ff 8cd600 109400 000000
+8 bg_stone        9290ff ffcec5 9c4a00 000000
+9 bg_coin         9290ff ea9e22 9c4a00 000000
+10 bg_dunbrick    000000 fffeff adadad 636363
+11 bg_dunbridge   000000 fffeff b53120 636363
+12 bg_dunaxe      000000 ea9e22 9c4a00 636363
+13 bg_waterblock  9290ff bdf4ab 109400 000000
+14 bg_seaweed     9290ff b5217b 4242ff ff6bce
+15 bg_watercoin   9290ff ea9e22 4242ff 000000
 end
 
 s
