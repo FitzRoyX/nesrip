@@ -9,7 +9,6 @@
 #include "utils.h"
 #include "ripper.h"
 
-
 //  default grayscale bwld colors
 //	0, 0, 0, 255,
 //	255, 255, 255, 255,
