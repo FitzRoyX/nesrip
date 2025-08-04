@@ -9,17 +9,30 @@
 #include "utils.h"
 #include "ripper.h"
 
+
+//  default grayscale bwld colors
+//	0, 0, 0, 255,
+//	255, 255, 255, 255,
+//	178, 178, 178, 255,
+//	107, 107, 107, 255
+
+//  redscale bwor colors
+//	0, 0, 0, 255,
+//	255, 255, 255, 255,
+//	255, 127, 0, 255,
+//	190, 0, 0, 255
+
 char paletteData[] = 
 {
 	0, 0, 0, 255,
-	239, 239, 239, 255,
-	222, 123, 82, 255,
-	41, 115, 156, 255
+	255, 255, 255, 255,
+	178, 178, 178, 255,
+	107, 107, 107, 255
 };
 
 char RedundantColor[] = 
 {
-	0, 255, 0, 255
+	255, 0, 255, 255
 };
 
 typedef enum
@@ -97,9 +110,9 @@ char* getColor(char color, char* paletteDescription)
 		return paletteData;
 	case 'w':
 		return paletteData + 4;
-	case 'o':
+	case 'l':
 		return paletteData + 8;
-	case 't':
+	case 'd':
 		return paletteData + 12;
 	}
 	
