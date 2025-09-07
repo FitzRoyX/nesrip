@@ -5,6 +5,7 @@
 #include "ripper.h"
 #include "utils.h"
 #include "sha_2/sha-256.h"
+#include "interpreter.h"
 
 char* hashString;
 char* tempHashString;
@@ -47,14 +48,14 @@ void popTokenContext(void)
 	--tokenContext;
 }
 
-int removeTails(char* string, int length, const char* pattern)
+size_t removeTails(char* string, size_t length, const char* pattern)
 {
-	int removed = 0;
+	size_t removed = 0;
 	char* match = strstr(string, pattern);
 
 	while (match != NULL)
 	{
-		int length = strcspn(match, "\n");
+		size_t length = strcspn(match, "\n");
 		memmove(match, match + length, strlen(match + length));
 		match = strstr(match, pattern);
 		removed += length;
@@ -64,12 +65,12 @@ int removeTails(char* string, int length, const char* pattern)
 	return length - removed;
 }
 
-int removeCarriageReturns(char* string, int length)
+size_t removeCarriageReturns(char* string, size_t length)
 {
 	return removeTails(string, length, "\r");
 }
 
-int removeComments(char* string, int length)
+size_t removeComments(char* string, size_t length)
 {
 	return removeTails(string, length, "//");
 }
@@ -99,7 +100,7 @@ int handleColorizerPaletteCommand()
 
 		ColorizerPalette* palette = &palettes[index];
 		palette->valid = true;
-		palette->name = strdup(name);
+		palette->name = _strdup(name);
 		for (int i = 0; i < 4; i++)
 		{
 			int color;
@@ -151,7 +152,7 @@ end:
 void interpretColorizer(char* colorizerFilename)
 {
 	char* database;
-	int databaseLength = readAllBytesFromFile(colorizerFilename, &database, true);
+	size_t databaseLength = readAllBytesFromFile(colorizerFilename, &database, true);
 	if (databaseLength <= 0)
 		return;
 
@@ -170,7 +171,7 @@ void interpretColorizer(char* colorizerFilename)
 			break;
 
 		printf("Invalid database token: ");
-		printf(token);
+		printf("%s", token);
 		printf("\n");
 		break;
 	}
@@ -182,30 +183,33 @@ void interpretColorizer(char* colorizerFilename)
 
 int handleHashCommand()
 {
+	
 	char* token;
+	
 	PULL_TOKEN("Hash", token);
-
-	if (strlen(token) < SIZE_OF_SHA_256_HASH * 2)
-	{
+	if (strlen(token) < SIZE_OF_SHA_256_HASH) {
 		printf("Warning: Matching hash \"");
-		printf(token);
+		printf("%s", token);
 		printf("\"  is too small.\n");
 		return 0;
 	}
 
-	memcpy(tempHashString, token, SIZE_OF_SHA_256_HASH * 2);
-	tempHashString[SIZE_OF_SHA_256_HASH * 2] = 0;
+	memcpy_s(tempHashString, hash_size, token, SIZE_OF_SHA_256_HASH);
+	tempHashString[SIZE_OF_SHA_256_HASH] = L'\0';
+		
+	errno_t err = _strupr_s(tempHashString, hash_size);
+	if (err == 0) {
+		if (strcmp(hashString, tempHashString) == 0) {
+			printf("Matched hash!\n");
+			foundRom = true;
 
-	strupr(tempHashString);
-
-	if (strcmp(hashString, tempHashString) == 0)
-	{
-		printf("Matched hash!\n");
-		foundRom = true;
-
-		char colorizerFilename[32];
-		sprintf(colorizerFilename, "colorizer/%.8s.txt", hashString);
-		interpretColorizer(colorizerFilename);
+			char colorizerFilename[32];
+			sprintf_s(colorizerFilename, sizeof("colorizer/%.8s.txt"), (char*)"colorizer/%.8s.txt", hashString);
+			interpretColorizer(colorizerFilename);
+		}
+	}
+	else {
+		printf("Error converting string to uppercase");
 	}
 
 	return 0;
@@ -324,17 +328,17 @@ void interpretDatabase()
 
 	for (int i = 0; i < SIZE_OF_SHA_256_HASH; i++)
 	{
-		sprintf(hashStringPtr, "%02X", hash[i]);
+		sprintf_s(hashStringPtr, strlen(hashStringPtr), "%02X", hash[i]);
 		hashStringPtr += 2;
 	}
 	hashStringPtr[0] = 0;
 
 	printf("ROM Hash: ");
-	printf(hashString);
+	printf("%s", hashString);
 	printf("\n");
 
 	char* database;
-	int databaseLength = readAllBytesFromFile(descriptorFilename, &database, true);
+	size_t databaseLength = readAllBytesFromFile(descriptorFilename, &database, true);
 	foundRom = false;
 
 	databaseLength = removeCarriageReturns(database, databaseLength);
@@ -367,7 +371,7 @@ void interpretDatabase()
 			break;
 
 		printf("Invalid database token: ");
-		printf(token);
+		printf("%s", token);
 		printf("\n");
 		break;
 	}

@@ -4,7 +4,7 @@
 
 void printProgamName()
 {
-	printf(programName);
+	printf("%s", programName);
 }
 
 void printHelp()
@@ -32,7 +32,7 @@ void printNoInput()
 void printInvalidArg(char* arg)
 {
 	printf("Unrecognised argument: ");
-	printf(arg);
+	printf("%s", arg);
 	printf(".\n");
 	printf("Run ");
 	printProgamName();
@@ -42,9 +42,9 @@ void printInvalidArg(char* arg)
 void printInvalidArgUsage(const char* arg, const char* error)
 {
 	printf("Invalid usage of argument ");
-	printf(arg);
+	printf("%s", arg);
 	printf(": ");
-	printf(error);
+	printf("%s", error);
 	printf("\nRun ");
 	printProgamName();
 	printf(" --help to see usage information.\n");
@@ -53,8 +53,8 @@ void printInvalidArgUsage(const char* arg, const char* error)
 void printInvalidDatabaseCommand(const char* arg, const char* error)
 {
 	printf("Error: Invalid graphics database command \"");
-	printf(arg);
+	printf("%s", arg);
 	printf("\": ");
-	printf(error);
+	printf("%s", error);
 	printf("\nAborting rip process.\n");
 }

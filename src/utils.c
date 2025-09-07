@@ -34,22 +34,35 @@ int numberOfSetBits(int i)
     return  i >> 24;
 }
 
-int numDigits(int n)
+double numDigits(int n)
 {
     if (n == 0)
         return 1;
     return floor(log10(abs(n))) + 1;
 }
 
-int readAllBytesFromFile(char* filename, char** output, int zeroTerminate)
+size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate)
 {
-    FILE* fileptr = fopen(filename, "rb");
+    FILE* fileptr;
+    errno_t err;
     long filelen;
+    int error = false;
 
-    if (fileptr == NULL)
-    {
+    #if C99
+        fileptr = fopen(filename, "rb");
+        if (fileptr == NULL) {
+            error = true;
+        }
+    #else
+        err = fopen_s(&fileptr, filename, "rb");
+        if (err != 0) {
+            error = true;
+        }
+    #endif
+
+    if (error) {
         printf("Error: Can't find file \"");
-        printf(filename);
+        printf("%s", filename);
         printf("\".\n");
         return -1;
     }
@@ -93,7 +106,7 @@ char* getFilename(char* path)
     return path;
 }
 
-int getFilenameLengthWithoutExtension(char* filename)
+size_t getFilenameLengthWithoutExtension(char* filename)
 {
     char* searchPointer = filename + strlen(filename) - 1;
 
@@ -118,4 +131,45 @@ char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict
 	if (**p) *(*p)++ = 0;
 	else *p = 0;
 	return s;
+}
+
+const char* cStdInUse(long int stdc) {
+    const char* version;
+    switch (stdc) {
+        case 199409L:
+            version = "C90";
+            break;
+        case 199901L:
+            version = "C99";
+            break;
+        case 201112L:
+            version = "C11";
+            break;
+        case 201710L:
+            version = "C17";
+            break;
+        case 202311L:
+            version = "C23";
+            break;
+        default:
+            version = "Unknown";
+            break;
+    }
+    return version;
+}
+
+int is_null_terminated(const char* str, size_t max_length) {
+    for (size_t i = 0; i <= max_length; i++) {
+        if (str[i] == '\0') {
+            return 1;  // Null-terminated
+        }
+    }
+    return 0;  // Not null-terminated
+}
+
+void toUpperCase(char* str) {
+    while (*str) {
+        *str = toupper(*str);
+        str++;
+    }
 }

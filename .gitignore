@@ -18,3 +18,4 @@ bld/
 [Ll]ogs/
 Generated\ Files/
 .vs
+*.o

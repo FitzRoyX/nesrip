@@ -12,12 +12,25 @@ typedef enum
 #define true 1
 #define false 0
 
+#ifndef __STDC_VERSION__ 
+    #define __STDC_VERSION__ 0
+#endif // !__STDC_VERSION__
+
+#if __STDC_VERSION__ == 199901L
+    #define C99  1
+#else 
+    #define C99  0
+#endif
+
 str2int_errno str2int(int* out, char* s, int base);
 int numberOfSetBits(int i);
-int numDigits(int n);
-int readAllBytesFromFile(char* filename, char** output, int zeroTerminate);
+double numDigits(int n);
+size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate);
 char* getFilename(char* path);
-int getFilenameLengthWithoutExtension(char* filename);
+size_t getFilenameLengthWithoutExtension(char* filename);
 char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p);
+const char* cStdInUse(long int);
+int is_null_terminated(const char* str, size_t max_length);
+void toUpperCase(char* str);
 
 #endif

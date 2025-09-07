@@ -3,9 +3,9 @@
 
 typedef struct
 {
-	char* originalData;
-	char* data;
-	int size;
+	char*  originalData;
+	char*  data;
+	size_t size;
 } Rom;
 
 Rom readRom(char* romName);

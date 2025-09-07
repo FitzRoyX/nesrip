@@ -129,9 +129,9 @@ void drawPixel(char* sheet, int x, int y, char* color)
 char* allocOverloadedFilename(ExtractionContext* context)
 {
 	ExtractionArguments* args = context->args;
-	int lenOutputFolder = strlen(args->outputFolder);
-	int lenFilename = strlen(args->filenameOverload);
-	int lenPaletteDescription = strlen(args->paletteDescription);
+	size_t lenOutputFolder = strlen(args->outputFolder);
+	size_t lenFilename = strlen(args->filenameOverload);
+	size_t lenPaletteDescription = strlen(args->paletteDescription);
 
 	char* result = (char*)malloc(lenOutputFolder + lenFilename + lenPaletteDescription + 6);
 
@@ -160,10 +160,10 @@ char* allocOverloadedFilename(ExtractionContext* context)
 char* allocSectionFilename(ExtractionContext* context)
 {
 	ExtractionArguments* args = context->args;
-	int lenOutputFolder = strlen(args->outputFolder);
-	int lenSectionStart = strlen(args->sectionStartString);
-	int lenSectionEnd = strlen(args->sectionEndString);
-	int lenPaletteDescription = strlen(args->paletteDescription);
+	size_t lenOutputFolder = strlen(args->outputFolder);
+	size_t lenSectionStart = strlen(args->sectionStartString);
+	size_t lenSectionEnd = strlen(args->sectionEndString);
+	size_t lenPaletteDescription = strlen(args->paletteDescription);
 
 	char* result = (char*)malloc(lenOutputFolder + lenSectionStart + lenSectionEnd + lenPaletteDescription + 9);
 
@@ -206,13 +206,13 @@ int writeOutput(char* outputData, int width, int height, ExtractionContext* cont
 		return 0;
 
 	printf("  Writing sheet to \"");
-	printf(outputFilename);
+	printf("%s", outputFilename);
 	printf("\".\n");
 
 	if (!stbi_write_png(outputFilename, width, height, 4, outputData, 128 * 4))
 	{
 		printf("An error occurred while writing to output file ");
-		printf(outputFilename);
+		printf("%s", outputFilename);
 		printf(".\n");
 		return 0;
 	}
@@ -360,14 +360,15 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 {
 	int data = 0;
 
-	switch (context->bitplaneType)
-	{
-	case ONE_BPP:
-		data = sectionData[y];
-		break;
-	case TWO_BPP:
-		data = (sectionData[y] | (sectionData[y + 8] << 8));
-		break;
+	switch (context->bitplaneType) {
+		case ONE_BPP:
+			data = sectionData[y];
+			break;
+		case TWO_BPP:
+			data = (sectionData[y] | (sectionData[y + 8] << 8));
+			break;
+		default:
+			break;
 	}
 
 	return data;
@@ -492,9 +493,9 @@ void drawRedundantTile(ExtractionContext* context)
 int ripSectionRaw(Rom* rom, ExtractionContext* context)
 {
 	printf("Ripping raw section from ");
-	printf(context->args->sectionStartString);
+	printf("%s", context->args->sectionStartString);
 	printf(" to ");
-	printf(context->args->sectionEndString);
+	printf("%s", context->args->sectionEndString);
 	printf(" in ROM.\n");
 
 	if (!getSectionDetails(rom, context))
@@ -596,7 +597,7 @@ int ripSection(Rom* rom, ExtractionArguments* arguments)
 	if (strcmp(arguments->compressionType, "raw") != 0)
 	{
 		printf("Error: Unknown compression type \"");
-		printf(arguments->compressionType);
+		printf("%s", arguments->compressionType);
 		printf("\".\n");
 		return 0;
 		
