@@ -7,8 +7,6 @@
 #include "sha_2/sha-256.h"
 #include "interpreter.h"
 
-char* hashString;
-char* tempHashString;
 int foundRom = false;
 char* tokenContextStack[2];
 char** tokenContext = &tokenContextStack[0];
@@ -181,8 +179,7 @@ void interpretColorizer(char* colorizerFilename)
 	free(database);
 }
 
-int handleHashCommand()
-{
+int handleHashCommand(char* hashString) {
 	
 	char* token;
 	
@@ -194,12 +191,13 @@ int handleHashCommand()
 		return 0;
 	}
 
-	memcpy_s(tempHashString, hash_size, token, SIZE_OF_SHA_256_HASH);
-	tempHashString[SIZE_OF_SHA_256_HASH] = L'\0';
+	//memcpy_s(tempHashString, hash_size, token, SIZE_OF_SHA_256_HASH);
 		
-	errno_t err = _strupr_s(tempHashString, hash_size);
+	errno_t err = _strupr_s(&token, strlen(token));
 	if (err == 0) {
-		if (strcmp(hashString, tempHashString) == 0) {
+		//token[SIZE_OF_SHA_256_HASH] = L'\0';
+
+		if (strcmp(hashString, token) == 0) {
 			printf("Matched hash!\n");
 			foundRom = true;
 
@@ -315,23 +313,15 @@ void interpretDatabase()
 	uint8_t hash[SIZE_OF_SHA_256_HASH];
 	calc_sha_256(hash, rom.data, rom.size);
 
-	hashString = (char*)malloc(sizeof(char) * SIZE_OF_SHA_256_HASH * 2 + 1);
-	tempHashString = (char*)malloc(sizeof(char) * SIZE_OF_SHA_256_HASH * 2 + 1);
+	char hashString[SIZE_OF_SHA_256_HASH * 2 + 1] = "";
+	char temp[4] = ""; // Temporary buffer for each hex value
+	size_t dataSize = sizeof(hash) / sizeof(hash[0]);
 
-	if (hashString == NULL)
-	{
-		printf("Error: Couldn't allocate memory for ROM hash string.\n");
-		return;
+	for (size_t i = 0; i < dataSize; i++) {
+		sprintf_s(temp, sizeof(temp), "%02X", hash[i]);
+		strcat_s(hashString, sizeof(hashString), temp);
 	}
-
-	char* hashStringPtr = hashString;
-
-	for (int i = 0; i < SIZE_OF_SHA_256_HASH; i++)
-	{
-		sprintf_s(hashStringPtr, strlen(hashStringPtr), "%02X", hash[i]);
-		hashStringPtr += 2;
-	}
-	hashStringPtr[0] = 0;
+	
 
 	printf("ROM Hash: ");
 	printf("%s", hashString);
@@ -351,7 +341,7 @@ void interpretDatabase()
 		{
 			if (strcmp(token, "hash") == 0)
 			{
-				if (handleHashCommand())
+				if (handleHashCommand(hashString))
 					break;
 			}
 
@@ -380,6 +370,4 @@ void interpretDatabase()
 		printf("Error: Could not match ROM with database.\n");
 
 	cleanupPatternChains();
-	free(hashString);
-	free(tempHashString);
 }
