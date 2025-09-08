@@ -179,7 +179,7 @@ void interpretColorizer(char* colorizerFilename)
 	free(database);
 }
 
-int handleHashCommand(char* hashString) {
+int handleHashCommand(char *hashString) {
 	
 	char* token;
 	
@@ -191,23 +191,14 @@ int handleHashCommand(char* hashString) {
 		return 0;
 	}
 
-	//memcpy_s(tempHashString, hash_size, token, SIZE_OF_SHA_256_HASH);
-		
-	errno_t err = _strupr_s(&token, strlen(token));
-	if (err == 0) {
-		//token[SIZE_OF_SHA_256_HASH] = L'\0';
+	toUpperCase(token);
+	if (strcmp(hashString, token) == 0) {
+		printf("Matched hash!\n");
+		foundRom = true;
 
-		if (strcmp(hashString, token) == 0) {
-			printf("Matched hash!\n");
-			foundRom = true;
-
-			char colorizerFilename[32];
-			sprintf_s(colorizerFilename, sizeof("colorizer/%.8s.txt"), (char*)"colorizer/%.8s.txt", hashString);
-			interpretColorizer(colorizerFilename);
-		}
-	}
-	else {
-		printf("Error converting string to uppercase");
+		char colorizerFilename[32];
+		sprintf_s(colorizerFilename, sizeof("colorizer/%.8s.txt"), (char*)"colorizer/%.8s.txt", hashString);
+		interpretColorizer(colorizerFilename);
 	}
 
 	return 0;

@@ -1,8 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-typedef enum
-{
+typedef enum {
     STR2INT_SUCCESS,
     STR2INT_OVERFLOW,
     STR2INT_UNDERFLOW,
