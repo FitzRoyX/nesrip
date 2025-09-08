@@ -68,5 +68,18 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\sha_2\LICENSE.txt" />
+    <Text Include="nes_gfxdb.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="compile.bat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="drag and drop ROMs.bat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="LICENSE.md" />
+    <None Include="Makefile" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>

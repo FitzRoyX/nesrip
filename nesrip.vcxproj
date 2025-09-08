@@ -24,6 +24,7 @@
     <ProjectGuid>{a3f1027a-04de-4160-931e-1649731a52da}</ProjectGuid>
     <RootNamespace>test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>nesrip</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -148,7 +149,16 @@
     <ClInclude Include="src\utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="nes_gfxdb.txt" />
     <Text Include="src\sha_2\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="compile.bat" />
+    <None Include="drag and drop ROMs.bat" />
+    <None Include="LICENSE.md" />
+    <None Include="Makefile" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

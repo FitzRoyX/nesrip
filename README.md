@@ -12,14 +12,26 @@ Pre-built binaries can be downloaded from the [GitHub Releases section](https://
 
 #### Dependencies
 
-* Windows 10
+* Windows 10/11
+
+## Supported compiler tools
 * [TCC](https://github.com/TinyCC/tinycc)
+* [GCC](https://www.mingw-w64.org/)
+* [Clang](https://clang.llvm.org/)
+* [Visual Studio C++ or it's Clang](https://visualstudio.microsoft.com/)
 * [Make](https://www.gnu.org/software/make)
 
 ### Building
 
 * Clone or download the repository
+## TCC
+* Run `compile` in the root folder of the project
+## GCC
 * Run `make` in the root folder of the project
+## Visual Studio C++ or Clang
+* Open `nesrip.sln` with Visual Studio, Clang can be chosen via the `nesrip` project properties in the Platform Toolset option
+## Clang
+* Update the `compile` and change `tcc` to `clang`
 
 ### Executing program
 
