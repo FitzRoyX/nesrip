@@ -175,7 +175,7 @@ void toUpperCase(char* str) {
 }
 
 int fileExists(const char* filename) {
-    FILE* file = fopen(filename, 'r');
+    FILE* file = fopen(filename, "r");
     if (file) {
         fclose(file);
         return 1;
