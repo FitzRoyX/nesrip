@@ -46,31 +46,21 @@ void popTokenContext(void)
 	--tokenContext;
 }
 
-size_t removeTails(char* string, size_t length, const char* pattern)
-{
-	size_t removed = 0;
-	char* match = strstr(string, pattern);
-
-	while (match != NULL)
-	{
-		size_t length = strcspn(match, "\n");
-		memmove(match, match + length, strlen(match + length));
-		match = strstr(match, pattern);
-		removed += length;
+void removeTails(char* string, size_t length, const char* pattern) {
+	char* pos;
+	while((pos = strstr(string, pattern)) != NULL) {
+		memmove(pos, pos + 1, strlen(pos)); //shift rest of the string left by one
 	}
-
-	memset(string + length - removed - 1, 0, removed);
-	return length - removed;
 }
 
-size_t removeCarriageReturns(char* string, size_t length)
-{
-	return removeTails(string, length, "\r");
+size_t removeCarriageReturns(char* string, size_t length) {
+	removeTails(string, length, "\r");
+	return strlen(string);
 }
 
-size_t removeComments(char* string, size_t length)
-{
-	return removeTails(string, length, "//");
+size_t removeComments(char* string, size_t length) {
+	removeTails(string, length, "//");
+	return strlen(string);
 }
 
 int handleColorizerPaletteCommand()
@@ -196,9 +186,12 @@ int handleHashCommand(char *hashString) {
 		printf("Matched hash!\n");
 		foundRom = true;
 
-		char colorizerFilename[32];
-		sprintf_s(colorizerFilename, sizeof("colorizer/%.8s.txt"), (char*)"colorizer/%.8s.txt", hashString);
-		interpretColorizer(colorizerFilename);
+		char colorizerFilename[32] = "";
+		sprintf_s(colorizerFilename, sizeof(colorizerFilename), "colorizer/%.8s.txt", hashString);
+		if (fileExists(colorizerFilename)) {
+			interpretColorizer(colorizerFilename);
+		}
+		
 	}
 
 	return 0;

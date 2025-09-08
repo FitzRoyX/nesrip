@@ -81,5 +81,6 @@
     <None Include="LICENSE.md" />
     <None Include="Makefile" />
     <None Include="README.md" />
+    <None Include="BladeBuster.nes" />
   </ItemGroup>
 </Project>

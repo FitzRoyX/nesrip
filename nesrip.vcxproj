@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="BladeBuster.nes" />
     <None Include="compile.bat" />
     <None Include="drag and drop ROMs.bat" />
     <None Include="LICENSE.md" />

@@ -31,5 +31,6 @@ char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict
 const char* cStdInUse(long int);
 int is_null_terminated(const char* str, size_t max_length);
 void toUpperCase(char* str);
+int fileExists(const char* filename);
 
 #endif
