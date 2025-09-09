@@ -197,10 +197,14 @@ char* allocSectionFilename(ExtractionContext* context)
 int writeOutput(char* outputData, int width, int height, ExtractionContext* context) {
 	char* outputFilename = NULL;
 
-	if (context->args->filenameOverload != NULL)
+	if (context->args->filenameOverload != NULL) {
 		outputFilename = allocOverloadedFilename(context);
-	else
+		//printf("AllocOverloaded Filename: %s", outputFilename);
+	}
+	else {
 		outputFilename = allocSectionFilename(context);
+		//printf("AllocSection Filename: %s", outputFilename);
+	}
 
 	if (outputFilename == NULL)
 		return 0;

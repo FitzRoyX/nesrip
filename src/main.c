@@ -77,8 +77,17 @@ int main(int argc, char** argv)
 		quitProgram(0);
 	}
 
+#if defined(__clang__)
 	memcpy_s(outputFolder, strlen(outputFolder), "output/", 7);
-	memcpy_s(outputFolder+7, strlen(outputFolder), inputFilename, outputFolderLength);
+	memcpy_s(outputFolder + 7, strlen(outputFolder), inputFilename, outputFolderLength);
+#elif defined(__GNUC__) || defined(__GNUG__) || defined(C99)
+	memcpy(outputFolder, "output/", 7);
+	memcpy(outputFolder + 7, inputFilename, outputFolderLength);
+#elif defined(_MSC_VER)
+	memcpy_s(outputFolder, strlen(outputFolder), "output/", 7);
+	memcpy_s(outputFolder + 7, strlen(outputFolder), inputFilename, outputFolderLength);
+#endif // defined(__clang__)
+
 	outputFolder[outputFolderLength + 7] = '/';
 	outputFolder[outputFolderLength + 8] = 0;
 

@@ -303,7 +303,11 @@ void interpretDatabase()
 
 	for (size_t i = 0; i < dataSize; i++) {
 		sprintf_s(temp, sizeof(temp), "%02X", hash[i]);
+#ifdef C99
+		strcat(hashString, temp);
+#else
 		strcat_s(hashString, sizeof(hashString), temp);
+#endif // C99
 	}
 	
 
