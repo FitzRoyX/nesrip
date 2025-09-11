@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Iinclude
+CFLAGS = -Iinclude -g -O0 -Wall
 SRCS = $(wildcard src/*.c src/sha_2/sha-256.c)
 OBJS = $(SRCS:.c=.o)
 TARGET = nesrip.exe

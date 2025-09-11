@@ -32,5 +32,6 @@ const char* cStdInUse(long int);
 int is_null_terminated(const char* str, size_t max_length);
 void toUpperCase(char* str);
 int fileExists(const char* filename);
+void deleteCharacters(char* str, size_t pos, size_t n);
 
 #endif
