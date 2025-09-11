@@ -1,7 +1,16 @@
-OUTPUT = nesrip.exe
+CC = gcc
+CFLAGS = -Iinclude
+SRCS = $(wildcard src/*.c src/sha_2/sha-256.c)
+OBJS = $(SRCS:.c=.o)
+TARGET = nesrip.exe
 
-all:
-	tcc -o $(OUTPUT) src/*.c src/*/*.c
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	del *.exe
+	rm -f $(OBJS) $(TARGET)

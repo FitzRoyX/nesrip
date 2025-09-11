@@ -27,7 +27,7 @@ int paletteOverride = false;
 int bitplaneOverride = false;
 int checkRedundantOverride = false;
 
-void quitProgram(int code)
+static void quitProgram(int code)
 {
 	if (outputFolder != NULL)
 		free(outputFolder);
@@ -38,6 +38,8 @@ void quitProgram(int code)
 
 int main(int argc, char** argv)
 {
+	printf("Compiler C Standard is %s\n", cStdInUse(__STDC_VERSION__));
+
 	programName = getFilename(argv[0]);
 
 	if (argc < 2)
@@ -65,7 +67,7 @@ int main(int argc, char** argv)
 	}
 
 	char* inputFilename = getFilename(inputRomName);
-	int outputFolderLength = getFilenameLengthWithoutExtension(inputFilename);
+	size_t outputFolderLength = getFilenameLengthWithoutExtension(inputFilename);
 
 	outputFolder = (char*)malloc(outputFolderLength + 9);
 
@@ -75,8 +77,17 @@ int main(int argc, char** argv)
 		quitProgram(0);
 	}
 
+#if defined(__clang__)
+	memcpy_s(outputFolder, strlen(outputFolder), "output/", 7);
+	memcpy_s(outputFolder + 7, strlen(outputFolder), inputFilename, outputFolderLength);
+#elif defined(__GNUC__) || defined(__GNUG__) || defined(C99)
 	memcpy(outputFolder, "output/", 7);
-	memcpy(outputFolder+7, inputFilename, outputFolderLength);
+	memcpy(outputFolder + 7, inputFilename, outputFolderLength);
+#elif defined(_MSC_VER)
+	memcpy_s(outputFolder, strlen(outputFolder), "output/", 7);
+	memcpy_s(outputFolder + 7, strlen(outputFolder), inputFilename, outputFolderLength);
+#endif // defined(__clang__)
+
 	outputFolder[outputFolderLength + 7] = '/';
 	outputFolder[outputFolderLength + 8] = 0;
 
