@@ -19,3 +19,7 @@ bld/
 Generated\ Files/
 .vs
 *.o
+/.idea
+/GCC Project.vcxproj
+/GCC Project.vcxproj.filters
+/GCC Project.vcxproj.user

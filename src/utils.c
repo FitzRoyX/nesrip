@@ -175,10 +175,37 @@ void toUpperCase(char* str) {
 }
 
 int fileExists(const char* filename) {
-    FILE* file = fopen(filename, "r");
+    FILE *file;
+#if defined(__GNUC__) || defined(__GNUG__) || defined(C99)
+    file = fopen(filename, "r");
     if (file) {
         fclose(file);
         return 1;
     }
+#else
+    errno_t error = fopen_s(&file, filename, "r");
+    if (error == 0) {
+        fclose(file);
+        return 1;
+    }
+#endif
     return 0;
+}
+
+void deleteCharacters(char* str, size_t pos, size_t n) {
+    size_t len = strlen(str);
+
+    // Ensure position and range are valid
+    if (pos < 0 || pos >= len || n <= 0) {
+        printf("Invalid position or range.\n");
+        return;
+    }
+
+    // Shift characters to the left
+    for (size_t i = pos; i < len - n; i++) {
+        str[i] = str[i + n];
+    }
+
+    // Null-terminate the string
+    str[len - n] = '\0';
 }

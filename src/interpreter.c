@@ -49,7 +49,7 @@ void popTokenContext(void)
 void removeTails(char* string, size_t length, const char* pattern) {
 	char* pos;
 	while((pos = strstr(string, pattern)) != NULL) {
-		memmove(pos, pos + 1, strlen(pos)); //shift rest of the string left by one
+		memmove(pos, pos + strlen(pattern), strlen(pos)); //shift rest of the string left by size of pattern
 	}
 }
 
@@ -59,8 +59,26 @@ size_t removeCarriageReturns(char* string, size_t length) {
 }
 
 size_t removeComments(char* string, size_t length) {
-	removeTails(string, length, "//");
-	return strlen(string);
+	size_t removed = 0;
+	char pattern[] = "//";
+	//char* result = removeString(string, pattern);
+	char* match = strstr(string, pattern);
+	size_t pos = match - string;
+	char* ptr = match;
+
+	while (ptr != NULL) {
+		size_t size = strcspn(ptr, "\n");
+		
+		deleteCharacters(match, pos, size);
+		ptr = strstr(match, pattern);
+		pos = ptr - match;
+		
+		removed += size;
+	}
+
+	memset(string + length - removed, 0, removed);
+	return length - removed;
+
 }
 
 int handleColorizerPaletteCommand()
@@ -347,6 +365,7 @@ void interpretDatabase()
 
 		if (strcmp(token, "end") == 0)
 			break;
+
 
 		printf("Invalid database token: ");
 		printf("%s", token);
