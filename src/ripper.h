@@ -20,7 +20,7 @@ typedef struct
 	char* filenameOverload;
 } ExtractionArguments;
 
-int ripSection(Rom* rom, ExtractionArguments* arguments);
+int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments);
 void initPatternChains();
 void cleanupPatternChains();
 

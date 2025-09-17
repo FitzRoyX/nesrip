@@ -1,6 +1,9 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
+
+
 #include "rom.h"
+#include <stdbool.h>
 
 extern Rom rom;
 extern char* programName;
@@ -18,25 +21,31 @@ extern int paletteOverride;
 extern int bitplaneOverride;
 extern int checkRedundantOverride;
 
-typedef struct
-{
+typedef struct {
 	int valid;
 	char* name;
 	char colors[4][4];
 } ColorizerPalette;
 
-typedef struct
-{
+typedef struct {
 	int valid;
 	int width;
 	int height;
 	unsigned char* tiles;
 } ColorizerSheet;
 
+typedef struct {
+	char* data;         // Pointer to dynamically allocated memory
+	size_t size;        // Current number of elements in the cache
+	size_t capacity;    // Maximum capacity of the cache
+	bool isInitialized;
+} Cache;
+
 #define MAX_PALETTES    256
 #define MAX_COLOR_ROWS  16384
 
 extern ColorizerPalette palettes[MAX_PALETTES];
 extern ColorizerSheet colorSheet;
+extern Cache cache;
 
 #endif

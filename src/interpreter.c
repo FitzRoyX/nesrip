@@ -242,8 +242,7 @@ int handlePaletteCommand()
 	return 0;
 }
 
-int handleSectionCommand()
-{
+int handleSectionCommand() {
 	char* prefix, * sectionStart, * sectionEnd;
 
 	PULL_TOKEN("Section", prefix);
@@ -264,7 +263,7 @@ int handleSectionCommand()
 		prefix
 	};
 
-	ripSection(&rom, &args);
+	ripSection(&rom, &cache, &args);
 	return 0;
 }
 
@@ -308,8 +307,7 @@ int handleClearRedundantCommand()
 	return 0;
 }
 
-void interpretDatabase()
-{
+void interpretDatabase() {
 	initPatternChains();
 
 	uint8_t hash[SIZE_OF_SHA_256_HASH];

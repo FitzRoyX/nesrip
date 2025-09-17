@@ -130,7 +130,7 @@ char* allocOverloadedFilename(ExtractionContext* context)
 {
 	ExtractionArguments* args = context->args;
 	size_t lenOutputFolder = strlen(args->outputFolder);
-	size_t lenFilename = strlen(args->filenameOverload);
+	size_t lenFilename = strlen("0");
 	size_t lenPaletteDescription = strlen(args->paletteDescription);
 
 	char* result = (char*)malloc(lenOutputFolder + lenFilename + lenPaletteDescription + 6);
@@ -145,7 +145,7 @@ char* allocOverloadedFilename(ExtractionContext* context)
 
 	memcpy(outputFilenamePtr, args->outputFolder, lenOutputFolder);
 	outputFilenamePtr += lenOutputFolder;
-	memcpy(outputFilenamePtr, args->filenameOverload, lenFilename);
+	memcpy(outputFilenamePtr, "0", lenFilename);
 	outputFilenamePtr += lenFilename;
 	*(outputFilenamePtr++) = '.';
 	memcpy(outputFilenamePtr, args->paletteDescription, lenPaletteDescription);
@@ -213,8 +213,7 @@ int writeOutput(char* outputData, int width, int height, ExtractionContext* cont
 	printf("%s", outputFilename);
 	printf("\".\n");
 
-	if (!stbi_write_png(outputFilename, width, height, 4, outputData, 128 * 4))
-	{
+	if (!stbi_write_png(outputFilename, width, height, 4, outputData, 128 * 4)) {
 		printf("An error occurred while writing to output file ");
 		printf("%s", outputFilename);
 		printf(".\n");
@@ -494,8 +493,7 @@ void drawRedundantTile(ExtractionContext* context)
 	}
 }
 
-int ripSectionRaw(Rom* rom, ExtractionContext* context)
-{
+int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	printf("Ripping raw section from ");
 	printf("%s", context->args->sectionStartString);
 	printf(" to ");
@@ -519,19 +517,17 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 	if (context->sheet == NULL)
 		return 0;
 
-	int sheetCount = 0;
-	int tx = 0;
-	int ty = 0;
-	int stx = 0;
-	int sty = 0;
+	//int sheetCount = 0;
+	//int tx = 0;
+	//int ty = 0;
+	//int stx = 0;
+	//int sty = 0;
 
 	unsigned char* sectionData = rom->data + context->sectionStart;
 	unsigned char* endPointer = rom->data + context->sectionEnd;
 
-	while (sectionData < endPointer)
-	{
-		if (context->checkRedundant)
-		{
+	while (sectionData < endPointer) {
+		if (context->checkRedundant) {
 			context->workingHash = 0;
 			processTile(context, sectionData, &addToHash);
 
@@ -539,9 +535,7 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 				processTile(context, sectionData, &writeLine);
 			else
 				drawRedundantTile(context);
-		}
-		else
-		{
+		} else {
 			processTile(context, sectionData, &writeLine);
 		}
 
@@ -551,7 +545,11 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 
 	colorSheetIndex += tileCount;
 
-	writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
+	if (!cache->isInitialized) {
+		initCache(cache, 10, true, context->maxX + 1, context->maxY + 1);
+	}
+	addToCache(cache, context->sheet);
+	//writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);
 
 	return 1;
@@ -590,16 +588,14 @@ void cleanupPatternChains()
 	}
 }
 
-int ripSection(Rom* rom, ExtractionArguments* arguments)
-{
+int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
 	ExtractionContext context = 
 	{
 		rom,
 		arguments
 	};
 
-	if (strcmp(arguments->compressionType, "raw") != 0)
-	{
+	if (strcmp(arguments->compressionType, "raw") != 0)	{
 		printf("Error: Unknown compression type \"");
 		printf("%s", arguments->compressionType);
 		printf("\".\n");
@@ -607,8 +603,7 @@ int ripSection(Rom* rom, ExtractionArguments* arguments)
 		
 	}
 
-	if (!ripSectionRaw(rom, &context))
-	{
+	if (!ripSectionRaw(rom, cache, &context)) {
 		printf("An error occured during ripping.\n");
 		return 0;
 	}

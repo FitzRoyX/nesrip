@@ -19,6 +19,7 @@ void printHelp()
 	printf(" -c {compression type, raw}                       Graphics decompression algorithm.\n");
 	printf(" -p {pattern size, 1/2/4/8/16} {direction, h/v}   Set or override tile block size and direction.\n");
 	printf(" -i {4 letter combination of b/o/t/w}             Set or override palette order for rendering.\n");
+	printf(" -g                                               Generate 8x8 2 color tile 16 times png file");
 }
 
 void printNoInput()

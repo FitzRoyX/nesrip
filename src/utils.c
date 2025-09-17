@@ -6,6 +6,7 @@
 #include <math.h>
 #include <string.h>
 #include "utils.h"
+#include "globals.h"
 
 str2int_errno str2int(int* out, char* s, int base)
 {
@@ -209,3 +210,35 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
     // Null-terminate the string
     str[len - n] = '\0';
 }
+
+void initCache(Cache* cache, size_t initialCapacity, bool isInitialized, int width, int height) {
+    if (!isInitialized) {
+        cache->data = NULL;
+        cache->isInitialized = isInitialized;
+
+    } else {
+        cache->data = (char*)malloc(initialCapacity * (width * height) * 4);
+        if (cache->data == NULL) {
+            perror("Failed to allocate memory");
+            exit(EXIT_FAILURE);
+        }
+        cache->isInitialized = isInitialized;
+    }
+    cache->size = 0;
+    cache->capacity = initialCapacity;
+}
+
+// Function to add data to the cache
+void addToCache(Cache* cache, char* value) {
+    if (cache->size == cache->capacity) {
+        // Double the capacity if the cache is full
+        cache->capacity *= 2;
+        cache->data = (char*)realloc(cache->data, cache->capacity * sizeof(cache));
+        if (cache->data == NULL) {
+            perror("Failed to reallocate memory");
+            exit(EXIT_FAILURE);
+        }
+    }
+    cache->data[cache->size++] = value;
+}
+
