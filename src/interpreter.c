@@ -30,8 +30,7 @@ if (token == NULL) \
 	return 1; \
 }
 
-char* updateToken(char* string)
-{
+char* updateToken(char* string) {
 	char* token = stringTokenize(string, " \n", tokenContext);
 	return token;
 }
@@ -121,18 +120,15 @@ int handleColorizerPaletteCommand()
 	return 0;
 }
 
-int handleColorizerSheetCommand()
-{
+int handleColorizerSheetCommand() {
 	ColorizerSheet* sheet = &colorSheet;
 	sheet->valid = true;
 	sheet->width = 16;
 	sheet->height = MAX_COLOR_ROWS;
 	sheet->tiles = malloc(sheet->width * sheet->height);
 
-	for (int y = 0; y < MAX_COLOR_ROWS; y++)
-	{
-		for (int x = 0; x < sheet->width; x++)
-		{
+	for (int y = 0; y < MAX_COLOR_ROWS; y++) {
+		for (int x = 0; x < sheet->width; x++) {
 			char* paletteString;
 			PULL_TOKEN("Sheet", paletteString);
 
@@ -140,8 +136,7 @@ int handleColorizerSheetCommand()
 				goto end;
 
 			int palette;
-			if (str2int(&palette, paletteString, 0) != STR2INT_SUCCESS || palette < 0 || palette >= MAX_PALETTES)
-			{
+			if (str2int(&palette, paletteString, 0) != STR2INT_SUCCESS || palette < 0 || palette >= MAX_PALETTES) {
 				printf("Error: Palette index out of range.\n");
 				return 1;
 			}
@@ -155,8 +150,7 @@ end:
 	return 0;
 }
 
-void interpretColorizer(char* colorizerFilename)
-{
+void interpretColorizer(char* colorizerFilename) {
 	char* database;
 	size_t databaseLength = readAllBytesFromFile(colorizerFilename, &database, true);
 	if (databaseLength <= 0)
@@ -339,12 +333,9 @@ void interpretDatabase() {
 	databaseLength = removeComments(database, databaseLength);
 
 	char* token = updateToken(database);
-	while (token != NULL)
-	{
-		if (!foundRom)
-		{
-			if (strcmp(token, "hash") == 0)
-			{
+	while (token != NULL) {
+		if (!foundRom) {
+			if (strcmp(token, "hash") == 0) {
 				if (handleHashCommand(hashString))
 					break;
 			}

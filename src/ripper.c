@@ -126,17 +126,16 @@ void drawPixel(char* sheet, int x, int y, char* color)
 	}
 }
 
-char* allocOverloadedFilename(ExtractionContext* context)
-{
+char* allocOverloadedFilename(ExtractionContext* context) {
 	ExtractionArguments* args = context->args;
 	size_t lenOutputFolder = strlen(args->outputFolder);
 	size_t lenFilename = strlen("0");
+	//*size_t lenFilename = strlen(args->filenameOverload);*/
 	size_t lenPaletteDescription = strlen(args->paletteDescription);
 
 	char* result = (char*)malloc(lenOutputFolder + lenFilename + lenPaletteDescription + 6);
 
-	if (result == NULL)
-	{
+	if (result == NULL) {
 		printf("Error: Couldn't allocate memory for filename data.\n");
 		return NULL;
 	}
@@ -146,6 +145,7 @@ char* allocOverloadedFilename(ExtractionContext* context)
 	memcpy(outputFilenamePtr, args->outputFolder, lenOutputFolder);
 	outputFilenamePtr += lenOutputFolder;
 	memcpy(outputFilenamePtr, "0", lenFilename);
+	//memcpy(outputFilenamePtr, args->filenameOverload, lenFilename);
 	outputFilenamePtr += lenFilename;
 	*(outputFilenamePtr++) = '.';
 	memcpy(outputFilenamePtr, args->paletteDescription, lenPaletteDescription);

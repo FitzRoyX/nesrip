@@ -51,8 +51,7 @@ void printInvalidArgUsage(const char* arg, const char* error)
 	printf(" --help to see usage information.\n");
 }
 
-void printInvalidDatabaseCommand(const char* arg, const char* error)
-{
+void printInvalidDatabaseCommand(const char* arg, const char* error) {
 	printf("Error: Invalid graphics database command \"");
 	printf("%s", arg);
 	printf("\": ");

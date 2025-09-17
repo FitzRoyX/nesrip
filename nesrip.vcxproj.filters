@@ -72,6 +72,12 @@
   <ItemGroup>
     <Text Include="src\sha_2\LICENSE.txt" />
     <Text Include="nes_gfxdb.txt" />
+    <Text Include="colorizer\4a4cf596.txt" />
+    <Text Include="colorizer\085e5397.txt" />
+    <Text Include="colorizer\a35e8463.txt" />
+    <Text Include="colorizer\e9f4c9d1.txt" />
+    <Text Include="colorizer\e8684004.txt" />
+    <Text Include="colorizer\fcb6a0ef.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
