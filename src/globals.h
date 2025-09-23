@@ -1,7 +1,6 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-
 #include "rom.h"
 #include <stdbool.h>
 
@@ -35,10 +34,19 @@ typedef struct {
 } ColorizerSheet;
 
 typedef struct {
-	char* data;         // Pointer to dynamically allocated memory
+	size_t width, height, channels;
+}PNGInfo;
+
+typedef struct {
+	PNGInfo* imageInfo;
+	size_t size;
+	char* data;
+} PNGImage;
+
+typedef struct {
 	size_t size;        // Current number of elements in the cache
 	size_t capacity;    // Maximum capacity of the cache
-	bool isInitialized;
+	PNGImage* image;    // Pointer to dynamically allocated memory
 } Cache;
 
 #define MAX_PALETTES    256
@@ -47,5 +55,7 @@ typedef struct {
 extern ColorizerPalette palettes[MAX_PALETTES];
 extern ColorizerSheet colorSheet;
 extern Cache cache;
+extern PNGImage image;
+extern PNGInfo imageInfo;
 
 #endif

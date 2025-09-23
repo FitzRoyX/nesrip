@@ -147,6 +147,7 @@
     <ClInclude Include="src\ripper.h" />
     <ClInclude Include="src\rom.h" />
     <ClInclude Include="src\sha_2\sha-256.h" />
+    <ClInclude Include="src\stb\stb_image.h" />
     <ClInclude Include="src\stb\stb_image_write.h" />
     <ClInclude Include="src\utils.h" />
   </ItemGroup>

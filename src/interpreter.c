@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <malloc.h>
 #include "globals.h"
 #include "logger.h"
@@ -11,10 +12,10 @@ int foundRom = false;
 char* tokenContextStack[2];
 char** tokenContext = &tokenContextStack[0];
 
-#define CHECK_COMMAND(command, callback) \
+#define CHECK_COMMAND(command, callback, cache) \
 if (strcmp(token, command) == 0) \
 { \
-	if (callback()) \
+	if (callback(cache)) \
 		break; \
 	\
 	token = updateToken(NULL); \
@@ -80,7 +81,7 @@ size_t removeComments(char* string, size_t length) {
 
 }
 
-int handleColorizerPaletteCommand()
+int handleColorizerPaletteCommand(Cache* cache)
 {
 	while (true)
 	{
@@ -120,7 +121,7 @@ int handleColorizerPaletteCommand()
 	return 0;
 }
 
-int handleColorizerSheetCommand() {
+int handleColorizerSheetCommand(Cache* cache) {
 	ColorizerSheet* sheet = &colorSheet;
 	sheet->valid = true;
 	sheet->width = 16;
@@ -150,7 +151,7 @@ end:
 	return 0;
 }
 
-void interpretColorizer(char* colorizerFilename) {
+void interpretColorizer(char* colorizerFilename, Cache* cache) {
 	char* database;
 	size_t databaseLength = readAllBytesFromFile(colorizerFilename, &database, true);
 	if (databaseLength <= 0)
@@ -164,8 +165,8 @@ void interpretColorizer(char* colorizerFilename) {
 	char* token = updateToken(database);
 	while (token != NULL)
 	{
-		CHECK_COMMAND("p", handleColorizerPaletteCommand);
-		CHECK_COMMAND("s", handleColorizerSheetCommand);
+		CHECK_COMMAND("p", handleColorizerPaletteCommand, cache);
+		CHECK_COMMAND("s", handleColorizerSheetCommand, cache);
 
 		if (strcmp(token, "end") == 0)
 			break;
@@ -181,7 +182,7 @@ void interpretColorizer(char* colorizerFilename) {
 	free(database);
 }
 
-int handleHashCommand(char *hashString) {
+int handleHashCommand(char *hashString, Cache* cache) {
 	
 	char* token;
 	
@@ -201,7 +202,7 @@ int handleHashCommand(char *hashString) {
 		char colorizerFilename[32] = "";
 		sprintf_s(colorizerFilename, sizeof(colorizerFilename), "colorizer/%.8s.txt", hashString);
 		if (fileExists(colorizerFilename)) {
-			interpretColorizer(colorizerFilename);
+			interpretColorizer(colorizerFilename, cache);
 		}
 		
 	}
@@ -209,7 +210,7 @@ int handleHashCommand(char *hashString) {
 	return 0;
 }
 
-int handlePatternCommand()
+int handlePatternCommand(Cache* cache)
 {
 	char* size, * direction;
 	PULL_TOKEN("Pattern", size);
@@ -224,7 +225,7 @@ int handlePatternCommand()
 	return 0;
 }
 
-int handlePaletteCommand()
+int handlePaletteCommand(Cache* cache)
 {
 	char* token;
 	PULL_TOKEN("Palette", token);
@@ -236,7 +237,7 @@ int handlePaletteCommand()
 	return 0;
 }
 
-int handleSectionCommand() {
+int handleSectionCommand(Cache* cache) {
 	char* prefix, * sectionStart, * sectionEnd;
 
 	PULL_TOKEN("Section", prefix);
@@ -257,11 +258,11 @@ int handleSectionCommand() {
 		prefix
 	};
 
-	ripSection(&rom, &cache, &args);
+	ripSection(&rom, cache, &args);
 	return 0;
 }
 
-int handleCompressionCommand()
+int handleCompressionCommand(Cache* cache)
 {
 	char* token;
 	PULL_TOKEN("Compression", token);
@@ -270,7 +271,7 @@ int handleCompressionCommand()
 	return 0;
 }
 
-int handleBitplaneCommand()
+int handleBitplaneCommand(Cache* cache)
 {
 	char* token;
 	PULL_TOKEN("Bitplane", token);
@@ -282,7 +283,7 @@ int handleBitplaneCommand()
 	return 0;
 }
 
-int handleCheckRedundantCommand()
+int handleCheckRedundantCommand(Cache* cache)
 {
 	char* token;
 	PULL_TOKEN("CheckRedundant", token);
@@ -294,14 +295,14 @@ int handleCheckRedundantCommand()
 	return 0;
 }
 
-int handleClearRedundantCommand()
+int handleClearRedundantCommand(Cache* cache)
 {
 	cleanupPatternChains();
 	initPatternChains();
 	return 0;
 }
 
-void interpretDatabase() {
+void interpretDatabase(Cache* cache) {
 	initPatternChains();
 
 	uint8_t hash[SIZE_OF_SHA_256_HASH];
@@ -336,7 +337,7 @@ void interpretDatabase() {
 	while (token != NULL) {
 		if (!foundRom) {
 			if (strcmp(token, "hash") == 0) {
-				if (handleHashCommand(hashString))
+				if (handleHashCommand(hashString, cache))
 					break;
 			}
 
@@ -344,13 +345,13 @@ void interpretDatabase() {
 			continue;
 		}
 
-		CHECK_COMMAND("p", handlePatternCommand);
-		CHECK_COMMAND("i", handlePaletteCommand);
-		CHECK_COMMAND("c", handleCompressionCommand);
-		CHECK_COMMAND("b", handleBitplaneCommand);
-		CHECK_COMMAND("r", handleCheckRedundantCommand);
-		CHECK_COMMAND("k", handleClearRedundantCommand);
-		CHECK_COMMAND("s", handleSectionCommand);
+		CHECK_COMMAND("p", handlePatternCommand, cache);
+		CHECK_COMMAND("i", handlePaletteCommand, cache);
+		CHECK_COMMAND("c", handleCompressionCommand, cache);
+		CHECK_COMMAND("b", handleBitplaneCommand, cache);
+		CHECK_COMMAND("r", handleCheckRedundantCommand, cache);
+		CHECK_COMMAND("k", handleClearRedundantCommand, cache);
+		CHECK_COMMAND("s", handleSectionCommand, cache);
 
 		if (strcmp(token, "end") == 0)
 			break;
@@ -364,6 +365,20 @@ void interpretDatabase() {
 
 	if (!foundRom)
 		printf("Error: Could not match ROM with database.\n");
+	else {
+		if (cache->size > 0) {
+			char customMsg[256];
+			const char* filename = "separator_8x8_16.png";
+			PNGInfo* imageInfo = getImageInfo(filename);
+			unsigned char* image_data = stbi_load(filename, &imageInfo->width, &imageInfo->height, &imageInfo->channels, 0);
+			if (image_data == NULL) {
+				snprintf(customMsg, sizeof(customMsg), "Error loading from file: %s", filename);
+				perror(customMsg);
+				exit(EXIT_FAILURE);
+			}
+			processCache(cache, image_data, imageInfo);
+		}
+	}
 
 	cleanupPatternChains();
 }

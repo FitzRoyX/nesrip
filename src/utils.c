@@ -5,6 +5,12 @@
 #include <limits.h>
 #include <math.h>
 #include <string.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb/stb_image_write.h"   
+
 #include "utils.h"
 #include "globals.h"
 
@@ -211,34 +217,87 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
     str[len - n] = '\0';
 }
 
-void initCache(Cache* cache, size_t initialCapacity, bool isInitialized, int width, int height) {
-    if (!isInitialized) {
-        cache->data = NULL;
-        cache->isInitialized = isInitialized;
-
-    } else {
-        cache->data = (char*)malloc(initialCapacity * (width * height) * 4);
-        if (cache->data == NULL) {
-            perror("Failed to allocate memory");
-            exit(EXIT_FAILURE);
-        }
-        cache->isInitialized = isInitialized;
-    }
+void initCache(Cache* cache, size_t initialCapacity) {
     cache->size = 0;
     cache->capacity = initialCapacity;
 }
 
 // Function to add data to the cache
-void addToCache(Cache* cache, char* value) {
+void addToCache(Cache* cache, const void* value, int width, int height, int comp, int stride_bytes) {
     if (cache->size == cache->capacity) {
         // Double the capacity if the cache is full
         cache->capacity *= 2;
-        cache->data = (char*)realloc(cache->data, cache->capacity * sizeof(cache));
-        if (cache->data == NULL) {
+        cache->image = (PNGImage*)realloc(cache->image, cache->capacity * sizeof(cache));
+        if (cache->image == NULL) {
             perror("Failed to reallocate memory");
             exit(EXIT_FAILURE);
         }
     }
-    cache->data[cache->size++] = value;
+
+    PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage) + (width * height * comp));
+    if (image == NULL) {
+        perror("Memory allocation failed for cacheData");
+        exit(EXIT_FAILURE);
+    }
+
+    PNGInfo* info = (PNGInfo*)calloc(1, sizeof(PNGInfo));
+    info->width = width;
+    info->height = height;
+    info->channels = comp;
+    image->imageInfo = info;
+
+    int len;
+    unsigned char* png = stbi_write_png_to_mem((const unsigned char*)value, stride_bytes, width, height, comp, &len);
+    image->data = png;
+    image->size = len;
+    cache[cache->size++].image = image;
 }
 
+void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
+    size_t maxSize = 0;
+    for (size_t i = 0; i < cache->size; i++) {
+        maxSize = maxSize + (cache[i].image->imageInfo->height * cache[i].image->imageInfo->width * cache[i].image->imageInfo->channels);
+    }
+
+    size_t totalSepSize = info->height * info->width * info->channels * (cache->size -1);
+
+    unsigned char* combinedImage = (unsigned char*)calloc(maxSize + totalSepSize, sizeof(unsigned char));
+    if (!combinedImage) {
+        perror("Failed to allocate memory for combined image");
+        stbi_image_free(separator);
+        exit(EXIT_FAILURE);
+    }
+    size_t sepSize = info->width * info->height * info->channels;
+	size_t offset = 0;
+    for (size_t i = 0; i < cache->size; i++) {
+        size_t imageSize = cache[i].image->size;
+        // Copy the current image
+        memcpy(combinedImage + offset, cache[i].image->data, imageSize);
+        // Insert separator only between images
+        if (i < (cache->size - 1)) {
+            memcpy(combinedImage + imageSize, separator, sepSize);
+            offset += imageSize + sepSize;
+        }
+    }
+
+    char* filename = "output/0.png";
+    printf("  Writing combined sheets to \"");
+    printf("%s", filename);
+    printf("\".\n");
+
+    if (!stbi_write_png(filename, info->width, info->height, info->channels, combinedImage, info->width * info->channels)) {
+        perror("Failed to write combined image\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+PNGInfo* getImageInfo(const char* filename) {
+    PNGInfo* info = (PNGInfo*)calloc(1, sizeof(PNGInfo));
+
+    if (stbi_info(filename, &info->width, &info->height, &info->channels)) {
+        return info;
+    } else {
+        perror("Failed to retrieve image info. Ensure the file exists and is a valid image.\n");
+        exit(EXIT_FAILURE);
+    }
+}

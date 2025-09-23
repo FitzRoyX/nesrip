@@ -96,9 +96,10 @@ int main(int argc, char** argv) {
 	}
 
 	//TODO: Handle ROM hash detection and graphics ripping here
-	Cache* cache = &cache;
-	initCache(cache, 10, false, 0, 0);
-	interpretDatabase();
+	size_t capacity = 10;
+	Cache* cache = (Cache*)calloc(capacity, sizeof(Cache) + sizeof(PNGImage));
+	initCache(cache, capacity);
+	interpretDatabase(cache);
 
 	quitProgram(0);
 }

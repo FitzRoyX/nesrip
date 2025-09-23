@@ -2,8 +2,6 @@
 #include <string.h>
 #include <malloc.h>
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb/stb_image_write.h"
 #include "globals.h"
 #include "logger.h"
 #include "utils.h"
@@ -545,10 +543,7 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 
 	colorSheetIndex += tileCount;
 
-	if (!cache->isInitialized) {
-		initCache(cache, 10, true, context->maxX + 1, context->maxY + 1);
-	}
-	addToCache(cache, context->sheet);
+	addToCache(cache, context->sheet, context->maxX + 1, context->maxY + 1, 4, 128 * 4);
 	//writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);
 
