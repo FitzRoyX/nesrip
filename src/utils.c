@@ -217,7 +217,7 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
     str[len - n] = '\0';
 }
 
-void initCache(Cache* cache, size_t initialCapacity) {
+void initCache(Cache* cache, int initialCapacity) {
     cache->size = 0;
     cache->capacity = initialCapacity;
 }
@@ -241,15 +241,20 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
     }
 
     PNGInfo* info = (PNGInfo*)calloc(1, sizeof(PNGInfo));
+    if (info == NULL) {
+        perror("Memory allocation failed for PNGInfo");
+        free(image);
+        exit(EXIT_FAILURE);
+	}
     info->width = width;
     info->height = height;
     info->channels = comp;
     image->imageInfo = info;
 
-    int len;
-    unsigned char* png = stbi_write_png_to_mem((const unsigned char*)value, stride_bytes, width, height, comp, &len);
-    image->data = png;
-    image->size = len;
+    //int len;
+    //unsigned char* png = stbi_write_png_to_mem((const unsigned char*)value, stride_bytes, width, height, comp, &len);
+    image->data = value;
+    image->size = width * height * comp;
     cache[cache->size++].image = image;
 }
 
@@ -259,44 +264,65 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
         maxSize = maxSize + (cache[i].image->imageInfo->height * cache[i].image->imageInfo->width * cache[i].image->imageInfo->channels);
     }
 
-    size_t totalSepSize = info->height * info->width * info->channels * (cache->size -1);
+    int totalSepSize = info->height * info->width * info->channels * (cache->size -1);
 
-    unsigned char* combinedImage = (unsigned char*)calloc(maxSize + totalSepSize, sizeof(unsigned char));
-    if (!combinedImage) {
-        perror("Failed to allocate memory for combined image");
-        stbi_image_free(separator);
-        exit(EXIT_FAILURE);
-    }
-    size_t sepSize = info->width * info->height * info->channels;
-	size_t offset = 0;
+    char* combinedImage = NULL;
+    char* filename = "output/1.png";
+
+    //char* combinedImage = (unsigned char*)calloc(maxSize + totalSepSize, sizeof(unsigned char));
+    //if (!combinedImage) {
+    //    perror("Failed to allocate memory for combined image");
+    //    stbi_image_free(separator);
+    //    exit(EXIT_FAILURE);
+    //}
+
+    int sepSize = info->width * info->height * info->channels;
+	int offset  = 0, height = 0, width = 0;
     for (size_t i = 0; i < cache->size; i++) {
-        size_t imageSize = cache[i].image->size;
+        int imageSize = cache[i].image->size;
+		height = cache[i].image->imageInfo->height;
+		width = cache[i].image->imageInfo->width;
         // Copy the current image
-        memcpy(combinedImage + offset, cache[i].image->data, imageSize);
+        stbi_write_png(filename, width, height, 4, cache[i].image->data, width * 4);
+        //combinedImage = cache[i].image->data;
+        //memcpy(combinedImage + offset, cache[i].image->data, imageSize);
+		break;
         // Insert separator only between images
         if (i < (cache->size - 1)) {
-            memcpy(combinedImage + imageSize, separator, 180);
+            memcpy(combinedImage + imageSize, separator, sepSize);
             offset += imageSize + sepSize;
         }
     }
 
-    char* filename = "output/0.png";
+    
     printf("  Writing combined sheets to \"");
     printf("%s", filename);
     printf("\".\n");
 
-    if (!stbi_write_png(filename, info->width, info->height, info->channels, combinedImage, info->width * info->channels)) {
-        perror("Failed to write combined image\n");
+    if (combinedImage == NULL) {
+        perror("No images in cache to combine");
+        stbi_image_free(separator);
         exit(EXIT_FAILURE);
-    }
+	}
+    //if (!stbi_write_png(filename, width, height, 4, combinedImage, width * 4)) {
+    //    perror("Failed to write combined image\n");
+    //    exit(EXIT_FAILURE);
+    //}
 }
 
 PNGInfo* getImageInfo(const char* filename) {
     PNGInfo* info = (PNGInfo*)calloc(1, sizeof(PNGInfo));
+    if (info == NULL) {
+        perror("Memory allocation failed for PNGInfo");
+        exit(EXIT_FAILURE);
+    }
 
     if (stbi_info(filename, &info->width, &info->height, &info->channels)) {
         return info;
     } else {
+        if (info != NULL) {
+            free(info);
+        }
         perror("Failed to retrieve image info. Ensure the file exists and is a valid image.\n");
         exit(EXIT_FAILURE);
     }

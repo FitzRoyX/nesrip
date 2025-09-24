@@ -34,18 +34,18 @@ typedef struct {
 } ColorizerSheet;
 
 typedef struct {
-	size_t width, height, channels;
+	int width, height, channels;
 }PNGInfo;
 
 typedef struct {
 	PNGInfo* imageInfo;
-	size_t size;
+	int size;
 	char* data;
 } PNGImage;
 
 typedef struct {
-	size_t size;        // Current number of elements in the cache
-	size_t capacity;    // Maximum capacity of the cache
+	int size;        // Current number of elements in the cache
+	int capacity;    // Maximum capacity of the cache
 	PNGImage* image;    // Pointer to dynamically allocated memory
 } Cache;
 

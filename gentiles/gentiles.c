@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"   
 #include <stdint.h>
 
-//#include "lodepng.h" // Ensure you have lodepng.h and lodepng.c in your project
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+#define STBI_ONLY_PNG
+
 
 #define REPEAT_COUNT 16
 #define TILE_SIZE 8
@@ -60,20 +63,20 @@ void generate_image(uint8_t *image) {
 }
 
 int main() {
-    uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT * 4];
-    generate_image(image);
+ //   uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT * 4];
+ //   generate_image(image);
 
-    // Save the tile as a PNG file
-	if (!stbi_write_png("tile_pattern.png", IMAGE_WIDTH, IMAGE_HEIGHT, 4, image, IMAGE_WIDTH * 4)) {
-        printf("Failed to write image\n");
-        return 1;
-	}
-    //unsigned error = lodepng_encode32_file("tile_pattern.png", image, IMAGE_WIDTH, IMAGE_HEIGHT);
-    //if (error) {
-    //    printf("Error %u: %s\n", error, lodepng_error_text(error));
-    //    return 1;
-    //}
+ //   // Save the tile as a PNG file
+	char* filename = "tile_pattern2.png";
+	//if (!stbi_write_png(filename, IMAGE_WIDTH, IMAGE_HEIGHT, 4, image, IMAGE_WIDTH * 4)) {
+ //       printf("Failed to write image\n");
+ //       return 1;
+	//}
 
-    printf("Tiles saved as tile_pattern.png\n");
+ //   printf("Tiles saved as tile_pattern.png\n");
+
+    char* image_data = stbi_load(filename, IMAGE_WIDTH, IMAGE_HEIGHT, 4, 0);
+    stbi_write_png("sep_test.png", IMAGE_WIDTH, IMAGE_HEIGHT, 4, image_data, IMAGE_WIDTH * 4);
+
     return 0;
 }

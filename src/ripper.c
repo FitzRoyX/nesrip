@@ -542,8 +542,11 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	}
 
 	colorSheetIndex += tileCount;
-
+	char* ctr = context->args->filenameOverload;
+	char filename[15];
+	snprintf(filename, sizeof(filename), "output/%s.png", ctr);
 	addToCache(cache, context->sheet, context->maxX + 1, context->maxY + 1, 4, 128 * 4);
+	stbi_write_png(filename, context->maxX + 1, context->maxY + 1, 4, context->sheet, 128 * 4);
 	//writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);
 
