@@ -275,7 +275,7 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
         memcpy(combinedImage + offset, cache[i].image->data, imageSize);
         // Insert separator only between images
         if (i < (cache->size - 1)) {
-            memcpy(combinedImage + imageSize, separator, sepSize);
+            memcpy(combinedImage + imageSize, separator, 180);
             offset += imageSize + sepSize;
         }
     }
