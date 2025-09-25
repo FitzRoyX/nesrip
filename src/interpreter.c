@@ -368,14 +368,15 @@ void interpretDatabase(Cache* cache) {
 	else {
 		if (cache->size > 0) {
 			char customMsg[256];
-			const char* filename = "separator_8x8_16.png";
-			PNGInfo* imageInfo = getImageInfo(filename);
-			unsigned char* image_data = stbi_load(filename, &imageInfo->width, &imageInfo->height, &imageInfo->channels, 0);
+			const char* sepfilename = "separator_8x8_16.png";
+			PNGInfo* imageInfo = getImageInfo(sepfilename);
+			unsigned char* image_data = stbi_load(sepfilename, &imageInfo->width, &imageInfo->height, &imageInfo->channels, 0);
 			if (image_data == NULL) {
-				snprintf(customMsg, sizeof(customMsg), "Error loading from file: %s", filename);
+				snprintf(customMsg, sizeof(customMsg), "Error loading from file: %s", sepfilename);
 				perror(customMsg);
 				exit(EXIT_FAILURE);
 			}
+
 			processCache(cache, image_data, imageInfo);
 		}
 	}

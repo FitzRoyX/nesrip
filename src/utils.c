@@ -220,7 +220,7 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
 void initCache(Cache* cache, int initialCapacity) {
     cache->size = 0;
     cache->capacity = initialCapacity;
-	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage*));
+	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage));
 }
 
 // Function to add data to the cache
@@ -237,6 +237,15 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
 		cache->images = tmp;
     }
 
+    // First copy the image before it is freed in the ripper logic
+    char* image_data = (char*)calloc(1, (size_t)width * height * comp);
+    if (image_data == NULL) {
+        free(cache);
+        perror("Failed to allocate memory for image data in Cache");
+        exit(EXIT_FAILURE);
+    }
+    memcpy(image_data, value, (size_t)width * height * comp);
+
 	PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
     if (image == NULL) {
 		free(cache);
@@ -247,9 +256,13 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
     image->imageInfo.width = width;
     image->imageInfo.height = height;
     image->imageInfo.channels = comp;
-    image->data = (char*)value;
+    image->data = image_data;
     image->size = width * height * comp;
-	cache->images[idx] = image;
+    cache->images[idx] = image;
+
+    char filename[256];
+    snprintf(filename, sizeof(filename), "output/afteradddingtocache_%d.png", idx + 1);
+    stbi_write_png(filename, width, height, 4, cache->images[0]->data, width * 4);
 }
 
 void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
@@ -261,14 +274,13 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
 
     int totalSepSize = info->height * info->width * info->channels * (cache->size -1);
 
-    char* combinedImage = NULL;
-    
-    //char* combinedImage = (unsigned char*)calloc(maxSize + totalSepSize, sizeof(unsigned char));
-    //if (!combinedImage) {
-    //    perror("Failed to allocate memory for combined image");
-    //    stbi_image_free(separator);
-    //    exit(EXIT_FAILURE);
-    //}
+    char* combinedimage = (char*)calloc((size_t)maxSize + totalSepSize, sizeof(char));
+    if (!combinedimage) {
+        perror("failed to allocate memory for combined image");
+        free(separator);
+        free(cache);
+        exit(EXIT_FAILURE);
+    }
 
     int sepSize = info->width * info->height * info->channels;
 	int offset  = 0, height = 0, width = 0;
@@ -276,7 +288,7 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
         PNGImage* image = cache->images[i];
 		height = image->imageInfo.height;
 		width = image->imageInfo.width;
-        char filename[15];
+        char filename[256];
         snprintf(filename, sizeof(filename), "output/%d.png", i+1);
         stbi_write_png(filename, width, height, 4, image->data, width * 4);
         // Copy the current image
@@ -287,6 +299,7 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
         //    memcpy(combinedImage + imageSize, separator, sepSize);
         //    offset += imageSize + sepSize;
         //}
+        break;
     }
 
     
@@ -294,9 +307,8 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
     printf("%s", "output");
     printf("\".\n");
 
-    if (combinedImage == NULL) {
+    if (combinedimage == NULL) {
         perror("No images in cache to combine");
-        stbi_image_free(separator);
         exit(EXIT_FAILURE);
 	}
     //if (!stbi_write_png(filename, width, height, 4, combinedImage, width * 4)) {
