@@ -546,9 +546,9 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	char* ctr = context->args->filenameOverload;
 	char filename[256];
 	snprintf(filename, sizeof(filename), "output/%s.png", ctr);
+	stbi_write_png(filename, context->maxX + 1, context->maxY + 1, 4, context->sheet, 128 * 4); 
 	addToCache(cache, context->sheet, context->maxX + 1, context->maxY + 1, 4, 128 * 4);
-	stbi_write_png(filename, context->maxX + 1, context->maxY + 1, 4, context->sheet, 128 * 4);
-
+	
 	//writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);
 
