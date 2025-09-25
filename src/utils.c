@@ -237,6 +237,8 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
 		cache->images = tmp;
     }
 
+    char filename[256];
+    int idx = cache->size++;
     // First copy the image before it is freed in the ripper logic
     char* image_data = (char*)calloc(1, (size_t)width * height * comp);
     if (image_data == NULL) {
@@ -245,6 +247,8 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
         exit(EXIT_FAILURE);
     }
     memcpy(image_data, value, (size_t)width * height * comp);
+    snprintf(filename, sizeof(filename), "output/aftermemcpy_%d.png", idx + 1);
+    stbi_write_png(filename, width, height, 4, image_data, width * 4);
 
 	PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
     if (image == NULL) {
@@ -252,7 +256,7 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
         perror("Failed to allocate memory for PNGImage");
         exit(EXIT_FAILURE);
 	}
-	int idx = cache->size++;
+	
     image->imageInfo.width = width;
     image->imageInfo.height = height;
     image->imageInfo.channels = comp;
@@ -260,7 +264,6 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
     image->size = width * height * comp;
     cache->images[idx] = image;
 
-    char filename[256];
     snprintf(filename, sizeof(filename), "output/afteradddingtocache_%d.png", idx + 1);
     stbi_write_png(filename, width, height, 4, cache->images[0]->data, width * 4);
 }
