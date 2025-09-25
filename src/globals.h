@@ -38,7 +38,7 @@ typedef struct {
 }PNGInfo;
 
 typedef struct {
-	PNGInfo* imageInfo;
+	PNGInfo imageInfo;
 	int size;
 	char* data;
 } PNGImage;
@@ -46,7 +46,7 @@ typedef struct {
 typedef struct {
 	int size;        // Current number of elements in the cache
 	int capacity;    // Maximum capacity of the cache
-	PNGImage* image;    // Pointer to dynamically allocated memory
+	PNGImage** images; // pointer to array of images
 } Cache;
 
 #define MAX_PALETTES    256

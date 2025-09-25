@@ -220,6 +220,7 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
 void initCache(Cache* cache, int initialCapacity) {
     cache->size = 0;
     cache->capacity = initialCapacity;
+	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage*));
 }
 
 // Function to add data to the cache
@@ -227,48 +228,41 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
     if (cache->size == cache->capacity) {
         // Double the capacity if the cache is full
         cache->capacity *= 2;
-        cache->image = (PNGImage*)realloc(cache->image, cache->capacity * sizeof(cache));
-        if (cache->image == NULL) {
-            perror("Failed to reallocate memory");
+        PNGImage** tmp = (PNGImage**)realloc(cache->images, cache->capacity * sizeof(PNGImage));
+        if (tmp == NULL) {
+			free(cache);
+            perror("Failed to reallocate memory to increase size of the Cache");
             exit(EXIT_FAILURE);
         }
+		cache->images = tmp;
     }
 
-    PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage) + (width * height * comp));
+	PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
     if (image == NULL) {
-        perror("Memory allocation failed for cacheData");
-        exit(EXIT_FAILURE);
-    }
-
-    PNGInfo* info = (PNGInfo*)calloc(1, sizeof(PNGInfo));
-    if (info == NULL) {
-        perror("Memory allocation failed for PNGInfo");
-        free(image);
+		free(cache);
+        perror("Failed to allocate memory for PNGImage");
         exit(EXIT_FAILURE);
 	}
-    info->width = width;
-    info->height = height;
-    info->channels = comp;
-    image->imageInfo = info;
-
-    //int len;
-    //unsigned char* png = stbi_write_png_to_mem((const unsigned char*)value, stride_bytes, width, height, comp, &len);
-    image->data = value;
+	int idx = cache->size++;
+    image->imageInfo.width = width;
+    image->imageInfo.height = height;
+    image->imageInfo.channels = comp;
+    image->data = (char*)value;
     image->size = width * height * comp;
-    cache[cache->size++].image = image;
+	cache->images[idx] = image;
 }
 
 void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
-    size_t maxSize = 0;
+    int maxSize = 0;
     for (size_t i = 0; i < cache->size; i++) {
-        maxSize = maxSize + (cache[i].image->imageInfo->height * cache[i].image->imageInfo->width * cache[i].image->imageInfo->channels);
+		PNGImage* image = cache->images[i];
+        maxSize = maxSize + image->size;
     }
 
     int totalSepSize = info->height * info->width * info->channels * (cache->size -1);
 
     char* combinedImage = NULL;
-    char* filename = "output/1.png";
-
+    
     //char* combinedImage = (unsigned char*)calloc(maxSize + totalSepSize, sizeof(unsigned char));
     //if (!combinedImage) {
     //    perror("Failed to allocate memory for combined image");
@@ -278,25 +272,26 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
 
     int sepSize = info->width * info->height * info->channels;
 	int offset  = 0, height = 0, width = 0;
-    for (size_t i = 0; i < cache->size; i++) {
-        int imageSize = cache[i].image->size;
-		height = cache[i].image->imageInfo->height;
-		width = cache[i].image->imageInfo->width;
+    for (int i = 0; i < cache->size; i++) {
+        PNGImage* image = cache->images[i];
+		height = image->imageInfo.height;
+		width = image->imageInfo.width;
+        char filename[15];
+        snprintf(filename, sizeof(filename), "output/%d.png", i+1);
+        stbi_write_png(filename, width, height, 4, image->data, width * 4);
         // Copy the current image
-        stbi_write_png(filename, width, height, 4, cache[i].image->data, width * 4);
         //combinedImage = cache[i].image->data;
         //memcpy(combinedImage + offset, cache[i].image->data, imageSize);
-		break;
         // Insert separator only between images
-        if (i < (cache->size - 1)) {
-            memcpy(combinedImage + imageSize, separator, sepSize);
-            offset += imageSize + sepSize;
-        }
+        //if (i < (cache->size - 1)) {
+        //    memcpy(combinedImage + imageSize, separator, sepSize);
+        //    offset += imageSize + sepSize;
+        //}
     }
 
     
     printf("  Writing combined sheets to \"");
-    printf("%s", filename);
+    printf("%s", "output");
     printf("\".\n");
 
     if (combinedImage == NULL) {

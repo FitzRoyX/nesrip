@@ -36,7 +36,7 @@ int is_null_terminated(const char* str, size_t max_length);
 void toUpperCase(char* str);
 int fileExists(const char* filename);
 void deleteCharacters(char* str, size_t pos, size_t n);
-void initCache(Cache* cache, size_t initialCapacity);
+void initCache(Cache* cache, int initialCapacity);
 void addToCache(Cache* cache, const void* value, int x, int y, int comp, int stride_bytes);
 PNGInfo* getImageInfo(const char* filename);
 #endif

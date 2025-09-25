@@ -96,8 +96,13 @@ int main(int argc, char** argv) {
 	}
 
 	//TODO: Handle ROM hash detection and graphics ripping here
-	size_t capacity = 10;
-	Cache* cache = (Cache*)calloc(capacity, sizeof(Cache) + sizeof(PNGImage));
+	int capacity = 10;
+	Cache* cache = (Cache*)calloc(1, sizeof(Cache));
+	if (cache == NULL) {
+		printf("Error: Couldn't allocate memory for cache.\n");
+		quitProgram(0);
+	}
+
 	initCache(cache, capacity);
 	interpretDatabase(cache);
 

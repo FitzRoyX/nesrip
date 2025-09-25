@@ -9,11 +9,11 @@
 #include "stb_image_write.h"
 #define STBI_ONLY_PNG
 
-
-#define REPEAT_COUNT 16
 #define TILE_SIZE 8
+#define REPEAT_COUNT 16
 #define IMAGE_WIDTH (TILE_SIZE * REPEAT_COUNT)
 #define IMAGE_HEIGHT TILE_SIZE
+
 
 void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]) {
     for (int y = 0; y < TILE_SIZE; y++) {
@@ -63,11 +63,15 @@ void generate_image(uint8_t *image) {
 }
 
 int main() {
- //   uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT * 4];
+    int CHANNELS = 4; // RGBA
+    int width = IMAGE_WIDTH;
+	int height = IMAGE_HEIGHT;
+ 
+    //   uint8_t image[IMAGE_WIDTH * IMAGE_HEIGHT * 4];
  //   generate_image(image);
 
  //   // Save the tile as a PNG file
-	char* filename = "tile_pattern2.png";
+	char* filename = "tile_pattern.png";
 	//if (!stbi_write_png(filename, IMAGE_WIDTH, IMAGE_HEIGHT, 4, image, IMAGE_WIDTH * 4)) {
  //       printf("Failed to write image\n");
  //       return 1;
@@ -75,8 +79,8 @@ int main() {
 
  //   printf("Tiles saved as tile_pattern.png\n");
 
-    char* image_data = stbi_load(filename, IMAGE_WIDTH, IMAGE_HEIGHT, 4, 0);
-    stbi_write_png("sep_test.png", IMAGE_WIDTH, IMAGE_HEIGHT, 4, image_data, IMAGE_WIDTH * 4);
+    char* image_data = stbi_load(filename, &width, &height, &CHANNELS, 0);
+    stbi_write_png("sep_test.png", width, height, CHANNELS, image_data, width * CHANNELS);
 
     return 0;
 }
