@@ -39,5 +39,5 @@ void deleteCharacters(char* str, size_t pos, size_t n);
 void initCache(Cache* cache, int initialCapacity);
 void addToCache(Cache* cache, char* value, int x, int y, int comp);
 PNGInfo* getImageInfo(const char* filename);
-void processCache(Cache* cache, unsigned char* separator, PNGInfo* info);
+void processCache(Cache* cache, char* separator, PNGInfo* info);
 #endif
