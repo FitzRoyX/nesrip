@@ -7,8 +7,8 @@
 #include <string.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb/stb_image.h"
 #include "stb/stb_image_write.h"   
 
 #include "utils.h"
@@ -224,7 +224,7 @@ void initCache(Cache* cache, int initialCapacity) {
 }
 
 // Function to add data to the cache
-void addToCache(Cache* cache, const void* value, int width, int height, int comp, int stride_bytes) {
+void addToCache(Cache* cache, char* value, int width, int height, int comp, int stride_bytes) {
     if (cache->size == cache->capacity) {
         // Double the capacity if the cache is full
         cache->capacity *= 2;
@@ -239,14 +239,17 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
 
     char filename[256];
     int idx = cache->size++;
+    snprintf(filename, sizeof(filename), "output/beforememcpy_%d.png", idx + 1);
+    stbi_write_png(filename, width, height, 4, value, width * 4);
+
     // First copy the image before it is freed in the ripper logic
-    char* image_data = (char*)calloc(1, (size_t)width * height * comp);
+    char* image_data = (char*)calloc(1, (size_t)width * height * comp * sizeof(char));
     if (image_data == NULL) {
         free(cache);
         perror("Failed to allocate memory for image data in Cache");
         exit(EXIT_FAILURE);
     }
-    memcpy(image_data, value, (size_t)width * height * comp);
+    memcpy(image_data, value, (size_t)width * height * comp * sizeof(char));
     snprintf(filename, sizeof(filename), "output/aftermemcpy_%d.png", idx + 1);
     stbi_write_png(filename, width, height, 4, image_data, width * 4);
 
@@ -261,11 +264,8 @@ void addToCache(Cache* cache, const void* value, int width, int height, int comp
     image->imageInfo.height = height;
     image->imageInfo.channels = comp;
     image->data = image_data;
-    image->size = width * height * comp;
+    image->size = width * height * comp * sizeof(char);
     cache->images[idx] = image;
-
-    snprintf(filename, sizeof(filename), "output/afteradddingtocache_%d.png", idx + 1);
-    stbi_write_png(filename, width, height, 4, cache->images[0]->data, width * 4);
 }
 
 void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
@@ -275,7 +275,8 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
         maxSize = maxSize + image->size;
     }
 
-    int totalSepSize = info->height * info->width * info->channels * (cache->size -1);
+    int sep_size = info->height * info->width * info->channels * sizeof(char);
+    int totalSepSize = sep_size * (cache->size -1);
 
     char* combinedimage = (char*)calloc((size_t)maxSize + totalSepSize, sizeof(char));
     if (!combinedimage) {
@@ -285,7 +286,6 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
         exit(EXIT_FAILURE);
     }
 
-    int sepSize = info->width * info->height * info->channels;
 	int offset  = 0, height = 0, width = 0;
     for (int i = 0; i < cache->size; i++) {
         PNGImage* image = cache->images[i];
