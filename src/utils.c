@@ -224,7 +224,7 @@ void initCache(Cache* cache, int initialCapacity) {
 }
 
 // Function to add data to the cache
-void addToCache(Cache* cache, char* value, int width, int height, int comp, int stride_bytes) {
+void addToCache(Cache* cache, char* value, int width, int height, int comp) {
     if (cache->size == cache->capacity) {
         // Double the capacity if the cache is full
         cache->capacity *= 2;
@@ -240,7 +240,7 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp, int 
     char filename[256];
     int idx = cache->size++;
     snprintf(filename, sizeof(filename), "output/beforememcpy_%d.png", idx + 1);
-    stbi_write_png(filename, width, height, 4, value, width * 4);
+    stbi_write_png(filename, width, height, 4, value, 128 * 4);
 
     // First copy the image before it is freed in the ripper logic
     char* image_data = (char*)calloc(1, (size_t)width * height * comp * sizeof(char));
@@ -251,7 +251,7 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp, int 
     }
     memcpy(image_data, value, (size_t)width * height * comp * sizeof(char));
     snprintf(filename, sizeof(filename), "output/aftermemcpy_%d.png", idx + 1);
-    stbi_write_png(filename, width, height, 4, image_data, width * 4);
+    stbi_write_png(filename, width, height, 4, image_data, 128 * 4);
 
 	PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
     if (image == NULL) {
@@ -293,7 +293,7 @@ void processCache(Cache* cache, unsigned char* separator, PNGInfo* info) {
 		width = image->imageInfo.width;
         char filename[256];
         snprintf(filename, sizeof(filename), "output/%d.png", i+1);
-        stbi_write_png(filename, width, height, 4, image->data, width * 4);
+        stbi_write_png(filename, width, height, 4, image->data, 128 * 4);
         // Copy the current image
         //combinedImage = cache[i].image->data;
         //memcpy(combinedImage + offset, cache[i].image->data, imageSize);
