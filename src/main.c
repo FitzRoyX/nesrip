@@ -12,7 +12,7 @@
 #include "sha_2/sha-256.h"
 
 Rom rom;
-Cache cache;
+Cache* cache;
 char* programName;
 char* outputFolder;
 char* outputFilename = NULL;
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 
 	//TODO: Handle ROM hash detection and graphics ripping here
 	int capacity = 10;
-	Cache* cache = (Cache*)calloc(1, sizeof(Cache));
+	cache = (Cache*)calloc(1, sizeof(Cache));
 	if (cache == NULL) {
 		printf("Error: Couldn't allocate memory for cache.\n");
 		quitProgram(0);

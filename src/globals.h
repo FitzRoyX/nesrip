@@ -54,7 +54,7 @@ typedef struct {
 
 extern ColorizerPalette palettes[MAX_PALETTES];
 extern ColorizerSheet colorSheet;
-extern Cache cache;
+extern Cache* cache;
 extern PNGImage image;
 extern PNGInfo imageInfo;
 
