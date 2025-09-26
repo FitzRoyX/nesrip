@@ -1084,11 +1084,14 @@ end
 
 
 
-//UNLICENSED
+//UNLICENSED TEST ENTRY
 //BladeBuster.nes
 hash 4a4cf5968932f2e7783e2e46cc2b870e73e1d6e7a874ec4a9f79ec217423ba8a
 p 1 h
 s 01 40000 40fff //seg1
-s 02 41000 410bf //seg2 less than 16 tiles
-s 03 410c0 420cf
+s 02 41000 410bf //seg2 less than 16 tiles, needs padding
+s 03 410c0 420cf //existing padding logic is used, 15 tiles short of 16
+s 04 45ff0 465df //existing padding logic is used, 1 tile short of 16
+s 05 52700 5334f //existing padding logic is used, 11 tiles short of 16
+s 06 55000 55fef //existing padding logic is used, 1 tile short of 16
 end
