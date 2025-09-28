@@ -7,10 +7,7 @@
 #include "utils.h"
 #include "sha_2/sha-256.h"
 #include "interpreter.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#define STBI_ONLY_PNG
+#include "stb/stb_image.h"
 
 int foundRom = false;
 char* tokenContextStack[2];
@@ -374,8 +371,8 @@ void interpretDatabase(Cache* cache) {
 			char customMsg[256];
 			char* sepfilename = "separator_8x8_16.png";
 			PNGInfo* imageInfo = getImageInfo(sepfilename);
-			//char* image_data = stbi_load(sepfilename, &width, &height, &CHANNELS, 0);
-			char* image_data = stbi_load(sepfilename, &imageInfo->width, &imageInfo->height, &imageInfo->channels, 0);
+			char* image_data = NULL;
+			image_data = stbi_load(sepfilename, &imageInfo->width, &imageInfo->height, &imageInfo->channels, 0);
 			if (image_data == NULL) {
 				snprintf(customMsg, sizeof(customMsg), "Error loading from file: %s", sepfilename);
 				perror(customMsg);

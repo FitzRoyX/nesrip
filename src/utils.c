@@ -238,10 +238,7 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
 		cache->images = tmp;
     }
 
-    char filename[256];
     int idx = cache->size++;
-    snprintf(filename, sizeof(filename), "output/beforememcpy_%d.png", idx + 1);
-    stbi_write_png(filename, width, height, 4, value, 128 * 4);
 
     // First copy the image before it is freed in the ripper logic
 	size_t imageSize = (size_t)width * height * comp * sizeof(char);
@@ -254,12 +251,10 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
         perror("Failed to allocate memory for image data in Cache");
         exit(EXIT_FAILURE);
     }
-    //memcpy(image_data, value, (size_t)width * height * comp * sizeof(char));
-	memmove(image_data, value, imageSize);
-    snprintf(filename, sizeof(filename), "output/aftermemcpy_%d.png", idx + 1);
-    stbi_write_png(filename, width, height, 4, image_data, 128 * 4);
 
-	PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
+    memmove(image_data, value, imageSize);
+
+    PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
     if (image == NULL) {
 		free(cache);
         perror("Failed to allocate memory for PNGImage");
@@ -292,37 +287,47 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
         exit(EXIT_FAILURE);
     }
 
-	int offset = 0, height = 0, width = 0;
+	int offset = 0, height = 0, width = 0, combined_height = 0;
     char filename[256];
     for (int i = 0; i < cache->size; i++) {
         PNGImage* image = cache->images[i];
-		height += image->imageInfo.height;
-		width = image->imageInfo.width;
+		combined_height += image->imageInfo.height;
+		if (image->imageInfo.width > width)
+		    width = image->imageInfo.width;
+
+        if (i == 2) {
+            char* testimage = (char*)calloc((size_t)image->size, sizeof(char));
+            memcpy(testimage, image->data, image->size);
+            snprintf(filename, sizeof(filename), "output/before_combined_%d.png", i + 1);
+            stbi_write_png(filename, width, image->imageInfo.height, 4, testimage, 128 * 4);
+        }
 
         // Copy the current image
         memcpy(combinedimage + offset, image->data, image->size);
 		offset += image->size;
-        strcpy(filename, "output/from cache_0.png");  
-        stbi_write_png(filename, width, height, 4, image->data, 128 * 4);
+        snprintf(filename, sizeof(filename), "output/combined_%d.png", i + 1);
+        stbi_write_png(filename, width, combined_height, 4, combinedimage, 128 * 4);
+
         // Insert separator only between images
         if (i < (cache->size - 1)) {
             memcpy(combinedimage + offset, separator, sep_size);
             offset += sep_size;
-			height += info->height;
+			combined_height += info->height;
         }
+        if(i < 2) { continue; }
         break;
     }
 
-    
+    strcpy(filename, "output/0.png");
     printf("  Writing combined sheets to \"");
-    printf("%s", "output/0.png");
+    printf("%s", filename);
     printf("\".\n");
 
     if (combinedimage == NULL) {
         perror("No images in cache to combine");
         exit(EXIT_FAILURE);
 	}
-    if (!stbi_write_png(filename, width, height, 4, combinedimage, 124 * 4)) {
+    if (!stbi_write_png(filename, width, combined_height, 4, combinedimage, 128 * 4)) {
         perror("Failed to write combined image\n");
         exit(EXIT_FAILURE);
     }

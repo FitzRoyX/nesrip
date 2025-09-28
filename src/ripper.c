@@ -6,6 +6,7 @@
 #include "logger.h"
 #include "utils.h"
 #include "ripper.h"
+#include "stb/stb_image_write.h"
 
 //  default grayscale bwld colors
 //	0, 0, 0, 255,
@@ -77,8 +78,7 @@ ColorizerPalette palettes[MAX_PALETTES];
 ColorizerSheet colorSheet;
 int colorSheetIndex = 0;
 
-int allocTilesheet(ExtractionContext* context, int tileCount)
-{
+int allocTilesheet(ExtractionContext* context, int tileCount) {
 	int width = 128;
 	int height = (tileCount / (16 * context->patternSize)) * context->patternSize * 8;
 
@@ -87,8 +87,7 @@ int allocTilesheet(ExtractionContext* context, int tileCount)
 
 	context->sheet = (char*)malloc(width * height * 4);
 
-	if (context->sheet == NULL)
-	{
+	if (context->sheet == NULL) {
 		printf("Error: Couldn't allocate memory for tilesheet.\n");
 		return 1;
 	}
