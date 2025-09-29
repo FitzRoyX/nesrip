@@ -291,29 +291,37 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
     char filename[256];
     for (int i = 0; i < cache->size; i++) {
         PNGImage* image = cache->images[i];
-		combined_height += image->imageInfo.height;
+		height = image->imageInfo.height;
 		if (image->imageInfo.width > width)
 		    width = image->imageInfo.width;
 
-        if (i == 2) {
-            char* testimage = (char*)calloc((size_t)image->size, sizeof(char));
-            memcpy(testimage, image->data, image->size);
-            snprintf(filename, sizeof(filename), "output/before_combined_%d.png", i + 1);
-            stbi_write_png(filename, width, image->imageInfo.height, 4, testimage, 128 * 4);
+        if (i == 0) {
+            // Copy the current image
+            memcpy(combinedimage + offset, image->data, image->size);
+            offset += image->size;
+            combined_height += height;
+			continue;
         }
 
-        // Copy the current image
-        memcpy(combinedimage + offset, image->data, image->size);
-		offset += image->size;
+		// Prepare image with separator
+        char* prep_image = (char*)calloc((size_t)image->size + sep_size, sizeof(char));
+        if (!prep_image) {
+            perror("failed to allocate memory for prep image");
+            free(separator);
+            free(cache);
+            exit(EXIT_FAILURE);
+        }
+
+        memcpy(prep_image, separator, sep_size);
+        memcpy(prep_image + sep_size, image->data, image->size);
         snprintf(filename, sizeof(filename), "output/combined_%d.png", i + 1);
-        stbi_write_png(filename, width, combined_height, 4, combinedimage, 128 * 4);
+        stbi_write_png(filename, width, height + info->height, 4, prep_image, 128 * 4);
 
-        // Insert separator only between images
-        if (i < (cache->size - 1)) {
-            memcpy(combinedimage + offset, separator, sep_size);
-            offset += sep_size;
-			combined_height += info->height;
-        }
+		// Merge the prepared image into the combined image
+        memcpy(combinedimage + offset, prep_image, (size_t)sep_size + image->size);
+        offset += (sep_size + image->size);
+        combined_height += (info->height + height);
+		free(prep_image);
         if(i < 2) { continue; }
         break;
     }
