@@ -5,6 +5,7 @@
 #include <limits.h>
 #include <math.h>
 #include <string.h>
+#include <stdint.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -290,11 +291,51 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
 	int offset = 0, height = 0, width = 0, combined_height = 0;
     char filename[256];
     for (int i = 0; i < cache->size; i++) {
+        //if (i != 1) { continue; }
         PNGImage* image = cache->images[i];
 		height = image->imageInfo.height;
-		if (image->imageInfo.width > width)
-		    width = image->imageInfo.width;
+        width = image->imageInfo.width;
+        if (width < 128) {
+			// Pad width to 128 if smaller for 8 x 8 tiles
+			int tiles_needed = (128 - width) / 8;
+			size_t padded_size = tiles_needed * (size_t)(8 * 8 * 4);
+            size_t image_size = image->size + padded_size;
+			width += tiles_needed * 8;
 
+            // Allocate memory for expanded width
+            char* temp_data = (char*)calloc(image_size, sizeof(char));
+            if (temp_data == NULL) {
+                // Handle allocation failure
+                free(cache);
+                perror("Failed to allocate memory for padded image");
+                exit(EXIT_FAILURE);
+            }
+			// Allocate memory for padded data
+			uint8_t* padded_data = (char*)calloc(padded_size, sizeof(char));
+            if (padded_data == NULL) {
+                // Handle allocation failure
+                free(temp_data);
+                free(cache);
+                perror("Failed to allocate memory for padded image");
+                exit(EXIT_FAILURE);
+			}
+
+
+            // Pad the image data with transparent pixels
+            generate_TransparentImage(padded_data, tiles_needed);
+            
+            memcpy(temp_data, image->data, image->size);
+			memcpy(temp_data + image->size, padded_data, padded_size);
+			free(padded_data);
+            free(image->data);
+
+            image->data = temp_data;
+            image->imageInfo.width = width;
+            image->size = (int)(image_size);
+            snprintf(filename, sizeof(filename), "output/padded_%d.png", i + 1);
+            stbi_write_png(filename, image->imageInfo.width, image->imageInfo.height, 4, image->data, 128 * 4);
+        }
+		
         if (i == 0) {
             // Copy the current image
             memcpy(combinedimage + offset, image->data, image->size);
@@ -358,3 +399,88 @@ PNGInfo* getImageInfo(const char* filename) {
         exit(EXIT_FAILURE);
     }
 }
+
+
+#define TILE_SIZE 8
+
+static void generateTransparentTile(uint8_t* image) {
+    // Create an 8x8 transparent tile (RGBA format)
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int x = 0; x < TILE_SIZE; x++) {
+            int index = (y * TILE_SIZE + x) * 4;
+            image[index + 0] = 0;   // Red
+            image[index + 1] = 0;   // Green
+            image[index + 2] = 0;   // Blue
+            image[index + 3] = 0;   // Alpha (fully transparent)
+        }
+    }
+}
+
+static void generate_TransparentImage(uint8_t* image, int repeat_count) {
+    uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
+    generateTransparentTile(tile);
+
+    int image_width = (TILE_SIZE * repeat_count);
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int repeat = 0; repeat < repeat_count; repeat++) {
+            for (int x = 0; x < TILE_SIZE; x++) {
+                int src_idx = (y * TILE_SIZE + x) * 4;
+                int dest_idx = (y * image_width + repeat * TILE_SIZE + x) * 4;
+
+                image[dest_idx] = tile[src_idx];
+                image[dest_idx + 1] = tile[src_idx + 1];
+                image[dest_idx + 2] = tile[src_idx + 2];
+                image[dest_idx + 3] = tile[src_idx + 3];
+            }
+        }
+    }
+}
+
+void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]) {
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int x = 0; x < TILE_SIZE; x++) {
+            int index = 4 * (y * TILE_SIZE + x);
+            if (x == y || x == TILE_SIZE - y - 1) {
+                // Set color for the "X" pattern
+                image[index + 0] = color1[0]; // Red
+                image[index + 1] = color1[1]; // Green
+                image[index + 2] = color1[2]; // Blue
+                image[index + 3] = color1[3]; // Alpha
+            }
+            else {
+                // Set background color
+                image[index + 0] = color2[0];
+                image[index + 1] = color2[1];
+                image[index + 2] = color2[2];
+                image[index + 3] = color2[3];
+            }
+        }
+    }
+}
+
+void generate_image(uint8_t* image, int repeat_count) {
+    uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
+
+    // Define two colors: Red for "X" and White for background
+    uint8_t color1[4] = { 255, 0, 0, 255 };   // Red
+    uint8_t color2[4] = { 255, 255, 255, 255 }; // White
+
+    // Generate the tile
+    generateTile(tile, color1, color2);
+    int image_width = (TILE_SIZE * repeat_count);
+
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int repeat = 0; repeat < repeat_count; repeat++) {
+            for (int x = 0; x < TILE_SIZE; x++) {
+                int src_idx = (y * TILE_SIZE + x) * 4;
+                int dest_idx = (y * image_width + repeat * TILE_SIZE + x) * 4;
+
+                image[dest_idx] = tile[src_idx];
+                image[dest_idx + 1] = tile[src_idx + 1];
+                image[dest_idx + 2] = tile[src_idx + 2];
+                image[dest_idx + 3] = tile[src_idx + 3];
+            }
+        }
+    }
+}
+

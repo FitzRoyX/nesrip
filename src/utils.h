@@ -2,6 +2,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stdint.h>
+
 #include "globals.h"
 
 typedef enum {
@@ -40,4 +42,7 @@ void initCache(Cache* cache, int initialCapacity);
 void addToCache(Cache* cache, char* value, int x, int y, int comp);
 PNGInfo* getImageInfo(const char* filename);
 void processCache(Cache* cache, char* separator, PNGInfo* info);
+void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]);
+void generate_image(uint8_t* image, int repeat_count);
+void generate_TransparentImage(uint8_t* image, int repeat_count);
 #endif
