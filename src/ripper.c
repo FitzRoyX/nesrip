@@ -551,7 +551,7 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 
 	colorSheetIndex += tileCount;
 
-	writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
+	writeOutput(context->sheet, 128, context->maxY + 1, context);
 	free(context->sheet);
 
 	return 1;
