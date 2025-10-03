@@ -16,6 +16,7 @@
 #include "utils.h"
 #include "globals.h"
 
+
 str2int_errno str2int(int* out, char* s, int base)
 {
     char* end;
@@ -341,7 +342,7 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
         //break;
     }
 
-    strcpy(filename, "output/0.png");
+    snprintf(filename, sizeof(filename), "%s/0.png", outputFilename);
     printf("  Writing combined sheets to \"");
     printf("%s", filename);
     printf("\".\n");

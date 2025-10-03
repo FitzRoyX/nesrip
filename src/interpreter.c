@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
+
 #include "globals.h"
 #include "logger.h"
 #include "ripper.h"
