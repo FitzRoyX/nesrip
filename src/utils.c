@@ -10,6 +10,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBI_ONLY_PNG
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "stb/stb_image_resize2.h"
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"   
 
@@ -244,7 +246,7 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
     // First copy the image before it is freed in the ripper logic
 	size_t imageSize = (size_t)width * height * comp * sizeof(char);
     if (imageSize <= 4000) {
-        imageSize = 4000; // minimum size to avoid small allocations
+		imageSize = 4000; // minimum size to avoid small allocations is a deeper bug somewhere
     }
     char* image_data = (char*)calloc(1, imageSize);
     if (image_data == NULL) {
@@ -271,6 +273,20 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
 }
 
 void processCache(Cache* cache, char* separator, PNGInfo* info) {
+    if (cache->size == 0) {
+        printf("No images in cache to process.\n");
+        return;
+	}
+    if (separator == NULL) {
+        printf("No separator image provided.\n");
+        return;
+	}
+    if (info == NULL) {
+        printf("No image info provided.\n");
+        return;
+    }
+
+
     int maxSize = 0;
     for (size_t i = 0; i < cache->size; i++) {
 		PNGImage* image = cache->images[i];
@@ -285,6 +301,7 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
         perror("failed to allocate memory for combined image");
         free(separator);
         free(cache);
+		free(info);
         exit(EXIT_FAILURE);
     }
 
@@ -296,44 +313,15 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
 		height = image->imageInfo.height;
         width = image->imageInfo.width;
         if (width < 128) {
-			// Pad width to 128 if smaller for 8 x 8 tiles
-			int tiles_needed = (128 - width) / 8;
-			size_t padded_size = tiles_needed * (size_t)(8 * 8 * 4);
-            size_t image_size = image->size + padded_size;
-			width += tiles_needed * 8;
+            char* resized_data = NULL;
+            resized_data = resize_image(image->data, width, height, 128, height);
+            //snprintf(filename, sizeof(filename), "output/resized_image_%d.png", i + 1);
+            //stbi_write_png(filename, 128, 8, 4, resized_data, 128 * 4);
+            int image_size = (128 * height * 4);
 
-            // Allocate memory for expanded width
-            char* temp_data = (char*)calloc(image_size, sizeof(char));
-            if (temp_data == NULL) {
-                // Handle allocation failure
-                free(cache);
-                perror("Failed to allocate memory for padded image");
-                exit(EXIT_FAILURE);
-            }
-			// Allocate memory for padded data
-			uint8_t* padded_data = (char*)calloc(padded_size, sizeof(char));
-            if (padded_data == NULL) {
-                // Handle allocation failure
-                free(temp_data);
-                free(cache);
-                perror("Failed to allocate memory for padded image");
-                exit(EXIT_FAILURE);
-			}
-
-
-            // Pad the image data with transparent pixels
-            generate_TransparentImage(padded_data, tiles_needed);
-            
-            memcpy(temp_data, image->data, image->size);
-			memcpy(temp_data + image->size, padded_data, padded_size);
-			free(padded_data);
-            free(image->data);
-
-            image->data = temp_data;
-            image->imageInfo.width = width;
-            image->size = (int)(image_size);
-            snprintf(filename, sizeof(filename), "output/padded_%d.png", i + 1);
-            stbi_write_png(filename, image->imageInfo.width, image->imageInfo.height, 4, image->data, 128 * 4);
+            image->data = resized_data;
+            image->imageInfo.width = 128;
+            image->size = image_size;
         }
 		
         if (i == 0) {
@@ -355,16 +343,16 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
 
         memcpy(prep_image, separator, sep_size);
         memcpy(prep_image + sep_size, image->data, image->size);
-        snprintf(filename, sizeof(filename), "output/combined_%d.png", i + 1);
-        stbi_write_png(filename, width, height + info->height, 4, prep_image, 128 * 4);
+        //snprintf(filename, sizeof(filename), "output/combined_%d.png", i + 1);
+        //stbi_write_png(filename, width, height + info->height, 4, prep_image, 128 * 4);
 
 		// Merge the prepared image into the combined image
         memcpy(combinedimage + offset, prep_image, (size_t)sep_size + image->size);
         offset += (sep_size + image->size);
         combined_height += (info->height + height);
 		free(prep_image);
-        if(i < 2) { continue; }
-        break;
+        //if(i < 2) { continue; }
+        //break;
     }
 
     strcpy(filename, "output/0.png");
@@ -484,3 +472,15 @@ void generate_image(uint8_t* image, int repeat_count) {
     }
 }
 
+char* resize_image(char* img, int width, int height, int new_width, int new_height) {
+    // Allocate memory for resized image
+    unsigned char* resized_img = malloc(new_width * new_height * 4);
+    if (resized_img == NULL) {
+        perror("Unable to allocate memory for resized image.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Resize image
+	stbir_resize_uint8_srgb(img, width, height, width * 4, resized_img, new_width, new_height, new_width * 4, STBIR_RGBA);
+    return resized_img;
+}

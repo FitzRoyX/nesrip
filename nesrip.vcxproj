@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -148,6 +148,7 @@
     <ClInclude Include="src\rom.h" />
     <ClInclude Include="src\sha_2\sha-256.h" />
     <ClInclude Include="src\stb\stb_image.h" />
+    <ClInclude Include="src\stb\stb_image_resize2.h" />
     <ClInclude Include="src\stb\stb_image_write.h" />
     <ClInclude Include="src\utils.h" />
   </ItemGroup>

@@ -45,4 +45,5 @@ void processCache(Cache* cache, char* separator, PNGInfo* info);
 void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]);
 void generate_image(uint8_t* image, int repeat_count);
 void generate_TransparentImage(uint8_t* image, int repeat_count);
+char* resize_image(char* img, int width, int height, int new_width, int new_height);
 #endif
