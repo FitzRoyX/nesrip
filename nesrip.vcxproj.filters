@@ -71,9 +71,6 @@
     <ClInclude Include="src\stb\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\stb\stb_image_resize2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\sha_2\LICENSE.txt" />

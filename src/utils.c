@@ -10,8 +10,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBI_ONLY_PNG
-#define STB_IMAGE_RESIZE_IMPLEMENTATION
-#include "stb/stb_image_resize2.h"
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"   
 
@@ -245,9 +243,9 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
 
     // First copy the image before it is freed in the ripper logic
 	size_t imageSize = (size_t)width * height * comp * sizeof(char);
-    if (imageSize <= 4000) {
-		imageSize = 4000; // minimum size to avoid small allocations is a deeper bug somewhere
-    }
+  //  if (imageSize <= 4000) {
+		//imageSize = 4000; // minimum size to avoid small allocations is a deeper bug somewhere
+  //  }
     char* image_data = (char*)calloc(1, imageSize);
     if (image_data == NULL) {
         free(cache);
@@ -312,18 +310,6 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
         PNGImage* image = cache->images[i];
 		height = image->imageInfo.height;
         width = image->imageInfo.width;
-        if (width < 128) {
-            char* resized_data = NULL;
-            resized_data = resize_image(image->data, width, height, 128, height);
-            //snprintf(filename, sizeof(filename), "output/resized_image_%d.png", i + 1);
-            //stbi_write_png(filename, 128, 8, 4, resized_data, 128 * 4);
-            int image_size = (128 * height * 4);
-
-            image->data = resized_data;
-            image->imageInfo.width = 128;
-            image->size = image_size;
-        }
-		
         if (i == 0) {
             // Copy the current image
             memcpy(combinedimage + offset, image->data, image->size);
@@ -404,7 +390,7 @@ static void generateTransparentTile(uint8_t* image) {
     }
 }
 
-static void generate_TransparentImage(uint8_t* image, int repeat_count) {
+void generate_TransparentImage(uint8_t* image, int repeat_count) {
     uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
     generateTransparentTile(tile);
 
@@ -470,17 +456,4 @@ void generate_image(uint8_t* image, int repeat_count) {
             }
         }
     }
-}
-
-char* resize_image(char* img, int width, int height, int new_width, int new_height) {
-    // Allocate memory for resized image
-    unsigned char* resized_img = malloc(new_width * new_height * 4);
-    if (resized_img == NULL) {
-        perror("Unable to allocate memory for resized image.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Resize image
-	stbir_resize_uint8_srgb(img, width, height, width * 4, resized_img, new_width, new_height, new_width * 4, STBIR_RGBA);
-    return resized_img;
 }
