@@ -1084,7 +1084,7 @@ end
 
 
 
-//UNLICENSED
+//UNLICENSED TEST ENTRY
 //BladeBuster.nes
 hash 4a4cf5968932f2e7783e2e46cc2b870e73e1d6e7a874ec4a9f79ec217423ba8a
 p 1 h
