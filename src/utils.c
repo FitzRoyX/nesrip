@@ -342,7 +342,7 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
         //break;
     }
 
-    snprintf(filename, sizeof(filename), "%s/0.png", outputFilename);
+    snprintf(filename, sizeof(filename), "%s0.png", outputFolder);
     printf("  Writing combined sheets to \"");
     printf("%s", filename);
     printf("\".\n");
