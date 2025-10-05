@@ -38,13 +38,11 @@ char* updateToken(char* string) {
 	return token;
 }
 
-void pushTokenContext(void)
-{
+void pushTokenContext(void) {
 	++tokenContext;
 }
 
-void popTokenContext(void)
-{
+void popTokenContext(void) {
 	--tokenContext;
 }
 
@@ -83,10 +81,8 @@ size_t removeComments(char* string, size_t length) {
 
 }
 
-int handleColorizerPaletteCommand(Cache* cache)
-{
-	while (true)
-	{
+int handleColorizerPaletteCommand(Cache* cache) {
+	while (true) {
 		char* indexString, * name, * colors[4];
 		PULL_TOKEN("Palette", indexString);
 
@@ -100,8 +96,7 @@ int handleColorizerPaletteCommand(Cache* cache)
 		PULL_TOKEN("Palette", colors[3]);
 
 		int index;
-		if (str2int(&index, indexString, 0) != STR2INT_SUCCESS || index < 0 || index >= MAX_PALETTES)
-		{
+		if (str2int(&index, indexString, 0) != STR2INT_SUCCESS || index < 0 || index >= MAX_PALETTES) {
 			printf("Error: Palette index out of range.\n");
 			return 1;
 		}
@@ -109,8 +104,7 @@ int handleColorizerPaletteCommand(Cache* cache)
 		ColorizerPalette* palette = &palettes[index];
 		palette->valid = true;
 		palette->name = _strdup(name);
-		for (int i = 0; i < 4; i++)
-		{
+		for (int i = 0; i < 4; i++)	{
 			int color;
 			str2int(&color, colors[i], 16);
 			palette->colors[i][0] = color >> 16 & 255;
@@ -165,8 +159,7 @@ void interpretColorizer(char* colorizerFilename, Cache* cache) {
 	pushTokenContext();
 
 	char* token = updateToken(database);
-	while (token != NULL)
-	{
+	while (token != NULL) {
 		CHECK_COMMAND("p", handleColorizerPaletteCommand, cache);
 		CHECK_COMMAND("s", handleColorizerSheetCommand, cache);
 
@@ -212,8 +205,7 @@ int handleHashCommand(char *hashString, Cache* cache) {
 	return 0;
 }
 
-int handlePatternCommand(Cache* cache)
-{
+int handlePatternCommand(Cache* cache) {
 	char* size, * direction;
 	PULL_TOKEN("Pattern", size);
 	PULL_TOKEN("Pattern", direction);
@@ -227,8 +219,7 @@ int handlePatternCommand(Cache* cache)
 	return 0;
 }
 
-int handlePaletteCommand(Cache* cache)
-{
+int handlePaletteCommand(Cache* cache) {
 	char* token;
 	PULL_TOKEN("Palette", token);
 
@@ -240,9 +231,8 @@ int handlePaletteCommand(Cache* cache)
 }
 
 int handleSectionCommand(Cache* cache) {
-	char* prefix, * sectionStart, * sectionEnd;
+	char* sectionStart, * sectionEnd;
 
-	PULL_TOKEN("Section", prefix);
 	PULL_TOKEN("Section", sectionStart);
 	PULL_TOKEN("Section", sectionEnd);
 
@@ -257,15 +247,13 @@ int handleSectionCommand(Cache* cache) {
 		bitplaneType,
 		checkRedundant,
 		outputFolder,
-		prefix
 	};
 
 	ripSection(&rom, cache, &args);
 	return 0;
 }
 
-int handleCompressionCommand(Cache* cache)
-{
+int handleCompressionCommand(Cache* cache) {
 	char* token;
 	PULL_TOKEN("Compression", token);
 
@@ -273,8 +261,7 @@ int handleCompressionCommand(Cache* cache)
 	return 0;
 }
 
-int handleBitplaneCommand(Cache* cache)
-{
+int handleBitplaneCommand(Cache* cache) {
 	char* token;
 	PULL_TOKEN("Bitplane", token);
 
@@ -285,8 +272,7 @@ int handleBitplaneCommand(Cache* cache)
 	return 0;
 }
 
-int handleCheckRedundantCommand(Cache* cache)
-{
+int handleCheckRedundantCommand(Cache* cache) {
 	char* token;
 	PULL_TOKEN("CheckRedundant", token);
 
@@ -297,8 +283,7 @@ int handleCheckRedundantCommand(Cache* cache)
 	return 0;
 }
 
-int handleClearRedundantCommand(Cache* cache)
-{
+int handleClearRedundantCommand(Cache* cache) {
 	cleanupPatternChains();
 	initPatternChains();
 	return 0;
