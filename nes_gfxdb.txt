@@ -1,126 +1,126 @@
 //3-D WorldRunner (USA).prg
 hash c457644ccfb93f8978326e728931800283821e531edc409fca9c0167495319c4
 p 1 h
-s 01 2000 3fff //seg1
-s 02 4100 438f //seg2
-s 03 8000 efff //seg3
-s 04 12000 12fff //seg4
-s 05 14800 157ff //seg5
-s 06 16000 17fff //seg6
+s 2000 3fff //seg1
+s 4100 438f //seg2
+s 8000 efff //seg3
+s 12000 12fff //seg4
+s 14800 157ff //seg5
+s 16000 17fff //seg6
 end
 
 //4 Nin Uchi Mahjong (Japan).chr
 hash 3841ff3e5e2fc98f14c7ef4bdc8361fee2dd47cecb2ee21417515124e1f2a5b9
 p 1 h
 b 1
-s 01 4000 4fff
+s 4000 4fff
 b 2
-s 02 5000 57ff
+s 5000 57ff
 b 1
-s 03 5800 5fff
+s 5800 5fff
 end
 
 //8 Eyes (Japan).chr
 hash c4b1bde698c2090646d967392052a9b3e5c911dcbc5b88b8d1b05e9324f11396
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //8 Eyes (USA).chr
 hash 3493f7621d964af7a56c407718ef1d056c6c46d4e4c6b3c48364d58a1b97a06a
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //10-Yard Fight (USA, Europe).chr
 hash 8e844d77da01f86ace52823f1f974c9230f09e6a6cbf33a07abfe9beeff00292
 p 1 h
-s 01 8000 9fff
+s 8000 9fff
 end
 
 //'89 Dennou Kyuusei Uranai (Japan).prg
 hash 4f6fa63277b7a114a24e8d67175ff3f7b993fa5db569d8b689ec20ccf1b0c0d3
 p 1 h
-s 01 0 7f5f //seg1
+s 0 7f5f //seg1
 b 1
-s 02 c000 1773f //seg2
+s c000 1773f //seg2
 b 2
-s 03 18000 191cf //seg3
+s 18000 191cf //seg3
 end
 
 //100 Man Dollar Kid - Maboroshi no Teiou Hen (Japan).prg
 hash bd578147b15c610e0ceafc7e27a87a3bf96e65af3b31aa98ae6924fc27a2d797
 p 1 h
 b 1
-s 01 8056 8465 //seg1
+s 8056 8465 //seg1
 b 2
-s 02 8466 9065
+s 8466 9065
 p 2 h
-s 03 9066 ac65
+s 9066 ac65
 p 1 h
-s 04 ac66 bff5
+s ac66 bff5
 p 2 h
-s 05 c03d c13c //seg2
+s c03d c13c //seg2
 p 1 h
-s 06 c13d ffec
-s 07 1006f 13fee //seg3
-s 08 14051 17fc0 //seg4
-s 09 180fb 1bfaa //seg5
-s 10 1c097 1fd86 //seg6
-s 11 2001a 20d19 //seg7
-s 12 2477f 248de //seg8
+s c13d ffec
+s 1006f 13fee //seg3
+s 14051 17fc0 //seg4
+s 180fb 1bfaa //seg5
+s 1c097 1fd86 //seg6
+s 2001a 20d19 //seg7
+s 2477f 248de //seg8
 end
 
 //720 Degrees (USA).prg !!somecompressedgfx!!
 hash df696ce2af90b18ca2b57468bdc525afce371bb1868152eb2cbbe1d62252f617
 p 1 h
 b 2
-s 01 6200 719f //seg1
-s 02 8000 917f //seg2
+s 6200 719f //seg1
+s 8000 917f //seg2
 b 1
-s 03 9180 9589
+s 9180 9589
 b 2
-s 04 958a a059
+s 958a a059
 p 4 v
-s 05 c000 13fff //seg3
+s c000 13fff //seg3
 end
 
 //1942 (Japan, USA).chr
 hash e868400409c70876b98dad2cca87b8e9ee31877b0cccbbd8405be5c54922722a
 p 1 h
-s 01 8000 9fff
+s 8000 9fff
 end
 
 //1943 - The Battle of Midway (USA).prg
 hash 9f54aafa367247b99c344ba9a0c58ad8fa8aceeeae1c304b8fefc9985c3c118c
 p 2 v
-s 01 0 5fff
-s 02 8000 ffff
+s 0 5fff
+s 8000 ffff
 end
 
 //1943 - The Battle of Valhalla (Japan).prg
 hash 28cdd5af3c441f361cfa3a21ec97a1ab08691dd5d73f7a10a372fbd1fffb8ba7
 p 2 v
-s 01 0 5fff
-s 02 8000 ffff
+s 0 5fff
+s 8000 ffff
 end
 
 //1999 - Hore, Mitakotoka! Seikimatsu (Japan).prg
 hash 3a3708c4bf67ff54ea95204b15adb6cac5358a4b722f45a9fa735d6ec0da3b49
 p 1 h
-s 01 40000 5ffff
+s 40000 5ffff
 end
 
 //2010 Street Fighter (Japan).chr
 hash 8aed01a409fd1e6f61fbe41421fe4a1da7242c7d6d6e26594bc026669d561247
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //A Ressha de Ikou (Japan).chr
 hash 9040f16eb22946f3b505dc9ccd7ac7ee5c6544580cfdc3f9f71cbc07755d1fc9
 p 1 h
-s 01 20000 23fff
+s 20000 23fff
 end
 
 //Aa Yakyuu Jinsei Icchokusen (Japan).prg !!allcompressedgfx!!
@@ -130,79 +130,79 @@ end
 //Abadox - The Deadly Inner War (USA).chr
 hash c4d4ff0bd283656c63d9a30dfc7dc6d2956744730a3641ba2c8f9f8e7204d9a1
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Abadox (Japan).chr
 hash 7934c8620f90ace5cd357d233a7c68687efb78cca7f3f95be48f3965f9e24c9a
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Abarenbou Tengu (Japan).chr
 hash 35fff8fa349361f879e419d303edd371d4f2f9d7a7912421343baa694fd471e9
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Aces - Iron Eagle III (Japan).chr !!somecompressedgfx!!
 hash 3b6055cedd2afb75ddf56f9100c9c9d393d42e18afa5e3c9b24454a0f995fe28
 p 1 h
-s 01 40000 7ffff
+s 40000 7ffff
 end
 
 //Action in New York (Europe).chr
 hash 6da6c8ac123df0f51e6f1b2ba79cb067d3352262532604ab08cf5dd587e84006
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Addams Family, The - Pugsley's Scavenger Hunt (Europe).chr
 hash d272fd3f15a3eb1f191fc488551373486f77bc7d39fad246bd4cea5eb1c91440
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Addams Family, The - Pugsley's Scavenger Hunt (USA).chr
 hash b3e09c94e33e0293672c1405c60fc69b2ab1564c8a4ee988e3ab6ada51484eea
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Addams Family, The (Europe).chr
 hash e92938b2379008222e093d0b9674607f4483da931061946e675c8a1ed6c8254e
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Addams Family, The (USA).chr
 hash 005c48a5984e3b75e069ef78d736266b12f7f6b102d88d90172ba9ae480b378b
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Advanced Dungeons & Dragons - Dragons of Flame (Japan).chr
 hash 314a546c20d6aa44e699c011bf04afd4f9d472d2af40d82836f76612cc606da8
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Advanced Dungeons & Dragons - Dragonstrike (USA).chr
 hash 22e92af92aed2d8d7bddb60732963642788b3ea9341592ce2c66a542a3d7ce7d
 p 1 h
-s 01 40000 7ffff
+s 40000 7ffff
 end
 
 //Advanced Dungeons & Dragons - Heroes of the Lance (Japan).chr
 hash 0c92894d0df0d890ddc437f1557dc0d6adfb81263c25c40841a1e83cd9d21732
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Advanced Dungeons & Dragons - Heroes of the Lance (USA).chr
 hash df2609c80e818bb95983b30a3ac1435ea2332ac83e29fde469f397e1d5a2db93
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Advanced Dungeons & Dragons - Hillsfar (Japan).prg !!allcompressedgfx!!
@@ -214,206 +214,206 @@ hash 60061c0042741f7c1e53ad8f738c27ffd9057310ff5d556662b3667e5700e751
 //Advanced Dungeons & Dragons - Pool of Radiance (Japan).chr
 hash 1d54a70fac4635e2dc8855296daaaa85e80be71ba1703c5859c6583b7dddeaaa
 p 1 h
-s 01 80000 9ffff
+s 80000 9ffff
 end
 
 //Advanced Dungeons & Dragons - Pool of Radiance (USA).chr
 hash 38e5253131d264395a302d0910316f94bec00f60db616caa7a53806f08c5b5f9
 p 1 h
-s 01 80000 9ffff
+s 80000 9ffff
 end
 
 //Adventure Island (USA).chr
 hash 53bfc94fce46a25188f84f102810406f686a7fb13fb5e4ae8f13760106acb969
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventure Island 3 (USA).chr
 hash e8dc8c0441c54d09a1cfe0c112a3137bb6d709989b23e6528f8e30360e1ad910
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventure Island Classic (Europe).chr
 hash 0b16539dccc9a914ad7ca908234842dbcdb9bad3860a503421c77bc17b34cbad
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventure Island II (USA).chr
 hash 5ee479ef04d80366a75dd144cbeb47d0347ee82025d1b65dd358e1f6498c9a39
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventure Island Part II, The (Europe).chr
 hash 9d82d83207a460258e833d430536d03c79ab8372435c614afb3c52e6b4325b68
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures in the Magic Kingdom (Europe).chr
 hash 4a4aeb204802fe00b801bf9f2d270e3def26e08fcafbbbaa9ec8bbca029550c4
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures in the Magic Kingdom (USA).chr
 hash 185e4adb2cbcb71ebf0fd3f6af767f2215f93916cd2ccf932ce5864d3953239a
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Bayou Billy, The (Europe).chr
 hash 599d9ed820218edada6f6f14fda1d0d21bad50cca28664f6604c171a72327adc
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Bayou Billy, The (USA).chr
 hash 0e862077f390348b8e109caa8189ff5ecdf3fac53eefc204369fae880e077d19
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Dino Riki (USA).chr
 hash 58d0f0e504b8450e7d2dfbe11948a244143bfe3065f7e78524633cce8ac73103
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventures of Gilligan's Island, The (USA).prg
 hash a0bc241936acf1993a300ab21c197a2647b6c072cfbb8e3f83424a9ab6655cc7
 p 1 h
-s 01 0 7b5f //segstart 1
-s 02 c000 c9ff //segstart 2
+s 0 7b5f //segstart 1
+s c000 c9ff //segstart 2
 end
 
 //Adventures of Lolo (Europe).chr
 hash ba954a009fbbd2b6de6f87e008e01145d842dd16b3f25625a994d58d420055bc
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventures of Lolo (Japan).chr
 hash 30db64a2f6f796308dfeefbf6f0b648176cf6c982fbb5158c5408a899d6355c3
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventures of Lolo (USA).chr
 hash c5e47c0479f500b86995fc8d09e132f5ba3f54cfd9a2a601ea3848bb60871a20
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventures of Lolo 2 (Europe).chr
 hash c37934b3eda806366d24cc3205ec656d6ac30faa30cb2172bdbc17503146dcae
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventures of Lolo 2 (USA).chr
 hash 12d3119e25f7b40a7ccc546f5d92edaad86fb0083facf6dd61db512bac45f99d
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Adventures of Lolo 3 (Europe).chr
 hash f2fd40a1207d504d140da9df73029002572c61be86d1ebfeaabad88475c833fa
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Lolo 3 (USA).chr
 hash 24f7bb802a0ddce0648ea9f156db42b3eaf4cc6598ce852ffac9f849bf92abee
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Lolo II (Japan).chr
 hash efa323475fa4567dbf88fc1f7dc8e072ba4ebc7de11e94e22022e7e95325c938
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Rad Gravity, The (Europe).chr
 hash 15b52b417006aeb18a2b8bcba9d89be89980ed8e1f7e78502921e637de7d0423
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Rad Gravity, The (USA).chr
 hash 322d6be47ed539c3dd3c1c92398e9842c3922d7c13914b9c72752ddec377145c
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Rocky and Bullwinkle and Friends, The (USA).chr
 hash 03db3d003eaa91e1434093ea259a82b9f2d5ed5b02404f9feba05819f69f81c4
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Adventures of Tom Sawyer (USA).chr
 hash 227e8a900206d0f8c67b7cb09eaee25f181085623b42bd9694dc30986d955f27
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //After Burner (Japan).chr
 hash 4fb12ad1c791c7ee8d5ec824eff871d71b43b92c4e93b45ed0b60f022459b917
 p 1 h
-s 01 20000 5ffff
+s 20000 5ffff
 end
 
 //Ai Sensei no Oshiete - Watashi no Hoshi (Japan).chr
 hash 21b10e8d4cf775aa1f4027c4afb4f64e72e221a506a485cf4ffdf98bed01a524
 p 1 h
-s 01 40000 5ffff
+s 40000 5ffff
 end
 
 //Aigina no Yogen - Balubalouk no Densetsu Yori (Japan).prg
 hash 1b5857f9fd57d6f50d8d1e57db67203155fb2974ae426deac3398efef1dbf042
 p 1 h
-s 01 0 bfff
+s 0 bfff
 end
 
 //Air Fortress (Europe).chr
 hash 0702704138e11bf3441f6bdd1ec03d59a7bf06ddb3c3a6607102f8ca394476b5
 p 1 h
-s 01 20000 27fff
+s 20000 27fff
 end
 
 //Air Fortress (Japan).chr
 hash 616d753986be5ddf359f5d914168d972724de9fd3cbf8e8118fc4cc34d637144
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Air Fortress (USA).chr
 hash 6d0215929f2dfeeecdeee4dd50b8aec07f279a8ab8df1dc4e877bbcad3db0d37
 p 1 h
-s 01 20000 27fff
+s 20000 27fff
 end
 
 //Airwolf (Europe) (Acclaim).chr
 hash fb1059806d503225093126145fc3cad0da773bcb81ea83165f7ee2e4b9ca6fd3
 p 1 h
-s 01 8000 27fff
+s 8000 27fff
 end
 
 //Airwolf (Japan) (Kyugo).chr
 hash 42b21cc066490b78afca98224d642507a4dbb74c1483c3d63fa85ffc883fe640
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Airwolf (USA) (Acclaim).chr
 hash b82c1234165cd725d8e7f3e51926bceb834744eb49ad915bd3ea8b76fa465eb1
 p 1 h
-s 01 8000 27fff
+s 8000 27fff
 end
 
 //Akagawa Jirou no Yuurei Ressha (Japan).prg !!allcompressedgfx!!
@@ -422,116 +422,116 @@ hash 99d13c5a1d0a3c9ee1f31a8718744635a1c4b0a58cb7133e4c56203821484101
 //Akira (Japan).chr
 hash caa7f0a9aa265625cc375ea6fe21d410b661476b5a665344eda1c5a9dff404f4
 p 1 h
-s 01 20000 5ffff
+s 20000 5ffff
 end
 
 //Akuma no Shoutaijou (Japan).chr
 hash c4c7bcbf9b9b95c3b8dd58adf5d51256cad3aec11bd609aaacae3ec2a829b286
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Akumajou Densetsu (Japan).chr
 hash c70f0f5d4054ce7c4850259879c9823add73ccc234ddcf96d95681bb78bd2c58
 p 1 h
-s 01 40000 5ffff
+s 40000 5ffff
 end
 
 //Akumajou Dracula (Japan).prg
 hash 60b1aebdc0a19afc5d3e7dc4f09d8a968580e007197461a8a142656702c27f0d
 p 2 v
-s 01 3501 3b00 //seg1
+s 3501 3b00 //seg1
 p 1 h
-s 02 4008 5007 //seg2
+s 4008 5007 //seg2
 p 2 v
-s 03 5008 6007
+s 5008 6007
 p 1 h
-s 04 6008 6907
+s 6008 6907
 p 2 v
-s 05 6908 6f07
+s 6908 6f07
 p 1 h
-s 06 6f08 74a7
+s 6f08 74a7
 p 2 v
-s 07 74a8 7a07
+s 74a8 7a07
 p 1 h
-s 08 7a08 8007
+s 7a08 8007
 p 2 v
-s 09 8008 8887
+s 8008 8887
 p 1 h
-s 10 8888 9187
+s 8888 9187
 p 2 v
-s 11 9188 9a07
+s 9188 9a07
 p 1 h
-s 12 9a08 a307
+s 9a08 a307
 p 2 v
-s 13 a308 ab87
+s a308 ab87
 p 1 h
-s 14 ab88 b487
+s ab88 b487
 p 2 v
-s 15 b488 c007
+s b488 c007
 p 1 h
-s 16 c008 c907
+s c008 c907
 p 2 v
-s 17 c908 d187
+s c908 d187
 p 1 h
-s 18 d188 da87
+s d188 da87
 p 2 v
-s 19 da88 e307
+s da88 e307
 p 1 h
-s 20 e308 f507
+s e308 f507
 p 2 v
-s 21 f508 f907
+s f508 f907
 p 1 h
-s 22 f908 ff07
+s f908 ff07
 p 2 v
-s 23 1aec8 1b3e7 //seg3
+s 1aec8 1b3e7 //seg3
 end
 
 //Akumajou Special - Boku Dracula-kun (Japan).chr
 hash ff5b96853cf67171918aad5157661dc223e0002e0373e2580cee2e207bb0a682
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Akuma-kun - Makai no Wana (Japan).chr
 hash fec392d252eda8203bfaee45c95ccfc8c1689b90ab6de5cce3f45320d9c69c74
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Al Unser Jr. Turbo Racing (USA).chr
 hash 4c95afeda9a92842933c174983fee954cf40d1301d32f6169f6653f1e5cdc10f
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Aladdin (Europe).prg
 hash 722096b8929442310bc268f9cfea10b26cff8a7e900197b54c73b4a8603b5d96
 p 1 h
-s 01 77e a9d
-s 02 8900 d25f
-s 03 18300 1c62f
-s 04 1f6d8 1fc67
-s 05 20cef 21bde
-s 06 28d8e 295ed
-s 07 291de 295dd
-s 08 29652 29901
-s 09 29a8e 29dfd
-s 10 29e00 2efff
-s 11 38d08 3a177
-s 12 3a528 3aa27
+s 77e a9d
+s 8900 d25f
+s 18300 1c62f
+s 1f6d8 1fc67
+s 20cef 21bde
+s 28d8e 295ed
+s 291de 295dd
+s 29652 29901
+s 29a8e 29dfd
+s 29e00 2efff
+s 38d08 3a177
+s 3a528 3aa27
 end
 
 //Alex DeMeo's Race America (USA).chr
 hash 5cb8d03a90732d01737a401e8dc87a3d594ab2f901970f309fe551c0013ac5da
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Alfred Chicken (Europe).unh
 hash 752eb500a872ce4dedfa419d673b738bde8342bdbe5304411b6d19607b155a5f
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Alfred Chicken (USA).prg !!allcompressed!!
@@ -540,52 +540,52 @@ hash 4b088e1e78981308da68883cf8292337ff8d899bf82a78d17e7a7af2745846e7
 //Alien 3 (Europe).chr
 hash 3b4f4c86e074d150e4763bf696011337a8a0b82b9ba7091b8dd38e4cd5373b2c
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Alien 3 (USA).chr
 hash d73a9a1fae7396754c19eecd6aa9e44d02c230df8efed0bafd86aa1cb0dd2a23
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Alien Syndrome (Japan).chr
 hash cd1a9bc6c9e2181668fea96db14bc67fbbf9bf1572eef2bb074e5912a0dd54c9
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //All-Pro Basketball (USA).chr
 hash 1c811b67d3e211f95ced51f3725c36fe45562d75d0a553b66dc3fb0b10e61ff1
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Alpha Mission (Europe).chr
 hash 7ae9746aa5c24c9c048b842879d93cae58c1c52be2ce1c3fbc749ab7ca2210bb
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Alpha Mission (USA).chr
 hash 3addebdec132929ecad2a8612a4ba54ccc39b9ada2295692f836c6b48d015054
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Amagon (USA).prg
 hash a978de5d5f343eacb0a6f12427327ecbe9b2e9cf881569aec7b838bd44237d84
 p 1 h
-s 01 0 7f3f
-s 02 be00 ffff
-s 03 139c0 13fef
-s 04 14030 140ef
+s 0 7f3f
+s be00 ffff
+s 139c0 13fef
+s 14030 140ef
 end
 
 //America Daitouryou Senkyo (Japan).chr
 hash dd83b05d9f77c9b8932fc99eca4ccf9d90b03e74f7ca24c1a25e93fbe340c44f
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //America Oudan Ultra Quiz - Shijou Saidai no Tatakai (Japan) (Rev 1).prg !!allcompressed!!
@@ -597,75 +597,75 @@ hash 0f9eb607392b6846c99d236198cfb3517ed0c9776b43ab0f5791d612499c3aed
 //American Dream (Japan).chr
 hash 64c4a4b718e60a8527c28b53f7aedfce448a013f4dd80c11815ef35f7426f7a4
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //American Football - Touchdown Fever (Japan).chr
 hash 261c7fb3ed73bc1ddcf93f3cbc2f315f7eb908c54ca137044e71492f2938d21f
 p 1 h
-s 01 20000 27fff
+s 20000 27fff
 end
 
 //American Gladiators (USA).chr
 hash be12cff13a06e0b5de2dad4d431f7cf9a6aa73be45cdbd952dfd03a9d23571b6
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Ankoku Shinwa - Yamato Takeru Densetsu (Japan).prg
 hash fd822408e52a2330af1fe35feae429be5bd504cba2d0298213d4192cd461460a
 p 2 v
-s 01 140 173f //seg1
+s 140 173f //seg1
 p 1 h
-s 02 1740 1d3f
+s 1740 1d3f
 p 2 h
-s 03 4953 4e92 //seg2
+s 4953 4e92 //seg2
 p 1 h
-s 04 724d 789c //seg3
+s 724d 789c //seg3
 b 1
-s 05 7aa8 7e5f //seg4
+s 7aa8 7e5f //seg4
 b 2
-s 06 7e60 7ebf //seg5
-s 07 8b4e ba9d //seg6
-s 08 cd0c ff8b //seg7
-s 09 115ef 13c9e //seg8
-s 10 14ec0 1728f //seg9
-s 11 1d1c8 1fd17 //seg10
-s 12 2287f 23c7e //seg11
-s 13 24b88 27cf7 //seg12
-s 14 28d58 2bf07 //seg13
-s 15 2cb78 2fee7 //seg14
+s 7e60 7ebf //seg5
+s 8b4e ba9d //seg6
+s cd0c ff8b //seg7
+s 115ef 13c9e //seg8
+s 14ec0 1728f //seg9
+s 1d1c8 1fd17 //seg10
+s 2287f 23c7e //seg11
+s 24b88 27cf7 //seg12
+s 28d58 2bf07 //seg13
+s 2cb78 2fee7 //seg14
 b 1
-s 16 30030 300e7 //seg15
+s 30030 300e7 //seg15
 b 2
-s 17 30218 322e7 //seg16
+s 30218 322e7 //seg16
 b 1
-s 18 33550 33917 //seg17
+s 33550 33917 //seg17
 b 2
-s 19 33918 33d17 //seg18
+s 33918 33d17 //seg18
 b 1
-s 20 33e08 33f87 //seg19
+s 33e08 33f87 //seg19
 b 2
-s 21 35056 36915 //seg20
-s 22 389e5 3bde4 //seg21
+s 35056 36915 //seg20
+s 389e5 3bde4 //seg21
 end
 
 //Anticipation (Europe).chr
 hash 9cd99bfb1e6f2ccde7b35063793a5879a2273c73e2cd6bed69c72c87b3b5f27c
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Anticipation (USA).chr
 hash 427876021e6c077479a1a1171e013f84ae951197005a317b099df3b6c2862603
 p 1 h
-s 01 8000 ffff
+s 8000 ffff
 end
 
 //Aoki Ookami to Shiroki Mejika - Genchou Hishi (Japan).unh
 hash 39a86e28afe46af9c7fd2158afc368c873f4a266f03d8d8ced9a752f5caa9434
 p 1 h
-s 01 80000 bffff
+s 80000 bffff
 end
 
 //Aoki Ookami to Shiroki Mejika - Genghis Khan (Japan).prg
@@ -674,211 +674,211 @@ hash 1d1fdadb35660db0048f20e056d61dc80726ef9b6d08f49f1799af6b364549db
 //Arabian Dream Scheherazade (Japan).chr
 hash 222240318f1decd91556d6837260bd8821c7bab7ce6f3143438a076f1dfdd7dd
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Arch Rivals - A Basketbrawl! (Europe).prg
 hash 5fe3435b99c10cd641e3f5509ec34e16559fdbd607e11b830f5a2ad572dff50f
 p 1 h
-s 01 80bb fa8a
-s 02 18122 1acf1
-s 03 1ad75 1bab4
-s 04 1bbba 1fa89
+s 80bb fa8a
+s 18122 1acf1
+s 1ad75 1bab4
+s 1bbba 1fa89
 end
 
 //Arch Rivals - A Basketbrawl! (USA).prg
 hash bb834eb82f0ac53114035e6f353434a934d4aa47742644740de5fa8b2b033b5b
 p 1 h
-s 01 80bb fa8a
-s 02 18122 1acf1
-s 03 1ad75 1bab4
-s 04 1bbba 1fa89
+s 80bb fa8a
+s 18122 1acf1
+s 1ad75 1bab4
+s 1bbba 1fa89
 end
 
 //Archon (USA).prg
 hash 751d3bf4722ce117d8ab7ff78059f42206ead5299716d91d5ff27d3900d555ad
 p 1 h
-s 01 4000 57ff
-s 02 6000 77ff
-s 02 8000 9fff
-s 03 c000 efff
-s 04 10000 1a7ff
+s 4000 57ff
+s 6000 77ff
+s 8000 9fff
+s c000 efff
+s 10000 1a7ff
 end
 
 //Arctic (Japan).prg
 hash a2efb3b288dedb5844b0ae9ac0cbf40aeb92638eacf860db4671043c53eb7d0c
 p 1 h
-s 01 10000 14fff
+s 10000 14fff
 end
 
 //Argos no Senshi - Hachamecha Daishingeki (Japan).prg
 hash d1eaf7419760c908053e14716607e994e0c29143885b4ec8b285caf46f7945ba
 p 1 h
-s 01 0 bfff
+s 0 bfff
 end
 
 //Argus (Japan).chr
 hash 7768ef85519c94dc40d09bc598121825d103fcf1d4927be59f597b0a3509d15f
 p 1 h
-s 01 8000 bfff
+s 8000 bfff
 end
 
 //Arkanoid (Japan) (En).chr
 hash c972cea7f55db3f92b775bd3878ce477feace79e3325e8bbcdd65fe780e2f50f
 p 1 h
-s 01 8000 bfff
+s 8000 bfff
 end
 
 //Arkanoid (USA).chr
 hash a3763e702f8ae0818480cf0a8b2395d3f928c539f75e230ed43fa6b904fe6365
 p 1 h
-s 01 8000 bfff
+s 8000 bfff
 end
 
 //Arkanoid II (Japan) (En).prg
 hash 8593b6ae7b19b2e767ad2c207c5a83dea90030414f45eef4c0dec3c3a5530364
 p 1 h
-s 01 10000 15fff
-s 02 18000 1dfff
-s 03 20000 25fff
+s 10000 15fff
+s 18000 1dfff
+s 20000 25fff
 end
 
 //Arkista's Ring (USA).chr
 hash 381fcbe2b714c38fdeb4045d93f0867fe80f4a219077c3dc5a683a05a8b8e78a
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Armadillo (Japan).chr
 hash 54526dc9444c0eb4b0e5814f98b5e522bcb9881a6f2c0644fc7a21ca8c03502b
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Artelius (Japan).chr
 hash 0efd33e900759399ed29c36350ed146eb60396d68f67bf29baa48d4d8c77bd23
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Asmik-kun Land (Japan).chr
 hash 72d1d7a95724256471b00f72033821eea61a67d3fbc7167420326f75523b4970
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //ASO - Armored Scrum Object (Japan) (En).chr
 hash 67e76511b467253a3a1a9caacd4febf7a97415c963ce0b4b4bc71539d6d1e528
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Asterix (Europe) (En,Fr,De,Es,It).chr
 hash 9680b586a90fa4d242abd8a48cc20ab551867e71a7a88b0f05b01056755da3f1
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Astro Fang - Super Machine (Japan).chr
 hash 20aaf9705d2cc17bac10468544afb250019f43983677b904ca88328f67aa9439
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Astro Robo Sasa (Japan).chr
 hash e06b95487c293ec2e2d1516ee2c61f2b5b88665a609e64e3689a42934d038792
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Astyanax (Europe).chr
 hash fa143a775995ba35a7bf52bbf89456e363de9811dfff5469a411da8029a01486
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Astyanax (USA).chr
 hash a08e6b53f1fa593e001719d87e2f203deb24ee1d389a8f3f339d75e9fb7c02f4
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Athena (Japan).chr
 hash 1949e556f0d2d8cb8e97a2aeb476d03ab76a4cdfb1f3f3ff95260df410b89fe2
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Athena (USA).chr
 hash 2137d1621d29df50100f4d0fba3bafa0be56ccd0c832e44cd29dd7f0d75b374e
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Athletic World (Europe).chr
 hash a0e0c22920d644e54cba9172cf55d6e8b96699ea1530da02cb4c2a6d2e9cb93a
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Athletic World (USA).chr
 hash 9d01730c16c2cfd2813a47a8a46d6e02a6ff0bca8e3cdcf5a1771b50af204b80
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Atlantis no Nazo (Japan).chr
 hash f3601248633f47a0ef10723e42a1072c76dd487d7ddf943e618611bb7cfec737
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Attack Animal Gakuen (Japan) (Famicom 3D System).chr
 hash 5afb3469a79ba55b8b3e2c6932b37cbb544d0e15f2d15d1f61616308aa61ba93
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Attack of the Killer Tomatoes (Europe).chr
 hash 9ed6247ab3374e36f340a7841cf6b4b0f1ee2c3fce2d8d3563dd38ab38b1f65e
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Attack of the Killer Tomatoes (USA).chr
 hash 3b687bf0a8ccd23736bb7ed2e6e75f9d150318d79da22bbf7ff1dd97ab980957
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //Aussie Rules Footy (Australia).chr
 hash d143c472ff7bb30adc8ba90d1be1b0905ca2e37bb4a4dfc6d6297b0284cb9ef2
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //
 hash 
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //
 hash 
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //
 hash 
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 //
 hash 
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 
@@ -893,205 +893,205 @@ end
 //Castlevania (USA).prg
 hash a35e846379ff252594ace83da2a1a1cb0692717b931055d1f6603812f18ad5cd
 p 2 v
-s 01 3501 3b00 //seg1
+s 3501 3b00 //seg1
 p 1 h
-s 02 4008 5007 //seg2
+s 4008 5007 //seg2
 p 2 v
-s 03 5008 6007
+s 5008 6007
 p 1 h
-s 04 6008 6907
+s 6008 6907
 p 2 v
-s 05 6908 6f07
+s 6908 6f07
 p 1 h
-s 06 6f08 74a7
+s 6f08 74a7
 p 2 v
-s 07 74a8 7a07
+s 74a8 7a07
 p 1 h
-s 08 7a08 8007
+s 7a08 8007
 p 2 v
-s 09 8008 8887
+s 8008 8887
 p 1 h
-s 10 8888 9187
+s 8888 9187
 p 2 v
-s 11 9188 9a07
+s 9188 9a07
 p 1 h
-s 12 9a08 a307
+s 9a08 a307
 p 2 v
-s 13 a308 ab87
+s a308 ab87
 p 1 h
-s 14 ab88 b487
+s ab88 b487
 p 2 v
-s 15 b488 c007
+s b488 c007
 p 1 h
-s 16 c008 c907
+s c008 c907
 p 2 v
-s 17 c908 d187
+s c908 d187
 p 1 h
-s 18 d188 da87
+s d188 da87
 p 2 v
-s 19 da88 e307
+s da88 e307
 p 1 h
-s 20 e308 f507
+s e308 f507
 p 2 v
-s 21 f508 f907
+s f508 f907
 p 1 h
-s 22 f908 ff07
+s f908 ff07
 p 2 v
-s 23 1b117 1b636 //seg3
+s 1b117 1b636 //seg3
 end
 
 //Dark Lord (Japan).unh
 hash d5426d3c26dc11200610044e3ff84ed13d09c372460bf09134ac8b770e69d724
 p 1 h
-s 01 40000 5ffff
+s 40000 5ffff
 end
 
 //Excitebike (Japan, USA).chr
 hash e9f4c9d1b7c66c6af83f2db5d4f704cf5f4b3c86e26a49c05539237807d8875e
 p 1 h
-s 01 4000 5fff
+s 4000 5fff
 end
 
 //Kirby's Adventure (Canada) (Fr)
 hash 24fca0fe86464c807ab5d58a2d56155a3fa1994e9bd78d119e3f8f84c8aee785
 p 1 h
-s 01 80000 bffff
+s 80000 bffff
 end
 
 //Kirby's Adventure (Europe)
 hash c6f3d15f8c9b60aff995e7e2559db82a5659a3fc9cf9cb6aa9da0e695e5030f3
 p 1 h
-s 01 80000 bffff
+s 80000 bffff
 end
 
 //Kirby's Adventure (France)
 hash b9124d9991574d190b8661f11140c5ce319ba050d26609fcf4c0f6349f7602bf
 p 1 h
-s 01 80000 bffff
+s 80000 bffff
 end
 
 //Kirby's Adventure (Germany)
 hash e57cded0299931b2e2b6dca0be1f251d0f66c7566a49c38a426085afaa175d68
 p 1 h
-s 01 80000 bffff
+s 80000 bffff
 end
 
 //Kirby's Adventure (USA) (Rev 1)
 hash 1250a80faf865aa5ee5585ad7639e5ef2b3fa541554effda5fad2cc5dc2acef5
 p 1 h
-s 01 80000 bffff
+s 80000 bffff
 end
 
 //Kirby's Adventure (USA)
 hash a6b81fec11c24a33fd763db5c28005e760a1614e70c1bb5ccde0bd4242431000
 p 1 h
-s 01 80000 bffff
+s 80000 bffff
 end
 
 //Legend of Zelda, The (USA).prg
 hash 085e5397a3487357c263dfa159fb0fe20a5f3ea8ef82d7af6a7e848d3b9364e8
 p 2 v
-s 01 4db4 56b3 //seg1
+s 4db4 56b3 //seg1
 p 1 h
-s 02 56b4 5ec3
+s 56b4 5ec3
 p 2 v
-s 03 807f 877e //seg2
+s 807f 877e //seg2
 p 1 h
-s 04 877f 8f5e
+s 877f 8f5e
 p 2 v
-s 05 c11b c83a //seg3
+s c11b c83a //seg3
 p 1 h
-s 06 c83b c93a
+s c83b c93a
 p 2 v
-s 07 c93b d08a
+s c93b d08a
 p 1 h
-s 08 d08b d15a
+s d08b d15a
 p 2 v
-s 09 d15b ebda
+s d15b ebda
 end
 
 //Legend of Zelda, The (USA) (Rev 1).prg
 hash ec0d4ebf6d2fcecd1d95fef7329954efe79676959bc281ea908b226459bc6dc2
 p 2 v
-s 01 4db4 56b3 //seg1
+s 4db4 56b3 //seg1
 p 1 h
-s 02 56b4 5ec3
+s 56b4 5ec3
 p 2 v
-s 03 807f 877e //seg2
+s 807f 877e //seg2
 p 1 h
-s 04 877f 8f5e
+s 877f 8f5e
 p 2 v
-s 05 c11b c83a //seg3
+s c11b c83a //seg3
 p 1 h
-s 06 c83b c93a
+s c83b c93a
 p 2 v
-s 07 c93b d08a
+s c93b d08a
 p 1 h
-s 08 d08b d15a
+s d08b d15a
 p 2 v
-s 09 d15b ebda
+s d15b ebda
 end
 
 //Mega Man (USA).prg
 hash 5314ad0c406161195b6bb100ee11304bab8af121bba85992be896d5cb26b109e
 p 1 h
-s 01 1000 3fff //seg1
+s 1000 3fff //seg1
 p 2 v
-s 02 5000 7fff //seg2
+s 5000 7fff //seg2
 p 1 h
-s 03 9000 bfff //seg3
+s 9000 bfff //seg3
 p 2 v
-s 04 d000 e7ff //seg4
+s d000 e7ff //seg4
 p 1 h
-s 05 e800 ffff
+s e800 ffff
 end
 
 //Metroid (Europe).prg
 hash 649db8035018f2512ccea70aca6606c3b3a6988cd9ed43953b38dc5103dec7bb
 p 1 h
-s 01 4d60 555f //seg1
-s 02 8d60 955f //seg2
-s 03 cd60 d55f //seg3
-s 04 10d60 1155f //seg4
-s 05 14d60 1555f //seg5
-s 06 18000 18a9f //seg6
-s 07 18be0 1989f //seg7
-s 08 19da0 1b8cf //seg8
+s 4d60 555f //seg1
+s 8d60 955f //seg2
+s cd60 d55f //seg3
+s 10d60 1155f //seg4
+s 14d60 1555f //seg5
+s 18000 18a9f //seg6
+s 18be0 1989f //seg7
+s 19da0 1b8cf //seg8
 
 //Metroid (USA).prg
 hash d2cdc3e8432f104709c17c88b20ceae87780e97cf6a2e3372fd54d0a67972062
 p 1 h
-s 01 4d60 555f //seg1
-s 02 8d60 955f //seg2
-s 03 cd60 d55f //seg3
-s 04 10d60 1155f //seg4
-s 05 14d60 1555f //seg5
-s 06 18000 18a9f //seg6
-s 07 18be0 1989f //seg7
-s 08 19da0 1b8cf //seg8
+s 4d60 555f //seg1
+s 8d60 955f //seg2
+s cd60 d55f //seg3
+s 10d60 1155f //seg4
+s 14d60 1555f //seg5
+s 18000 18a9f //seg6
+s 18be0 1989f //seg7
+s 19da0 1b8cf //seg8
 
 //Super Mario Bros (World).chr
 hash fcb6a0ef3a20c19b356005fbb21dc8009563b1cb5a9aaebc8e9386b4a8c5912e
 p 1 h
-s 01 8000 9fff
+s 8000 9fff
 end
 
 //Super Mario Bros 2 (USA).chr
 hash cba920f9394733c82253685d7783f26a3033ba58a94623e9abf7892329b969b9
 p 1 h
-s 01 20000 3ffff
+s 20000 3ffff
 end
 
 
 
-//UNLICENSED TEST ENTRY
+//UNLICENSED
 //BladeBuster.nes
 hash 4a4cf5968932f2e7783e2e46cc2b870e73e1d6e7a874ec4a9f79ec217423ba8a
 p 1 h
-s 01 40000 40fff //seg1
-s 02 41000 410bf //seg2 less than 16 tiles, needs padding
-s 03 410c0 420cf //existing padding logic is used, 15 tiles short of 16
-s 04 45ff0 465df //existing padding logic is used, 1 tile short of 16
-s 05 52700 5334f //existing padding logic is used, 11 tiles short of 16
-s 06 55000 55fef //existing padding logic is used, 1 tile short of 16
+s 40000 40fff //seg1
+s 41000 410bf //seg2 less than 16 tiles, needs padding
+s 410c0 420cf //existing padding logic is used, 15 tiles short of 16
+s 45ff0 465df //existing padding logic is used, 1 tile short of 16
+s 52700 5334f //existing padding logic is used, 11 tiles short of 16
+s 55000 55fef //existing padding logic is used, 1 tile short of 16
 end
