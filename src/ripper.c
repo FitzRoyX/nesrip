@@ -20,37 +20,32 @@
 //	255, 127, 0, 255,
 //	190, 0, 0, 255
 
-char paletteData[] = 
-{
+char paletteData[] = {
 	0, 0, 0, 255,
 	255, 255, 255, 255,
 	178, 178, 178, 255,
 	107, 107, 107, 255
 };
 
-char RedundantColor[] = 
-{
+char RedundantColor[] = {
 	255, 0, 255, 255
 };
 
-typedef enum
-{
+typedef enum {
 	ONE_BPP,
 	TWO_BPP,
 
 	BPP_COUNT
 } BitplaneType;
 
-typedef struct Pattern 
-{
+typedef struct Pattern {
 	unsigned char* data;
 	unsigned int hash;
 	struct Pattern *next;
 	struct Pattern *down;
 } Pattern;
 
-typedef struct
-{
+typedef struct {
 	Rom* rom;
 	ExtractionArguments* args;
 	int sectionStart;
@@ -85,7 +80,7 @@ int allocTilesheet(ExtractionContext* context, int tileCount) {
 	if (tileCount % (16 * context->patternSize) != 0)
 		height += context->patternSize * 8;
 
-	context->sheet = (char*)malloc(width * height * 4);
+	context->sheet = malloc(width * height * 4);
 
 	if (context->sheet == NULL) {
 		printf("Error: Couldn't allocate memory for tilesheet.\n");
@@ -96,29 +91,25 @@ int allocTilesheet(ExtractionContext* context, int tileCount) {
 	return 0;
 }
 
-char* getColor(char color, char* paletteDescription)
-{
+char* getColor(char color, char* paletteDescription) {
 	char c = paletteDescription[color];
 
-	switch (c)
-	{
-	case 'b':
-		return paletteData;
-	case 'w':
-		return paletteData + 4;
-	case 'l':
-		return paletteData + 8;
-	case 'd':
-		return paletteData + 12;
+	switch (c) {
+		case 'b':
+			return paletteData;
+		case 'w':
+			return paletteData + 4;
+		case 'l':
+			return paletteData + 8;
+		case 'd':
+			return paletteData + 12;
 	}
 	
 	return paletteData;
 }
 
-void drawPixel(char* sheet, int x, int y, char* color)
-{
-	for (int i = 0; i < 4; i++)
-	{
+void drawPixel(char* sheet, int x, int y, char* color) {
+	for (int i = 0; i < 4; i++)	{
 		sheet[(y * 128 + x) * 4 + i] = color[i];
 	}
 }
@@ -127,10 +118,8 @@ char* allocOverloadedFilename(ExtractionContext* context) {
 	ExtractionArguments* args = context->args;
 	size_t lenOutputFolder = strlen(args->outputFolder);
 	size_t lenFilename = strlen("0");
-	//*size_t lenFilename = strlen(args->filenameOverload);*/
-	size_t lenPaletteDescription = strlen(args->paletteDescription);
 
-	char* result = (char*)malloc(lenOutputFolder + lenFilename + lenPaletteDescription + 6);
+	char* result = malloc(lenOutputFolder + lenFilename);
 
 	if (result == NULL) {
 		printf("Error: Couldn't allocate memory for filename data.\n");
@@ -142,48 +131,8 @@ char* allocOverloadedFilename(ExtractionContext* context) {
 	memcpy(outputFilenamePtr, args->outputFolder, lenOutputFolder);
 	outputFilenamePtr += lenOutputFolder;
 	memcpy(outputFilenamePtr, "0", lenFilename);
-	//memcpy(outputFilenamePtr, args->filenameOverload, lenFilename);
 	outputFilenamePtr += lenFilename;
 	*(outputFilenamePtr++) = '.';
-	memcpy(outputFilenamePtr, args->paletteDescription, lenPaletteDescription);
-	outputFilenamePtr += lenPaletteDescription;
-	memcpy(outputFilenamePtr, ".png", 4);
-	outputFilenamePtr += 4;
-	outputFilenamePtr[0] = 0;
-
-	return result;
-}
-
-char* allocSectionFilename(ExtractionContext* context)
-{
-	ExtractionArguments* args = context->args;
-	size_t lenOutputFolder = strlen(args->outputFolder);
-	size_t lenSectionStart = strlen(args->sectionStartString);
-	size_t lenSectionEnd = strlen(args->sectionEndString);
-	size_t lenPaletteDescription = strlen(args->paletteDescription);
-
-	char* result = (char*)malloc(lenOutputFolder + lenSectionStart + lenSectionEnd + lenPaletteDescription + 9);
-
-	if (result == NULL)
-	{
-		printf("Error: Couldn't allocate memory for filename data.\n");
-		return NULL;
-	}
-
-	char* outputFilenamePtr = result;
-
-	memcpy(outputFilenamePtr, args->outputFolder, lenOutputFolder);
-	outputFilenamePtr += lenOutputFolder;
-	memcpy(outputFilenamePtr, args->sectionStartString, lenSectionStart);
-	outputFilenamePtr += lenSectionStart;
-	*(outputFilenamePtr++) = '_';
-	memcpy(outputFilenamePtr, args->sectionEndString, lenSectionEnd);
-	outputFilenamePtr += lenSectionEnd;
-	*(outputFilenamePtr++) = '_';
-	*(outputFilenamePtr++) = args->patternDirectionString[0];
-	*(outputFilenamePtr++) = '.';
-	memcpy(outputFilenamePtr, args->paletteDescription, lenPaletteDescription);
-	outputFilenamePtr += lenPaletteDescription;
 	memcpy(outputFilenamePtr, ".png", 4);
 	outputFilenamePtr += 4;
 	outputFilenamePtr[0] = 0;
@@ -194,14 +143,8 @@ char* allocSectionFilename(ExtractionContext* context)
 int writeOutput(char* outputData, int width, int height, ExtractionContext* context) {
 	char* outputFilename = NULL;
 
-	if (context->args->filenameOverload != NULL) {
+	if (context->args->filenameOverload != NULL)
 		outputFilename = allocOverloadedFilename(context);
-		//printf("AllocOverloaded Filename: %s", outputFilename);
-	}
-	else {
-		outputFilename = allocSectionFilename(context);
-		//printf("AllocSection Filename: %s", outputFilename);
-	}
 
 	if (outputFilename == NULL)
 		return 0;
@@ -222,31 +165,26 @@ int writeOutput(char* outputData, int width, int height, ExtractionContext* cont
 	return 1;
 }
 
-int getSectionDetails(Rom* rom, ExtractionContext* context)
-{
+int getSectionDetails(Rom* rom, ExtractionContext* context) {
 	ExtractionArguments* args = context->args;
 
-	if (str2int(&(context->sectionStart), args->sectionStartString, 16) != STR2INT_SUCCESS || context->sectionStart < 0 || context->sectionStart >= rom->size)
-	{
+	if (str2int(&(context->sectionStart), args->sectionStartString, 16) != STR2INT_SUCCESS || context->sectionStart < 0 || context->sectionStart >= rom->size) {
 		printf("Error: Invalid section start address.\n");
 		return 0;
 	}
 
 
-	if (str2int(&(context->sectionEnd), args->sectionEndString, 16) != STR2INT_SUCCESS || context->sectionEnd < 0 || context->sectionEnd >= rom->size)
-	{
+	if (str2int(&(context->sectionEnd), args->sectionEndString, 16) != STR2INT_SUCCESS || context->sectionEnd < 0 || context->sectionEnd >= rom->size) {
 		printf("Error: Invalid section end address.\n");
 		return 0;
 	}
 
-	if (str2int(&(context->patternSize), args->patternSizeString, 10) != STR2INT_SUCCESS || numberOfSetBits(context->patternSize) > 1 || (unsigned int)context->patternSize > MAX_PATTERN_SIZE)
-	{
+	if (str2int(&(context->patternSize), args->patternSizeString, 10) != STR2INT_SUCCESS || numberOfSetBits(context->patternSize) > 1 || (unsigned int)context->patternSize > MAX_PATTERN_SIZE)	{
 		printf("Error: Invalid pattern size.\n");
 		return 0;
 	}
 
-	if (context->sectionEnd < context->sectionStart)
-	{
+	if (context->sectionEnd < context->sectionStart) {
 		printf("Error: Section end is placed before start.\n");
 		return 0;
 	}
@@ -258,27 +196,22 @@ int getSectionDetails(Rom* rom, ExtractionContext* context)
 	else
 		printf("Error: Invalid pattern direction. Use \"h\" or \"v\".\n");
 
-	if (strcmp(args->bitplaneType, "1") == 0)
-	{
+	if (strcmp(args->bitplaneType, "1") == 0) {
 		context->bitplaneType = ONE_BPP;
 		context->tileLength = 8;
 	}
-	else if (strcmp(args->bitplaneType, "2") == 0)
-	{
+	else if (strcmp(args->bitplaneType, "2") == 0) {
 		context->bitplaneType = TWO_BPP;
 		context->tileLength = 16;
 	}
 
-	if (strcmp(args->checkRedundant, "true") == 0)
-	{
+	if (strcmp(args->checkRedundant, "true") == 0) {
 		context->checkRedundant = true;
 	}
-	else if (strcmp(args->checkRedundant, "false") == 0)
-	{
+	else if (strcmp(args->checkRedundant, "false") == 0) {
 		context->checkRedundant = false;
 	}
-	else
-	{
+	else {
 		printf("Error: Invalid Redundant check value. Use \"true\" or \"false\". Defaulting to \"true\".\n");
 		context->checkRedundant = true;
 	}
@@ -286,8 +219,7 @@ int getSectionDetails(Rom* rom, ExtractionContext* context)
 	return 1;
 }
 
-void incrementTilePos(ExtractionContext* context)
-{
+void incrementTilePos(ExtractionContext* context) {
 	context->index++;
 	
 	context->stx++;
@@ -308,16 +240,14 @@ void incrementTilePos(ExtractionContext* context)
 	context->ty++;
 }
 
-int writeLine(ExtractionContext* context, int y, unsigned int data)
-{
+int writeLine(ExtractionContext* context, int y, unsigned int data) {
 	int stx = (context->patternDirection) ? context->sty : context->stx;
 	int sty = (context->patternDirection) ? context->stx : context->sty;
 
 	int px;
 	int py = (context->ty * context->patternSize + sty) * 8 + y;
 
-	for (int x = 0; x < 8; x++)
-	{
+	for (int x = 0; x < 8; x++)	{
 		char c = (((data & 0x01000000) >> 21) | ((data & 0x00010000) >> 14) | ((data & 0x00000100) >> 7) | (data & 0x00000001));
 		data = (data >> 1) & 0x7F7F7F7F;
 
@@ -329,11 +259,9 @@ int writeLine(ExtractionContext* context, int y, unsigned int data)
 		ColorizerSheet* sheet = &colorSheet;
 		int cx = (colorSheetIndex + context->index) % 16;
 		int cy = (colorSheetIndex + context->index) / 16;
-		if (sheet->valid && cx < sheet->width && cy < sheet->height)
-		{
+		if (sheet->valid && cx < sheet->width && cy < sheet->height) {
 			ColorizerPalette* palette = &palettes[sheet->tiles[cy * sheet->width + cx]];
-			if (palette->valid)
-			{
+			if (palette->valid) {
 				memcpy(color, palette->colors[c], sizeof(color));
 			}
 		}
@@ -350,14 +278,12 @@ int writeLine(ExtractionContext* context, int y, unsigned int data)
 	return 0;
 }
 
-int addToHash(ExtractionContext* context, int y, unsigned int data)
-{
+int addToHash(ExtractionContext* context, int y, unsigned int data) {
 	context->workingHash ^= data;
 	return 0;
 }
 
-unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData, int y)
-{
+unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData, int y) {
 	int data = 0;
 
 	switch (context->bitplaneType) {
@@ -374,19 +300,15 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 	return data;
 }
 
-void processTile(ExtractionContext* context, unsigned char* sectionData, int(*callback)(ExtractionContext*,int,unsigned int))
-{
-	for (int y = 0; y < 8; y++)
-	{
+void processTile(ExtractionContext* context, unsigned char* sectionData, int(*callback)(ExtractionContext*,int,unsigned int)) {
+	for (int y = 0; y < 8; y++)	{
 		unsigned int data = getLineData(context, sectionData, y);
 		if ((*callback)(context, y, data)) return;
 	}
 }
 
-int isTileMatch(ExtractionContext* context, unsigned char* tileDataA, unsigned char* tileDataB)
-{
-	for (int y = 0; y < 8; y++)
-	{
+int isTileMatch(ExtractionContext* context, unsigned char* tileDataA, unsigned char* tileDataB) {
+	for (int y = 0; y < 8; y++)	{
 		unsigned int lineA, lineB;
 		lineA = getLineData(context, tileDataA, y);
 		lineB = getLineData(context, tileDataB, y);
@@ -398,8 +320,7 @@ int isTileMatch(ExtractionContext* context, unsigned char* tileDataA, unsigned c
 	return 1;
 }
 
-int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsigned int hash)
-{
+int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsigned int hash) {
 	Pattern* pattern = (Pattern*)malloc(sizeof(Pattern));
 	pattern->data = tileData;
 	pattern->hash = hash;
@@ -408,8 +329,7 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 
 	Pattern* hashChainStartPointer = patterns[context->bitplaneType];
 
-	if (hashChainStartPointer == NULL)
-	{
+	if (hashChainStartPointer == NULL) {
 		patterns[context->bitplaneType] = pattern;
 		return 0;
 	}
@@ -418,10 +338,8 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 	Pattern* previousHashChainPointer = NULL;
 	Pattern* downStartPointer = NULL;
 
-	while (true)
-	{
-		if (hashChainPointer->hash == hash)
-		{
+	while (true) {
+		if (hashChainPointer->hash == hash) {
 			downStartPointer = hashChainPointer;
 			break;
 		}
@@ -433,8 +351,7 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 		hashChainPointer = hashChainPointer->next;
 	};
 
-	if (downStartPointer == NULL)
-	{
+	if (downStartPointer == NULL) {
 		pattern->next = hashChainStartPointer;
 		patterns[context->bitplaneType] = pattern;
 		return 0;
@@ -442,10 +359,8 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 
 	Pattern* downPointer = downStartPointer;
 
-	do
-	{
-		if (isTileMatch(context, tileData, downPointer->data))
-		{
+	do {
+		if (isTileMatch(context, tileData, downPointer->data)) {
 			free(pattern);
 			return 1;
 		}
@@ -453,8 +368,7 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 		downPointer = downPointer->down;
 	} while (downPointer != NULL);
 
-	if (downPointer == NULL)
-	{
+	if (downPointer == NULL) {
 		pattern->down = downStartPointer;
 		pattern->next = downStartPointer->next;
 		if (previousHashChainPointer != NULL)
@@ -466,18 +380,15 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 	return 0;
 }
 
-void drawRedundantTile(ExtractionContext* context)
-{
+void drawRedundantTile(ExtractionContext* context) {
 	int stx = (context->patternDirection) ? context->sty : context->stx;
 	int sty = (context->patternDirection) ? context->stx : context->sty;
 
 	int px, py;
-	for (int y = 0; y < 8; y++)
-	{
+	for (int y = 0; y < 8; y++)	{
 		py = (context->ty * context->patternSize + sty) * 8 + y;
 
-		for (int x = 0; x < 8; x++)
-		{
+		for (int x = 0; x < 8; x++)	{
 			px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
 			drawPixel(context->sheet, px, py, RedundantColor);
 		}
@@ -500,8 +411,7 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	if (!getSectionDetails(rom, context))
 		return 0;
 
-	if (((context->sectionEnd - context->sectionStart) + 1) % context->tileLength != 0)
-	{
+	if (((context->sectionEnd - context->sectionStart) + 1) % context->tileLength != 0)	{
 		printf("Warning: Targeted section has some extra bytes that cannot be used to make a full tile.\n         Rounding down section end address.\n");
 		context->sectionEnd -= (context->sectionEnd - context->sectionStart + 1) % context->tileLength;
 	}
@@ -513,12 +423,6 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 
 	if (context->sheet == NULL)
 		return 0;
-
-	//int sheetCount = 0;
-	//int tx = 0;
-	//int ty = 0;
-	//int stx = 0;
-	//int sty = 0;
 
 	unsigned char* sectionData = rom->data + context->sectionStart;
 	unsigned char* endPointer = rom->data + context->sectionEnd;
@@ -543,38 +447,28 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	colorSheetIndex += tileCount;
 
 	char* ctr = context->args->filenameOverload;
-	//char filename[256];
-	//snprintf(filename, sizeof(filename), "output/%s.png", ctr);
-	//stbi_write_png(filename, context->maxX + 1, context->maxY + 1, 4, context->sheet, 128 * 4); 
 	addToCache(cache, context->sheet, 128, context->maxY + 1, 4);
 
-	//writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);
 
 	return 1;
 }
 
-void initPatternChains()
-{
-	for (int i = 0; i < BPP_COUNT; i++)
-	{
+void initPatternChains() {
+	for (int i = 0; i < BPP_COUNT; i++)	{
 		patterns[i] = (Pattern*)NULL;
 	}
 }
 
-void cleanupPatternChains()
-{
-	for (int i = 0; i < BPP_COUNT; i++)
-	{
+void cleanupPatternChains() {
+	for (int i = 0; i < BPP_COUNT; i++)	{
 		Pattern* patternChainPointer = patterns[i];
 
-		while (patternChainPointer != NULL)
-		{
+		while (patternChainPointer != NULL) {
 			Pattern* next;
 			Pattern* downChainPointer = patternChainPointer->down;
 
-			while (downChainPointer != NULL)
-			{
+			while (downChainPointer != NULL) {
 				next = downChainPointer->down;
 				free(downChainPointer);
 				downChainPointer = next;
@@ -588,8 +482,7 @@ void cleanupPatternChains()
 }
 
 int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
-	ExtractionContext context = 
-	{
+	ExtractionContext context = {
 		rom,
 		arguments
 	};
