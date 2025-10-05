@@ -2,12 +2,11 @@
 #include <string.h>
 #include <malloc.h>
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb/stb_image_write.h"
 #include "globals.h"
 #include "logger.h"
 #include "utils.h"
 #include "ripper.h"
+#include "stb/stb_image_write.h"
 
 //  default grayscale bwld colors
 //	0, 0, 0, 255,
@@ -79,8 +78,7 @@ ColorizerPalette palettes[MAX_PALETTES];
 ColorizerSheet colorSheet;
 int colorSheetIndex = 0;
 
-int allocTilesheet(ExtractionContext* context, int tileCount)
-{
+int allocTilesheet(ExtractionContext* context, int tileCount) {
 	int width = 128;
 	int height = (tileCount / (16 * context->patternSize)) * context->patternSize * 8;
 
@@ -89,8 +87,7 @@ int allocTilesheet(ExtractionContext* context, int tileCount)
 
 	context->sheet = (char*)malloc(width * height * 4);
 
-	if (context->sheet == NULL)
-	{
+	if (context->sheet == NULL) {
 		printf("Error: Couldn't allocate memory for tilesheet.\n");
 		return 1;
 	}
@@ -126,17 +123,16 @@ void drawPixel(char* sheet, int x, int y, char* color)
 	}
 }
 
-char* allocOverloadedFilename(ExtractionContext* context)
-{
+char* allocOverloadedFilename(ExtractionContext* context) {
 	ExtractionArguments* args = context->args;
 	size_t lenOutputFolder = strlen(args->outputFolder);
-	size_t lenFilename = strlen(args->filenameOverload);
+	size_t lenFilename = strlen("0");
+	//*size_t lenFilename = strlen(args->filenameOverload);*/
 	size_t lenPaletteDescription = strlen(args->paletteDescription);
 
 	char* result = (char*)malloc(lenOutputFolder + lenFilename + lenPaletteDescription + 6);
 
-	if (result == NULL)
-	{
+	if (result == NULL) {
 		printf("Error: Couldn't allocate memory for filename data.\n");
 		return NULL;
 	}
@@ -145,7 +141,8 @@ char* allocOverloadedFilename(ExtractionContext* context)
 
 	memcpy(outputFilenamePtr, args->outputFolder, lenOutputFolder);
 	outputFilenamePtr += lenOutputFolder;
-	memcpy(outputFilenamePtr, args->filenameOverload, lenFilename);
+	memcpy(outputFilenamePtr, "0", lenFilename);
+	//memcpy(outputFilenamePtr, args->filenameOverload, lenFilename);
 	outputFilenamePtr += lenFilename;
 	*(outputFilenamePtr++) = '.';
 	memcpy(outputFilenamePtr, args->paletteDescription, lenPaletteDescription);
@@ -213,8 +210,7 @@ int writeOutput(char* outputData, int width, int height, ExtractionContext* cont
 	printf("%s", outputFilename);
 	printf("\".\n");
 
-	if (!stbi_write_png(outputFilename, width, height, 4, outputData, 128 * 4))
-	{
+	if (!stbi_write_png(outputFilename, width, height, 4, outputData, 128 * 4)) {
 		printf("An error occurred while writing to output file ");
 		printf("%s", outputFilename);
 		printf(".\n");
@@ -494,8 +490,7 @@ void drawRedundantTile(ExtractionContext* context)
 	}
 }
 
-int ripSectionRaw(Rom* rom, ExtractionContext* context)
-{
+int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	printf("Ripping raw section from ");
 	printf("%s", context->args->sectionStartString);
 	printf(" to ");
@@ -519,19 +514,17 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 	if (context->sheet == NULL)
 		return 0;
 
-	int sheetCount = 0;
-	int tx = 0;
-	int ty = 0;
-	int stx = 0;
-	int sty = 0;
+	//int sheetCount = 0;
+	//int tx = 0;
+	//int ty = 0;
+	//int stx = 0;
+	//int sty = 0;
 
 	unsigned char* sectionData = rom->data + context->sectionStart;
 	unsigned char* endPointer = rom->data + context->sectionEnd;
 
-	while (sectionData < endPointer)
-	{
-		if (context->checkRedundant)
-		{
+	while (sectionData < endPointer) {
+		if (context->checkRedundant) {
 			context->workingHash = 0;
 			processTile(context, sectionData, &addToHash);
 
@@ -539,9 +532,7 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 				processTile(context, sectionData, &writeLine);
 			else
 				drawRedundantTile(context);
-		}
-		else
-		{
+		} else {
 			processTile(context, sectionData, &writeLine);
 		}
 
@@ -551,7 +542,13 @@ int ripSectionRaw(Rom* rom, ExtractionContext* context)
 
 	colorSheetIndex += tileCount;
 
-	writeOutput(context->sheet, 128, context->maxY + 1, context);
+	char* ctr = context->args->filenameOverload;
+	//char filename[256];
+	//snprintf(filename, sizeof(filename), "output/%s.png", ctr);
+	//stbi_write_png(filename, context->maxX + 1, context->maxY + 1, 4, context->sheet, 128 * 4); 
+	addToCache(cache, context->sheet, 128, context->maxY + 1, 4);
+
+	//writeOutput(context->sheet, context->maxX + 1, context->maxY + 1, context);
 	free(context->sheet);
 
 	return 1;
@@ -590,16 +587,14 @@ void cleanupPatternChains()
 	}
 }
 
-int ripSection(Rom* rom, ExtractionArguments* arguments)
-{
+int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
 	ExtractionContext context = 
 	{
 		rom,
 		arguments
 	};
 
-	if (strcmp(arguments->compressionType, "raw") != 0)
-	{
+	if (strcmp(arguments->compressionType, "raw") != 0)	{
 		printf("Error: Unknown compression type \"");
 		printf("%s", arguments->compressionType);
 		printf("\".\n");
@@ -607,8 +602,7 @@ int ripSection(Rom* rom, ExtractionArguments* arguments)
 		
 	}
 
-	if (!ripSectionRaw(rom, &context))
-	{
+	if (!ripSectionRaw(rom, cache, &context)) {
 		printf("An error occured during ripping.\n");
 		return 0;
 	}

@@ -5,7 +5,17 @@
 #include <limits.h>
 #include <math.h>
 #include <string.h>
+#include <stdint.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define STBI_ONLY_PNG
+#include "stb/stb_image.h"
+#include "stb/stb_image_write.h"   
+
 #include "utils.h"
+#include "globals.h"
+
 
 str2int_errno str2int(int* out, char* s, int base)
 {
@@ -208,4 +218,243 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
 
     // Null-terminate the string
     str[len - n] = '\0';
+}
+
+void initCache(Cache* cache, int initialCapacity) {
+    cache->size = 0;
+    cache->capacity = initialCapacity;
+	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage));
+}
+
+// Function to add data to the cache
+void addToCache(Cache* cache, char* value, int width, int height, int comp) {
+    if (cache->size == cache->capacity) {
+        // Double the capacity if the cache is full
+        cache->capacity *= 2;
+        PNGImage** tmp = (PNGImage**)realloc(cache->images, cache->capacity * sizeof(PNGImage));
+        if (tmp == NULL) {
+			free(cache);
+            perror("Failed to reallocate memory to increase size of the Cache");
+            exit(EXIT_FAILURE);
+        }
+		cache->images = tmp;
+    }
+
+    int idx = cache->size++;
+
+    // First copy the image before it is freed in the ripper logic
+	size_t imageSize = (size_t)width * height * comp * sizeof(char);
+  //  if (imageSize <= 4000) {
+		//imageSize = 4000; // minimum size to avoid small allocations is a deeper bug somewhere
+  //  }
+    char* image_data = (char*)calloc(1, imageSize);
+    if (image_data == NULL) {
+        free(cache);
+        perror("Failed to allocate memory for image data in Cache");
+        exit(EXIT_FAILURE);
+    }
+
+    memmove(image_data, value, imageSize);
+
+    PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
+    if (image == NULL) {
+		free(cache);
+        perror("Failed to allocate memory for PNGImage");
+        exit(EXIT_FAILURE);
+	}
+	
+    image->imageInfo.width = width;
+    image->imageInfo.height = height;
+    image->imageInfo.channels = comp;
+    image->data = image_data;
+    image->size = (int)imageSize;
+    cache->images[idx] = image;
+}
+
+void processCache(Cache* cache, char* separator, PNGInfo* info) {
+    if (cache->size == 0) {
+        printf("No images in cache to process.\n");
+        return;
+	}
+    if (separator == NULL) {
+        printf("No separator image provided.\n");
+        return;
+	}
+    if (info == NULL) {
+        printf("No image info provided.\n");
+        return;
+    }
+
+
+    int maxSize = 0;
+    for (size_t i = 0; i < cache->size; i++) {
+		PNGImage* image = cache->images[i];
+        maxSize = maxSize + image->size;
+    }
+
+    int sep_size = info->height * info->width * info->channels * sizeof(char);
+    int totalSepSize = sep_size * (cache->size -1);
+
+    char* combinedimage = (char*)calloc((size_t)maxSize + totalSepSize, sizeof(char));
+    if (!combinedimage) {
+        perror("failed to allocate memory for combined image");
+        free(separator);
+        free(cache);
+		free(info);
+        exit(EXIT_FAILURE);
+    }
+
+	int offset = 0, height = 0, width = 0, combined_height = 0;
+    char filename[256];
+    for (int i = 0; i < cache->size; i++) {
+        //if (i != 1) { continue; }
+        PNGImage* image = cache->images[i];
+		height = image->imageInfo.height;
+        width = image->imageInfo.width;
+        if (i == 0) {
+            // Copy the current image
+            memcpy(combinedimage + offset, image->data, image->size);
+            offset += image->size;
+            combined_height += height;
+			continue;
+        }
+
+		// Prepare image with separator
+        char* prep_image = (char*)calloc((size_t)image->size + sep_size, sizeof(char));
+        if (!prep_image) {
+            perror("failed to allocate memory for prep image");
+            free(separator);
+            free(cache);
+            exit(EXIT_FAILURE);
+        }
+
+        memcpy(prep_image, separator, sep_size);
+        memcpy(prep_image + sep_size, image->data, image->size);
+        //snprintf(filename, sizeof(filename), "output/combined_%d.png", i + 1);
+        //stbi_write_png(filename, width, height + info->height, 4, prep_image, 128 * 4);
+
+		// Merge the prepared image into the combined image
+        memcpy(combinedimage + offset, prep_image, (size_t)sep_size + image->size);
+        offset += (sep_size + image->size);
+        combined_height += (info->height + height);
+		free(prep_image);
+        //if(i < 2) { continue; }
+        //break;
+    }
+
+    snprintf(filename, sizeof(filename), "%s0.png", outputFolder);
+    printf("  Writing combined sheets to \"");
+    printf("%s", filename);
+    printf("\".\n");
+
+    if (combinedimage == NULL) {
+        perror("No images in cache to combine");
+        exit(EXIT_FAILURE);
+	}
+    if (!stbi_write_png(filename, width, combined_height, 4, combinedimage, 128 * 4)) {
+        perror("Failed to write combined image\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+PNGInfo* getImageInfo(const char* filename) {
+    PNGInfo* info = (PNGInfo*)calloc(1, sizeof(PNGInfo));
+    if (info == NULL) {
+        perror("Memory allocation failed for PNGInfo");
+        exit(EXIT_FAILURE);
+    }
+
+    if (stbi_info(filename, &info->width, &info->height, &info->channels)) {
+        return info;
+    } else {
+        if (info != NULL) {
+            free(info);
+        }
+        perror("Failed to retrieve image info. Ensure the file exists and is a valid image.\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+
+#define TILE_SIZE 8
+
+static void generateTransparentTile(uint8_t* image) {
+    // Create an 8x8 transparent tile (RGBA format)
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int x = 0; x < TILE_SIZE; x++) {
+            int index = (y * TILE_SIZE + x) * 4;
+            image[index + 0] = 0;   // Red
+            image[index + 1] = 0;   // Green
+            image[index + 2] = 0;   // Blue
+            image[index + 3] = 0;   // Alpha (fully transparent)
+        }
+    }
+}
+
+void generate_TransparentImage(uint8_t* image, int repeat_count) {
+    uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
+    generateTransparentTile(tile);
+
+    int image_width = (TILE_SIZE * repeat_count);
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int repeat = 0; repeat < repeat_count; repeat++) {
+            for (int x = 0; x < TILE_SIZE; x++) {
+                int src_idx = (y * TILE_SIZE + x) * 4;
+                int dest_idx = (y * image_width + repeat * TILE_SIZE + x) * 4;
+
+                image[dest_idx] = tile[src_idx];
+                image[dest_idx + 1] = tile[src_idx + 1];
+                image[dest_idx + 2] = tile[src_idx + 2];
+                image[dest_idx + 3] = tile[src_idx + 3];
+            }
+        }
+    }
+}
+
+void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]) {
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int x = 0; x < TILE_SIZE; x++) {
+            int index = 4 * (y * TILE_SIZE + x);
+            if (x == y || x == TILE_SIZE - y - 1) {
+                // Set color for the "X" pattern
+                image[index + 0] = color1[0]; // Red
+                image[index + 1] = color1[1]; // Green
+                image[index + 2] = color1[2]; // Blue
+                image[index + 3] = color1[3]; // Alpha
+            }
+            else {
+                // Set background color
+                image[index + 0] = color2[0];
+                image[index + 1] = color2[1];
+                image[index + 2] = color2[2];
+                image[index + 3] = color2[3];
+            }
+        }
+    }
+}
+
+void generate_image(uint8_t* image, int repeat_count) {
+    uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
+
+    // Define two colors: Red for "X" and White for background
+    uint8_t color1[4] = { 255, 0, 0, 255 };   // Red
+    uint8_t color2[4] = { 255, 255, 255, 255 }; // White
+
+    // Generate the tile
+    generateTile(tile, color1, color2);
+    int image_width = (TILE_SIZE * repeat_count);
+
+    for (int y = 0; y < TILE_SIZE; y++) {
+        for (int repeat = 0; repeat < repeat_count; repeat++) {
+            for (int x = 0; x < TILE_SIZE; x++) {
+                int src_idx = (y * TILE_SIZE + x) * 4;
+                int dest_idx = (y * image_width + repeat * TILE_SIZE + x) * 4;
+
+                image[dest_idx] = tile[src_idx];
+                image[dest_idx + 1] = tile[src_idx + 1];
+                image[dest_idx + 2] = tile[src_idx + 2];
+                image[dest_idx + 3] = tile[src_idx + 3];
+            }
+        }
+    }
 }

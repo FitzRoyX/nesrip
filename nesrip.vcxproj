@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>ClangCL</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -107,7 +107,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <DisableSpecificWarnings>$(NoWarn);4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,9 +147,17 @@
     <ClInclude Include="src\ripper.h" />
     <ClInclude Include="src\rom.h" />
     <ClInclude Include="src\sha_2\sha-256.h" />
+    <ClInclude Include="src\stb\stb_image.h" />
+    <ClInclude Include="src\stb\stb_image_write.h" />
     <ClInclude Include="src\utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="colorizer\085e5397.txt" />
+    <Text Include="colorizer\4a4cf596.txt" />
+    <Text Include="colorizer\a35e8463.txt" />
+    <Text Include="colorizer\e8684004.txt" />
+    <Text Include="colorizer\e9f4c9d1.txt" />
+    <Text Include="colorizer\fcb6a0ef.txt" />
     <Text Include="nes_gfxdb.txt" />
     <Text Include="src\sha_2\LICENSE.txt" />
   </ItemGroup>
@@ -160,6 +169,9 @@
     <None Include="LICENSE.md" />
     <None Include="Makefile" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="separator_8x8_16.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

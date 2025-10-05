@@ -56,7 +56,7 @@ int handleDirectSectionRipArg(int pass, int* argc, char*** argv)
 		outputFilename
 	};
 
-	ripSection(&rom, &args);
+	ripSection(&rom, cache, &args);
 	return 1;
 }
 

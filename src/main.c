@@ -12,6 +12,7 @@
 #include "sha_2/sha-256.h"
 
 Rom rom;
+Cache* cache;
 char* programName;
 char* outputFolder;
 char* outputFilename = NULL;
@@ -27,8 +28,7 @@ int paletteOverride = false;
 int bitplaneOverride = false;
 int checkRedundantOverride = false;
 
-static void quitProgram(int code)
-{
+static void quitProgram(int code) {
 	if (outputFolder != NULL)
 		free(outputFolder);
 
@@ -36,14 +36,12 @@ static void quitProgram(int code)
 	exit(code);
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
 	printf("Compiler C Standard is %s\n", cStdInUse(__STDC_VERSION__));
-
+	
 	programName = getFilename(argv[0]);
 
-	if (argc < 2)
-	{
+	if (argc < 2) {
 		printNoInput();
 		return 0;
 	}
@@ -54,14 +52,12 @@ int main(int argc, char** argv)
 	char* inputRomName = argv[1];
 	rom = readRom(inputRomName);
 
-	if (rom.size < 0)
-	{
+	if (rom.size < 0) {
 		printf("An error occured while opening input ROM file.\n");
 		return 0;
 	}
 
-	if (argc > 2)
-	{
+	if (argc > 2) {
 		if (handleAdditionnalArgs(0, argc - 2, argv + 2))
 			quitProgram(0);
 	}
@@ -71,8 +67,7 @@ int main(int argc, char** argv)
 
 	outputFolder = (char*)malloc(outputFolderLength + 9);
 
-	if (outputFolder == NULL)
-	{
+	if (outputFolder == NULL) {
 		printf("Error: Couldn't allocate memory for output folder string.\n");
 		quitProgram(0);
 	}
@@ -95,14 +90,21 @@ int main(int argc, char** argv)
 	CreateDirectoryA("output", 0);
 	CreateDirectoryA(outputFolder, 0);
 
-	if (argc > 2)
-	{
+	if (argc > 2) {
 		if (handleAdditionnalArgs(1, argc - 2, argv + 2))
 			quitProgram(0);
 	}
 
 	//TODO: Handle ROM hash detection and graphics ripping here
-	interpretDatabase();
+	int capacity = 10;
+	cache = (Cache*)calloc(1, sizeof(Cache));
+	if (cache == NULL) {
+		printf("Error: Couldn't allocate memory for cache.\n");
+		quitProgram(0);
+	}
+
+	initCache(cache, capacity);
+	interpretDatabase(cache);
 
 	quitProgram(0);
 }
