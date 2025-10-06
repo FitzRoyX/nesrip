@@ -8,7 +8,6 @@
 #include "utils.h"
 #include "sha_2/sha-256.h"
 #include "interpreter.h"
-#include "stb/stb_image.h"
 
 int foundRom = false;
 char* tokenContextStack[2];
@@ -123,6 +122,12 @@ int handleColorizerSheetCommand(Cache* cache) {
 	sheet->width = 16;
 	sheet->height = MAX_COLOR_ROWS;
 	sheet->tiles = malloc(sheet->width * sheet->height);
+	if (sheet->tiles == NULL) {
+		perror("failed to allocate memory for combined image");
+		free(cache);
+		free(sheet);
+		exit(EXIT_FAILURE);
+	}
 
 	for (int y = 0; y < MAX_COLOR_ROWS; y++) {
 		for (int x = 0; x < sheet->width; x++) {
@@ -354,18 +359,9 @@ void interpretDatabase(Cache* cache) {
 		printf("Error: Could not match ROM with database.\n");
 	else {
 		if (cache->size > 0) {
-			char customMsg[256];
-			char* sepfilename = "separator_8x8_16.png";
-			PNGInfo* imageInfo = getImageInfo(sepfilename);
-			char* image_data = NULL;
-			image_data = stbi_load(sepfilename, &imageInfo->width, &imageInfo->height, &imageInfo->channels, 0);
-			if (image_data == NULL) {
-				snprintf(customMsg, sizeof(customMsg), "Error loading from file: %s", sepfilename);
-				perror(customMsg);
-				exit(EXIT_FAILURE);
-			}
-
-			processCache(cache, image_data, imageInfo);
+			uint8_t separator[128 * 8 * 4];
+			generate_image(separator, 16);
+			processCache(cache, separator, sizeof(separator));
 		}
 	}
 
