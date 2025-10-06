@@ -410,9 +410,9 @@ void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]) {
 void generate_image(uint8_t* image, int repeat_count) {
     uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
 
-    // Define two colors: Red for "X" and White for background
-    uint8_t color1[4] = { 255, 0, 0, 255 };   // Red
-    uint8_t color2[4] = { 255, 255, 255, 255 }; // White
+    // Define two colors: Magenta for "X" and Yellow for background
+    uint8_t color1[4] = { 255, 0, 255, 255 };   // Magenta
+    uint8_t color2[4] = { 255, 255, 0, 255 }; // Yellow
 
     // Generate the tile
     generateTile(tile, color1, color2);
