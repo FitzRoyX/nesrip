@@ -1,6 +1,6 @@
 ## About
 
-This drag-n-drop tool extracts graphics from NES roms into modern PNG tilesheets for modern usage via database entries. A completed database will effectively document every game's graphics locations, bitplane type, pattern type, compression type, and palettes. It has powerful features like a colorizer and tile deduplicator. Future map and sprite definition tools using these modernized sheets are planned.
+This tool extracts graphics from NES roms into modern PNG tilesheets. It has drag-n-drop and command-line functionality. The database, when completed, will effectively document every game's graphics locations, bitplane type, pattern type, compression type, and palettes. It has powerful features like a colorizer and tile deduplicator. Future map and sprite definition tools using these modernized sheets are planned.
 
 ## Supported compilers
 * [TCC](https://github.com/TinyCC/tinycc)
