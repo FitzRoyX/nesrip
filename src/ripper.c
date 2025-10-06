@@ -322,6 +322,11 @@ int isTileMatch(ExtractionContext* context, unsigned char* tileDataA, unsigned c
 
 int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsigned int hash) {
 	Pattern* pattern = (Pattern*)malloc(sizeof(Pattern));
+	if (pattern == NULL) {
+		perror("Error: Couldn't allocate memory for pattern data.\n");
+		exit(EXIT_FAILURE);
+	}
+
 	pattern->data = tileData;
 	pattern->hash = hash;
 	pattern->next = NULL;

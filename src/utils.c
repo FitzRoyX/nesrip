@@ -7,10 +7,8 @@
 #include <string.h>
 #include <stdint.h>
 
-#define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBI_ONLY_PNG
-#include "stb/stb_image.h"
 #include "stb/stb_image_write.h"   
 
 #include "utils.h"
@@ -271,7 +269,7 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
     cache->images[idx] = image;
 }
 
-void processCache(Cache* cache, char* separator, PNGInfo* info) {
+void processCache(Cache* cache, char* separator, int sep_size) {
     if (cache->size == 0) {
         printf("No images in cache to process.\n");
         return;
@@ -280,10 +278,6 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
         printf("No separator image provided.\n");
         return;
 	}
-    if (info == NULL) {
-        printf("No image info provided.\n");
-        return;
-    }
 
 
     int maxSize = 0;
@@ -292,15 +286,13 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
         maxSize = maxSize + image->size;
     }
 
-    int sep_size = info->height * info->width * info->channels * sizeof(char);
-    int totalSepSize = sep_size * (cache->size -1);
+        int totalSepSize = sep_size * (cache->size -1);
 
     char* combinedimage = (char*)calloc((size_t)maxSize + totalSepSize, sizeof(char));
     if (!combinedimage) {
         perror("failed to allocate memory for combined image");
         free(separator);
         free(cache);
-		free(info);
         exit(EXIT_FAILURE);
     }
 
@@ -336,7 +328,7 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
 		// Merge the prepared image into the combined image
         memcpy(combinedimage + offset, prep_image, (size_t)sep_size + image->size);
         offset += (sep_size + image->size);
-        combined_height += (info->height + height);
+        combined_height += (8 + height);
 		free(prep_image);
         //if(i < 2) { continue; }
         //break;
@@ -353,24 +345,6 @@ void processCache(Cache* cache, char* separator, PNGInfo* info) {
 	}
     if (!stbi_write_png(filename, width, combined_height, 4, combinedimage, 128 * 4)) {
         perror("Failed to write combined image\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
-PNGInfo* getImageInfo(const char* filename) {
-    PNGInfo* info = (PNGInfo*)calloc(1, sizeof(PNGInfo));
-    if (info == NULL) {
-        perror("Memory allocation failed for PNGInfo");
-        exit(EXIT_FAILURE);
-    }
-
-    if (stbi_info(filename, &info->width, &info->height, &info->channels)) {
-        return info;
-    } else {
-        if (info != NULL) {
-            free(info);
-        }
-        perror("Failed to retrieve image info. Ensure the file exists and is a valid image.\n");
         exit(EXIT_FAILURE);
     }
 }
