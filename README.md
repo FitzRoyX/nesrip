@@ -64,10 +64,10 @@ Arguments:
 
 ## Credits
 
-Matys Guéroult - Lead programmer
-FitzRoyX - Designer/commissioner of tool, database maintainer
-Invertego - Colorizer programmer
-Richard Wheeler - Programmer
+Matys Guéroult - Lead programmer<br>
+FitzRoyX - Designer/commissioner of tool, database maintainer<br>
+Invertego - Colorizer programmer<br>
+Richard Wheeler - Programmer<br>
 
 ## License
 
