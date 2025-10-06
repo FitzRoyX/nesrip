@@ -1,113 +1,51 @@
-# nesrip
+## About
 
-This tool takes in a ROM and a graphics database file *(described further down)*, and automatically extracts graphics from the ROM.
-
-## Installation
-
-### Pre-built binaries
-
-Pre-built binaries can be downloaded from the [GitHub Releases section](https://github.com/GeekJoystick/nesrip/releases/latest)
-
-### Compilation
-
-#### Dependencies
+This drag-n-drop tool extracts graphics from NES roms into modern PNG tilesheets for modern usage via database entries. A completed database will effectively document every game's graphics locations, bitplane type, pattern type, compression type, and palettes. It has powerful features like a colorizer and tile deduplicator. Future map and sprite definition tools using these modernized sheets are planned.
 
 * Windows 10/11
 
-## Supported compiler tools
+## Supported compilers
 * [TCC](https://github.com/TinyCC/tinycc)
 * [GCC](https://www.mingw-w64.org/)
 * [Clang](https://clang.llvm.org/)
-* [Visual Studio C++ or it's Clang](https://visualstudio.microsoft.com/)
+* [Visual Studio](https://visualstudio.microsoft.com/)
 * [Make](https://www.gnu.org/software/make)
 
-### Building
+## Building and usage
 
-* Clone or download the repository
-## TCC
-* Run `compile` in the root folder of the project
-## GCC
-* Run `make` in the root folder of the project
-## Visual Studio C++ or Clang
-* Open `nesrip.sln` with Visual Studio, Clang can be chosen via the `nesrip` project properties in the Platform Toolset option
-## Clang
-* Update the `compile` and change `tcc` to `clang`
+The easiest way to build this tool on Windows is by using TCC (TinyCC), a super small compiler with no installer. A prebuilt version can be found [here](https://github.com/FitzRoyX/tinycc/releases/tag/tcc_20251005). Simply extract it into the nesrip folder so that nesrip/tcc/tcc.exe exists, then run "compile_with_tcc_local.bat". This will create nesrip.exe, onto which roms can be dragged to create PNG output files. A game must be in the database for the tool to work. The database is a text file called nes_gfxdb.txt.
 
-### Executing program
+## Graphics database commands
+```
+//comments and inline comments are supported
+hash {ROM SHA-256 hash}
+s {} {} (section start and end addresses)
+p {1/2/4/8/16} {h/v} (pattern size and direction)
+i {} (any combo of bwld grayscale palette order: [b]lack, [w]hite, [l]ight gray, [d]ark gray)
+c {} (compression type)
+b {1/2} (bitplane type: [1]bpp, [2]bpp)
+r {true/false} (tile redundancy checker)
+k (clear the tile redundancy checker cache)
+end
+```
 
-#### Usage
-
+## Command-Line usage
 ```
 nesrip.exe file [arguments]                                                                                      
 Arguments:
- -S {start address} {end address}                 Directly rip graphics from specified memory in ROM.
- -o {filename}                                    Output filename (without file extension) when using -S.
- -d {filename}                                    Graphics database filename.
- -c {compression type, raw}                       Graphics decompression algorithm.
- -p {pattern size, 1/2/4/8/16} {direction, h/v}   Set or override tile block size and direction.
- -i {4 letter combination of b/o/t/w}             Set or override palette order for rendering.
- -b {bitplane type, 1/2}                          Set or override bitplane type
- -r {redundancy check enable, true/false}         Set or override enabling redundancy checks
+ -s {} {} (section start and end addresses)
+ -o {} (output filename when using -s)
+ -d {} (graphics database filename)
+ -p {1/2/4/8/16} {h/v} (pattern size and direction)
+ -i {} (any combo of bwld grayscale palette order: [b]lack, [w]hite, [l]ight gray, [d]ark gray)
+ -c {} (compression type)
+ -b {1/2} (bitplane type: [1]bpp, [2]bpp)
+ -r {true/false} (tile redundancy checker)
 ```
 
-### Graphics database file
-
-The Graphics database file is used by **nesrip** to match the given ROM to a set of commands written for extracting its graphics.
-The file contains a number of **description blocks**, each of them containing a SHA-256 hash of a ROM, and a list of commands that determine palette indices, pattern sizes, decompression algorithms and finally the ROM addresses of the graphics data.
-
-#### Note
-
-> By default the tool will look for a graphics database file called `nes_gfxdb.txt`.
-> You can change this by using the `-d` argument when running **nesrip**
-
-> You also must provide the database file yourself.
-
-### Graphics data base commands
-
-```
-hash {ROM SHA-256 hash}
-end
-s {Start address} {End address}                (Rip graphics from rom between start address and end address)
-p {Pattern size, 1/2/4/8/16} {Direction, h/v}  (Set extraction pattern size and direction)
-i {4 letter combination of b/o/t/w}            (Set palette used for rendering extracted graphics: [b]lack, [o]range, [t]eal, [w]hite)
-c {compression type, raw}                      (Set graphics compression algorithm)
-b {1/2}                                        (Set bitplane type: [1]bpp, [2]bpp)
-r {true/false}                                 (Enable or disable tile redundancy checks)
-k                                              (Clear the tile redundancy check cache)
-```
-
-### Compression types
+## Compression types
 
 * `raw`: Uncompressed graphics
-
-#### Note
-
-> No compression algorithm is supported at the moment
-
-### Example database file
-
-```
-//Spacegulls
-Hash B69BD1809E26400336AF288BC04403C00D77030B931BC31875594C9A0AE92F67
-Pattern 1 h
-Palette botw
-Section bg 00000 FFFFF
-EndHash
-
-//Micro Mages
-Hash A4B5B736A84B260314C18783381FE2DCA7B803F7C29E78FB403A0F9087A7E570
-Pattern 1 v
-Palette btow
-Section spr 8000 8FFF
-Section bg 9000 9FFF
-EndHash
-
-...
-```
-
-#### Note
-
-> Text written outside of a **description block** is ignored by the tool, though the latter will throw errors if you put text other than commands in a **description block**.
 
 ## Version History
 
@@ -125,6 +63,13 @@ EndHash
 	* Added a pattern size of 16 to allow for fully vertical 128x128 sections.
 * 0.1
 	* Initial Release.
+
+## Credits
+
+Matys Guéroult - Lead programmer
+FitzRoyX - Designer/commissioner of tool, database maintainer
+Invertego - Colorizer programmer
+Richard Wheeler - Programmer
 
 ## License
 
