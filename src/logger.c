@@ -13,13 +13,10 @@ void printHelp()
 	printProgamName();
 	printf(" file [arguments]\n");
 	printf("Arguments:\n");
-	printf(" -S {start address} {end address}                 Directly rip graphics from specified memory in ROM.\n");
-	printf(" -o {filename}                                    Output filename (without file extension) when using -S.\n");
-	printf(" -d {filename}                                    Graphics database filename.\n");
-	printf(" -c {compression type, raw}                       Graphics decompression algorithm.\n");
-	printf(" -p {pattern size, 1/2/4/8/16} {direction, h/v}   Set or override tile block size and direction.\n");
-	printf(" -i {4 letter combination of b/o/t/w}             Set or override palette order for rendering.\n");
-	printf(" -g                                               Generate 8x8 2 color tile 16 times png file");
+	printf(" -s {} {}                Section start and end addresses.\n");
+	printf(" -c {}                   Graphics decompression algorithm.\n");
+	printf(" -p {1/2/4/8/16} {h/v}   Pattern size and direction.\n");
+	printf(" -b {1/2}                Bitplane type.\n");
 }
 
 void printNoInput()
