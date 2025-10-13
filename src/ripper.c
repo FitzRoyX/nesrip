@@ -8,12 +8,26 @@
 #include "ripper.h"
 #include "stb/stb_image_write.h"
 
-//black, white, light gray, dark gray
 char paletteData[] = {
-	0, 0, 0, 255,
-	255, 255, 255, 255,
-	178, 178, 178, 255,
-	107, 107, 107, 255
+	0, 0, 0, 255, //black
+	255, 255, 255, 255, //white
+	175, 175, 175, 255, //lgray
+	100, 100, 100, 255, //dgray
+	
+	150, 0, 0, 255, //dred
+	200, 0, 0, 255, //lred
+	0, 150, 0, 255, //dgreen
+	0, 200, 0, 255, //lgreen
+	
+	0, 0, 150, 255, //dblue
+	0, 0, 200, 255, //lblue
+	0, 150, 150, 255, //dteal
+	0, 200, 200, 255, //lteal
+	
+	150, 150, 0, 255, //dyellow
+	200, 200, 0, 255, //lyellow
+	150, 0, 150, 255, //dpurple
+	200, 0, 200, 255, //lpurple
 };
 
 char RedundantColor[] = {
