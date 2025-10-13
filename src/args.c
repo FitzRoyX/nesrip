@@ -110,53 +110,6 @@ int handleCompressionArg(int pass, int* argc, char*** argv)
 	return 0;
 }
 
-int handlePaletteDescriptionArg(int pass, int* argc, char*** argv)
-{
-	CHECK_ARGC("-i", 2);
-
-	if (pass != 0)
-	{
-		INC(2);
-		return 0;
-	}
-
-	if (strlen((*argv)[1]) != 4)
-	{
-		printInvalidArgUsage("-i", "Palette description is too long or too short. Use a 4 letter long combination of \"b\", \"o\", \"t\" or \"w\".");
-		return 1;
-	}
-
-	for (int i = 0; i < 4; i++)
-	{
-		char c = (*argv)[1][i];
-		if (c != 'b' && c != 'o' && c != 't' && c != 'w')
-		{
-			printInvalidArgUsage("-i", "Palette description contains invalid characters. Make sure to only use \"b\", \"o\", \"t\" or \"w\"");
-			return 1;
-		}
-	}
-
-	paletteDescription = (*argv)[1];
-	paletteOverride = true;
-	INC(2);
-	return 0;
-}
-
-int handleDescriptorFilenameArg(int pass, int* argc, char*** argv)
-{
-	CHECK_ARGC("-d", 2);
-
-	if (pass != 0)
-	{
-		INC(2);
-		return 0;
-	}
-
-	descriptorFilename = (*argv)[1];
-	INC(2);
-	return 0;
-}
-
 int handleBitplaneArg(int pass, int* argc, char*** argv)
 {
 	CHECK_ARGC("-b", 2);
@@ -208,8 +161,6 @@ int handleAdditionnalArgs(int pass, int argc, char** argv)
 		CHECK_ARG("-o", handleOutputArg);
 		CHECK_ARG("-p", handlePatternArg);
 		CHECK_ARG("-c", handleCompressionArg);
-		CHECK_ARG("-i", handlePaletteDescriptionArg);
-		CHECK_ARG("-d", handleDescriptorFilenameArg);
 		CHECK_ARG("-b", handleBitplaneArg);
 		CHECK_ARG("-r", handleCheckRedundantArg);
 
