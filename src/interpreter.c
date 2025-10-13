@@ -319,7 +319,7 @@ void interpretDatabase(Cache* cache) {
 	printf("\n");
 
 	char* database;
-	size_t databaseLength = readAllBytesFromFile(descriptorFilename, &database, true);
+	size_t databaseLength = readAllBytesFromFile(databaseFilename, &database, true);
 	foundRom = false;
 
 	databaseLength = removeCarriageReturns(database, databaseLength);
