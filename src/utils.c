@@ -15,8 +15,7 @@
 #include "globals.h"
 
 
-str2int_errno str2int(int* out, char* s, int base)
-{
+str2int_errno str2int(int* out, char* s, int base) {
     char* end;
     if (s[0] == '\0' || isspace(s[0]))
         return STR2INT_INCONVERTIBLE;
@@ -33,8 +32,7 @@ str2int_errno str2int(int* out, char* s, int base)
     return STR2INT_SUCCESS;
 }
 
-int numberOfSetBits(int i)
-{
+int numberOfSetBits(int i) {
     i = i - ((i >> 1) & 0x55555555);
     i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
     i = (i + (i >> 4)) & 0x0F0F0F0F;
@@ -42,15 +40,13 @@ int numberOfSetBits(int i)
     return  i >> 24;
 }
 
-double numDigits(int n)
-{
+double numDigits(int n) {
     if (n == 0)
         return 1;
     return floor(log10(abs(n))) + 1;
 }
 
-size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate)
-{
+size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate) {
     FILE* fileptr;
     errno_t err;
     long filelen;
@@ -81,8 +77,7 @@ size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate)
 
     char* result = (char*)malloc(filelen * sizeof(char));
 
-    if (result == NULL)
-    {
+    if (result == NULL) {
         printf("Error: Couldn't allocate memory for reading file data.\n");
         return -1;
     }
@@ -90,8 +85,7 @@ size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate)
     fread(result, filelen, 1, fileptr);
     fclose(fileptr);
 
-    for (int i = filelen - zeroTerminate; i < filelen; i++)
-    {
+    for (int i = filelen - zeroTerminate; i < filelen; i++) {
         result[i] = 0;
     }
 
@@ -99,12 +93,10 @@ size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate)
     return filelen;
 }
 
-char* getFilename(char* path)
-{
+char* getFilename(char* path) {
 	char* searchPointer = path + strlen(path) - 1;
 
-	while (searchPointer >= path)
-    {
+	while (searchPointer >= path) {
 		if (searchPointer[0] == '\\' || searchPointer[0] == '/')
 			return searchPointer + 1;
 
@@ -114,12 +106,10 @@ char* getFilename(char* path)
     return path;
 }
 
-size_t getFilenameLengthWithoutExtension(char* filename)
-{
+size_t getFilenameLengthWithoutExtension(char* filename) {
     char* searchPointer = filename + strlen(filename) - 1;
 
-	while (searchPointer >= filename)
-    {
+	while (searchPointer >= filename) {
 		if (searchPointer[0] == '.')
 			return searchPointer - filename;
 
@@ -130,8 +120,7 @@ size_t getFilenameLengthWithoutExtension(char* filename)
 }
 
 // strtok_r from musl libc
-char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p)
-{
+char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p) {
 	if (!s && !(s = *p)) return NULL;
 	s += strspn(s, sep);
 	if (!*s) return *p = 0;
@@ -322,8 +311,6 @@ void processCache(Cache* cache, char* separator, int sep_size) {
 
         memcpy(prep_image, separator, sep_size);
         memcpy(prep_image + sep_size, image->data, image->size);
-        //snprintf(filename, sizeof(filename), "output/combined_%d.png", i + 1);
-        //stbi_write_png(filename, width, height + info->height, 4, prep_image, 128 * 4);
 
 		// Merge the prepared image into the combined image
         memcpy(combinedimage + offset, prep_image, (size_t)sep_size + image->size);
