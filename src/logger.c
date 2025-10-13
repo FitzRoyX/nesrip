@@ -14,9 +14,9 @@ void printHelp()
 	printf(" file [arguments]\n");
 	printf("Arguments:\n");
 	printf(" -s {} {}                Section start and end addresses.\n");
-	printf(" -c {}                   Graphics decompression algorithm.\n");
-	printf(" -p {1/2/4/8/16} {h/v}   Pattern size and direction.\n");
 	printf(" -b {1/2}                Bitplane type.\n");
+	printf(" -p {1/2/4/8/16} {h/v}   Pattern size and direction.\n");
+	printf(" -c {}                   Ccompression type.\n");
 }
 
 void printNoInput()
