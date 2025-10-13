@@ -4,8 +4,7 @@
 
 #define MAX_PATTERN_SIZE 16
 
-typedef struct
-{
+typedef struct {
 	//String arguments
 	char* sectionStartString;
 	char* sectionEndString;
