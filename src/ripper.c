@@ -8,18 +8,7 @@
 #include "ripper.h"
 #include "stb/stb_image_write.h"
 
-//  default grayscale bwld colors
-//	0, 0, 0, 255,
-//	255, 255, 255, 255,
-//	178, 178, 178, 255,
-//	107, 107, 107, 255
-
-//  redscale bwor colors
-//	0, 0, 0, 255,
-//	255, 255, 255, 255,
-//	255, 127, 0, 255,
-//	190, 0, 0, 255
-
+//black, white, light gray, dark gray
 char paletteData[] = {
 	0, 0, 0, 255,
 	255, 255, 255, 255,
