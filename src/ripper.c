@@ -25,6 +25,10 @@ typedef enum {
 	TWO_BPP,
 	THREE_BPP,
 	FOUR_BPP,
+	FIVE_BPP,
+	SIX_BPP,
+	SEVEN_BPP,
+	EIGHT_BPP,
 	BPP_COUNT
 } BitplaneType;
 
