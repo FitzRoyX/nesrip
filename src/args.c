@@ -36,7 +36,7 @@ int checkHelpArg(char* arg)
 
 int handleDirectSectionRipArg(int pass, int* argc, char*** argv)
 {
-	CHECK_ARGC("-S", 3);
+	CHECK_ARGC("-s", 3);
 
 	if (pass != 1)
 	{
@@ -50,30 +50,11 @@ int handleDirectSectionRipArg(int pass, int* argc, char*** argv)
 		(*argv)[2],
 		patternSize,
 		patternDirection,
-		paletteDescription,
 		compressionType,
-		outputFolder,
-		outputFilename
 	};
 
 	ripSection(&rom, cache, &args);
 	return 1;
-}
-
-int handleOutputArg(int pass, int* argc, char*** argv)
-{
-	CHECK_ARGC("-o", 2);
-
-	if (pass != 0)
-	{
-		INC(2);
-		return 0;
-	}
-
-	outputFilename = (*argv)[1];
-
-	INC(2);
-	return 0;
 }
 
 int handlePatternArg(int pass, int* argc, char*** argv)
@@ -109,6 +90,53 @@ int handleCompressionArg(int pass, int* argc, char*** argv)
 	INC(2);
 	return 0;
 }
+
+///int handlePaletteDescriptionArg(int pass, int* argc, char*** argv)
+///{
+///	CHECK_ARGC("-i", 2);
+///
+///	if (pass != 0)
+///	{
+///		INC(2);
+///		return 0;
+///	}
+///
+///	if (strlen((*argv)[1]) != 4)
+///	{
+///		printInvalidArgUsage("-i", "Palette description is too long or too short. Use a 4 letter long combination of \"b\", \"o\", \"t\" or \"w\".");
+///		return 1;
+///	}
+///
+///	for (int i = 0; i < 4; i++)
+///	{
+///		char c = (*argv)[1][i];
+///		if (c != 'b' && c != 'o' && c != 't' && c != 'w')
+///		{
+///			printInvalidArgUsage("-i", "Palette description contains invalid characters. Make sure to only use \"b\", \"o\", \"t\" or \"w\"");
+///			return 1;
+///		}
+///	}
+///
+///	paletteDescription = (*argv)[1];
+///	paletteOverride = true;
+///	INC(2);
+///	return 0;
+///}
+///
+///int handleDatabaseFilenameArg(int pass, int* argc, char*** argv)
+///{
+///	CHECK_ARGC("-d", 2);
+///
+///	if (pass != 0)
+///	{
+///		INC(2);
+///		return 0;
+///	}
+///
+///	databaseFilename = (*argv)[1];
+///	INC(2);
+///	return 0;
+///}
 
 int handleBitplaneArg(int pass, int* argc, char*** argv)
 {
@@ -157,11 +185,10 @@ int handleAdditionnalArgs(int pass, int argc, char** argv)
 		if (checkHelpArg(argv[0]))
 			return 1;
 
-		CHECK_ARG("-S", handleDirectSectionRipArg);
-		CHECK_ARG("-o", handleOutputArg);
+		CHECK_ARG("-s", handleDirectSectionRipArg);
+		CHECK_ARG("-b", handleBitplaneArg);
 		CHECK_ARG("-p", handlePatternArg);
 		CHECK_ARG("-c", handleCompressionArg);
-		CHECK_ARG("-b", handleBitplaneArg);
 		CHECK_ARG("-r", handleCheckRedundantArg);
 
 		printInvalidArg(argv[0]);
