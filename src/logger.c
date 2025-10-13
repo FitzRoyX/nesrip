@@ -2,13 +2,11 @@
 #include <string.h>
 #include "logger.h"
 
-void printProgamName()
-{
+void printProgamName() {
 	printf("%s", programName);
 }
 
-void printHelp()
-{
+void printHelp() {
 	printf("Usage: ");
 	printProgamName();
 	printf(" file [arguments]\n");
@@ -19,16 +17,14 @@ void printHelp()
 	printf(" -c {}                   Ccompression type.\n");
 }
 
-void printNoInput()
-{
+void printNoInput() {
 	printf("No input ROM file specified.\n");
 	printf("Run ");
 	printProgamName();
 	printf(" --help to see usage information.\n");
 }
 
-void printInvalidArg(char* arg)
-{
+void printInvalidArg(char* arg) {
 	printf("Unrecognised argument: ");
 	printf("%s", arg);
 	printf(".\n");
@@ -37,8 +33,7 @@ void printInvalidArg(char* arg)
 	printf(" --help to see usage information.\n");
 }
 
-void printInvalidArgUsage(const char* arg, const char* error)
-{
+void printInvalidArgUsage(const char* arg, const char* error) {
 	printf("Invalid usage of argument ");
 	printf("%s", arg);
 	printf(": ");
