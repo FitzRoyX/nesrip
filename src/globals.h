@@ -35,7 +35,7 @@ typedef struct {
 
 typedef struct {
 	int width, height, channels;
-}PNGInfo;
+} PNGInfo;
 
 typedef struct {
 	PNGInfo imageInfo;
