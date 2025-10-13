@@ -13,7 +13,7 @@ extern char* patternSize;
 extern char* patternDirection;
 extern char* paletteDescription;
 extern char* bitplaneType;
-extern char* descriptorFilename;
+extern char* databaseFilename;
 extern char* checkRedundant;
 extern int patternOverride;
 extern int paletteOverride;
