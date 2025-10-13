@@ -23,7 +23,8 @@ char RedundantColor[] = {
 typedef enum {
 	ONE_BPP,
 	TWO_BPP,
-
+	THREE_BPP,
+	FOUR_BPP,
 	BPP_COUNT
 } BitplaneType;
 
@@ -39,9 +40,9 @@ typedef struct {
 	ExtractionArguments* args;
 	int sectionStart;
 	int sectionEnd;
+	BitplaneType bitplaneType;
 	int patternSize;
 	int patternDirection;
-	BitplaneType bitplaneType;
 	int checkRedundant;
 	int tileLength;
 
