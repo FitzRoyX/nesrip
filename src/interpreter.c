@@ -250,7 +250,7 @@ int handleSectionCommand(Cache* cache) {
 		paletteDescription,
 		compressionType,
 		bitplaneType,
-		checkRedundant,
+		deduplicator,
 		outputFolder,
 	};
 
@@ -277,18 +277,18 @@ int handleBitplaneCommand(Cache* cache) {
 	return 0;
 }
 
-int handleCheckRedundantCommand(Cache* cache) {
+int handleDeduplicatorCommand(Cache* cache) {
 	char* token;
-	PULL_TOKEN("CheckRedundant", token);
+	PULL_TOKEN("Deduplicator", token);
 
-	if (checkRedundantOverride)
+	if (deduplicatorOverride)
 		return 0;
 
-	checkRedundant = token;
+	deduplicator = token;
 	return 0;
 }
 
-int handleClearRedundantCommand(Cache* cache) {
+int handleClearDeduplicatorCommand(Cache* cache) {
 	cleanupPatternChains();
 	initPatternChains();
 	return 0;
@@ -337,12 +337,11 @@ void interpretDatabase(Cache* cache) {
 			continue;
 		}
 
-		CHECK_COMMAND("p", handlePatternCommand, cache);
-		CHECK_COMMAND("i", handlePaletteCommand, cache);
-		CHECK_COMMAND("c", handleCompressionCommand, cache);
 		CHECK_COMMAND("b", handleBitplaneCommand, cache);
-		CHECK_COMMAND("r", handleCheckRedundantCommand, cache);
-		CHECK_COMMAND("k", handleClearRedundantCommand, cache);
+		CHECK_COMMAND("p", handlePatternCommand, cache);
+		CHECK_COMMAND("c", handleCompressionCommand, cache);
+		CHECK_COMMAND("r", handleDeduplicatorCommand, cache);
+		CHECK_COMMAND("k", handleClearDeduplicatorCommand, cache);
 		CHECK_COMMAND("s", handleSectionCommand, cache);
 
 		if (strcmp(token, "end") == 0)
