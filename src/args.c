@@ -32,7 +32,7 @@ int checkHelpArg(char* arg) {
 	return 0;
 }
 
-int handleDirectSectionRipArg(int pass, int* argc, char*** argv) {
+int handleSectionArg(int pass, int* argc, char*** argv) {
 	CHECK_ARGC("-s", 3);
 
 	if (pass != 1) {
@@ -142,20 +142,20 @@ int handleCompressionArg(int pass, int* argc, char*** argv) {
 ///	INC(2);
 ///	return 0;
 ///}
-
-int handleCheckRedundantArg(int pass, int* argc, char*** argv) {
-	CHECK_ARGC("-r", 2);
-
-	if (pass != 0) {
-		INC(2);
-		return 0;
-	}
-
-	checkRedundant = (*argv)[1];
-	checkRedundantOverride = true;
-	INC(2);
-	return 0;
-}
+///
+///int handleDeduplicatorArg(int pass, int* argc, char*** argv) {
+///	CHECK_ARGC("-r", 2);
+///
+///	if (pass != 0) {
+///		INC(2);
+///		return 0;
+///	}
+///
+///	deduplicator = (*argv)[1];
+///	deduplicatorOverride = true;
+///	INC(2);
+///	return 0;
+///}
 
 /*
 *	Check and handle call arguments
@@ -165,16 +165,15 @@ int handleCheckRedundantArg(int pass, int* argc, char*** argv) {
 *
 *	Some arguments ignore the pass value (eg. --help)
 */
-int handleAdditionnalArgs(int pass, int argc, char** argv) {
+int handleAdditionalArgs(int pass, int argc, char** argv) {
 	while (argc > 0) {
 		if (checkHelpArg(argv[0]))
 			return 1;
 
-		CHECK_ARG("-s", handleDirectSectionRipArg);
+		CHECK_ARG("-s", handleSectionArg);
 		CHECK_ARG("-b", handleBitplaneArg);
 		CHECK_ARG("-p", handlePatternArg);
 		CHECK_ARG("-c", handleCompressionArg);
-		CHECK_ARG("-r", handleCheckRedundantArg);
 
 		printInvalidArg(argv[0]);
 		return 1;
