@@ -352,7 +352,7 @@ static void generateTransparentTile(uint8_t* image) {
     }
 }
 
-void generate_TransparentImage(uint8_t* image, int repeat_count) {
+void generateTransparentImage(uint8_t* image, int repeat_count) {
     uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
     generateTransparentTile(tile);
 
@@ -372,7 +372,7 @@ void generate_TransparentImage(uint8_t* image, int repeat_count) {
     }
 }
 
-void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]) {
+void generateSeparatorTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]) {
     for (int y = 0; y < TILE_SIZE; y++) {
         for (int x = 0; x < TILE_SIZE; x++) {
             int index = 4 * (y * TILE_SIZE + x);
@@ -394,7 +394,7 @@ void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]) {
     }
 }
 
-void generate_image(uint8_t* image, int repeat_count) {
+void generateSeparator(uint8_t* image, int repeat_count) {
     uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
 
     // Define two colors: Magenta for "X" and Yellow for background
@@ -402,7 +402,7 @@ void generate_image(uint8_t* image, int repeat_count) {
     uint8_t color2[4] = { 255, 255, 0, 255 }; // Yellow
 
     // Generate the tile
-    generateTile(tile, color1, color2);
+    generateSeparatorTile(tile, color1, color2);
     int image_width = (TILE_SIZE * repeat_count);
 
     for (int y = 0; y < TILE_SIZE; y++) {
