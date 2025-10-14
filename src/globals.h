@@ -14,11 +14,11 @@ extern char* patternDirection;
 extern char* paletteDescription;
 extern char* bitplaneType;
 extern char* databaseFilename;
-extern char* checkRedundant;
+extern char* deduplicator;
 extern int patternOverride;
 extern int paletteOverride;
 extern int bitplaneOverride;
-extern int checkRedundantOverride;
+extern int deduplicatorOverride;
 
 typedef struct {
 	int valid;
