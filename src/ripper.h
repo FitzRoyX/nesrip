@@ -6,14 +6,14 @@
 
 typedef struct {
 	//String arguments
-	char* sectionStartString;
-	char* sectionEndString;
+	char* compressionType;
+	char* bitplaneType;
 	char* patternSizeString;
 	char* patternDirectionString;
 	char* paletteDescription;
-	char* compressionType;
-	char* bitplaneType;
 	char* deduplicator;
+	char* sectionStartString;
+	char* sectionEndString;
 	//Output arguments
 	char* outputFolder;
 	char* filenameOverload;
