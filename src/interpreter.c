@@ -359,7 +359,7 @@ void interpretDatabase(Cache* cache) {
 	else {
 		if (cache->size > 0) {
 			uint8_t separator[128 * 8 * 4];
-			generate_image(separator, 16);
+			generateSeparator(separator, 16);
 			processCache(cache, separator, sizeof(separator));
 		}
 	}
