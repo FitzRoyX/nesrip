@@ -42,8 +42,8 @@ void deleteCharacters(char* str, size_t pos, size_t n);
 void initCache(Cache* cache, int initialCapacity);
 void addToCache(Cache* cache, char* value, int x, int y, int comp);
 void processCache(Cache* cache, char* separator, int sep_size);
-void generateTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]);
-void generate_image(uint8_t* image, int repeat_count);
-void generate_TransparentImage(uint8_t* image, int repeat_count);
+void generateSeparatorTile(uint8_t* image, uint8_t color1[4], uint8_t color2[4]);
+void generateSeparator(uint8_t* image, int repeat_count);
+void generateTransparentImage(uint8_t* image, int repeat_count);
 
 #endif
