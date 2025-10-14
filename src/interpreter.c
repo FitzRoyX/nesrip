@@ -243,14 +243,14 @@ int handleSectionCommand(Cache* cache) {
 
 	ExtractionArguments args =
 	{
-		sectionStart,
-		sectionEnd,
+		compressionType,
+		bitplaneType,
 		patternSize,
 		patternDirection,
 		paletteDescription,
-		compressionType,
-		bitplaneType,
 		deduplicator,
+		sectionStart,
+		sectionEnd,
 		outputFolder,
 	};
 
@@ -337,9 +337,9 @@ void interpretDatabase(Cache* cache) {
 			continue;
 		}
 
+		CHECK_COMMAND("c", handleCompressionCommand, cache);
 		CHECK_COMMAND("b", handleBitplaneCommand, cache);
 		CHECK_COMMAND("p", handlePatternCommand, cache);
-		CHECK_COMMAND("c", handleCompressionCommand, cache);
 		CHECK_COMMAND("r", handleDeduplicatorCommand, cache);
 		CHECK_COMMAND("k", handleClearDeduplicatorCommand, cache);
 		CHECK_COMMAND("s", handleSectionCommand, cache);
