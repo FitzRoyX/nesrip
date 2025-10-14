@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 	CreateDirectoryA(outputFolder, 0);
 
 	if (argc > 2) {
-		if (handleAdditionnalArgs(1, argc - 2, argv + 2))
+		if (handleAdditionalArgs(1, argc - 2, argv + 2))
 			quitProgram(0);
 	}
 
