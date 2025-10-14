@@ -16,17 +16,17 @@ Cache* cache;
 char* programName;
 char* outputFolder;
 char* outputFilename = NULL;
-char* compressionType = "raw";
+char* bitplaneType = "2";
 char* patternSize = "1";
 char* patternDirection = "h";
 char* paletteDescription = "bwld";
-char* bitplaneType = "2";
+char* compressionType = "raw";
 char* databaseFilename = "nes_gfx_db.txt";
-char* checkRedundant = "true";
+char* deduplicator = "true";
 int patternOverride = false;
 int paletteOverride = false;
 int bitplaneOverride = false;
-int checkRedundantOverride = false;
+int deduplicatorOverride = false;
 
 static void quitProgram(int code) {
 	if (outputFolder != NULL)
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 	}
 
 	if (argc > 2) {
-		if (handleAdditionnalArgs(0, argc - 2, argv + 2))
+		if (handleAdditionalArgs(0, argc - 2, argv + 2))
 			quitProgram(0);
 	}
 
