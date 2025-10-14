@@ -30,7 +30,7 @@ char paletteData[] = {
 	200, 0, 200, 255, //lpurple
 };
 
-char RedundantColor[] = {
+char deduplicatedTileColor[] = {
 	255, 0, 255, 255
 };
 
@@ -61,7 +61,7 @@ typedef struct {
 	BitplaneType bitplaneType;
 	int patternSize;
 	int patternDirection;
-	int checkRedundant;
+	int deduplicator;
 	int tileLength;
 
 	char* sheet;
@@ -213,15 +213,15 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 		context->tileLength = 16;
 	}
 
-	if (strcmp(args->checkRedundant, "true") == 0) {
-		context->checkRedundant = true;
+	if (strcmp(args->deduplicator, "true") == 0) {
+		context->deduplicator = true;
 	}
-	else if (strcmp(args->checkRedundant, "false") == 0) {
-		context->checkRedundant = false;
+	else if (strcmp(args->deduplicator, "false") == 0) {
+		context->deduplicator = false;
 	}
 	else {
-		printf("Error: Invalid Redundant check value. Use \"true\" or \"false\". Defaulting to \"true\".\n");
-		context->checkRedundant = true;
+		printf("Error: Invalid deduplicator value. Use \"true\" or \"false\". Defaulting to \"true\".\n");
+		context->deduplicator = true;
 	}
 
 	return 1;
@@ -393,7 +393,7 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 	return 0;
 }
 
-void drawRedundantTile(ExtractionContext* context) {
+void drawDeduplicatedTile(ExtractionContext* context) {
 	int stx = (context->patternDirection) ? context->sty : context->stx;
 	int sty = (context->patternDirection) ? context->stx : context->sty;
 
@@ -403,7 +403,7 @@ void drawRedundantTile(ExtractionContext* context) {
 
 		for (int x = 0; x < 8; x++)	{
 			px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
-			drawPixel(context->sheet, px, py, RedundantColor);
+			drawPixel(context->sheet, px, py, deduplicatedTileColor);
 		}
 
 		if (px + 7 > context->maxX)
@@ -441,14 +441,14 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	unsigned char* endPointer = rom->data + context->sectionEnd;
 
 	while (sectionData < endPointer) {
-		if (context->checkRedundant) {
+		if (context->deduplicator) {
 			context->workingHash = 0;
 			processTile(context, sectionData, &addToHash);
 
 			if (!checkHasTileMatch(context, sectionData, context->workingHash))
 				processTile(context, sectionData, &writeLine);
 			else
-				drawRedundantTile(context);
+				drawDeduplicatedTile(context);
 		} else {
 			processTile(context, sectionData, &writeLine);
 		}
