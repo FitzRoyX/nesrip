@@ -13,7 +13,7 @@ typedef struct {
 	char* paletteDescription;
 	char* compressionType;
 	char* bitplaneType;
-	char* checkRedundant;
+	char* deduplicator;
 	//Output arguments
 	char* outputFolder;
 	char* filenameOverload;
