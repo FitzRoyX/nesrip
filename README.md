@@ -17,12 +17,12 @@ The easiest way to build this tool on Windows is by using TCC (TinyCC), a super 
 ```
 //comments and inline comments are supported
 hash {}
-s {} {} (section start and end addresses)
+s {} {} (section start and end)
+c {} (compression type)
 b {1/2} (bitplane type)
 p {1/2/4/8/16} {h/v} (pattern size and direction)
-c {} (compression type)
-r {true/false} (tile redundancy checker)
-k (clear the tile redundancy checker cache)
+r {true/false} (tile deduplicator)
+k (clear tile deduplicator cache)
 end
 ```
 
@@ -30,11 +30,11 @@ end
 ```
 nesrip.exe filename [arguments]                                                                                      
 Arguments:
- -s {} {} (section start and end addresses)
+ -s {} {} (section start and end)
+ -c {} (compression type)
  -b {1/2} (bitplane type)
  -p {1/2/4/8/16} {h/v} (pattern size and direction)
- -c {} (compression type)
- -r {true/false} (tile redundancy checker)
+ -r {true/false} (tile deduplicator)
 ```
 
 ## Compression types
