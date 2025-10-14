@@ -2,6 +2,6 @@
 #define ARGS_H
 
 int checkHelpArg(char* arg);
-int handleAdditionnalArgs(int pass, int argc, char** argv);
+int handleAdditionalArgs(int pass, int argc, char** argv);
 
 #endif
