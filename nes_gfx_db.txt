@@ -940,7 +940,7 @@ p 2 v
 s 1b117 1b636 //seg3
 end
 
-//Dark Lord (Japan).unh
+//Dark Lord (Japan).chr
 hash d5426d3c26dc11200610044e3ff84ed13d09c372460bf09134ac8b770e69d724
 p 1 h
 s 40000 5ffff
@@ -952,37 +952,37 @@ p 1 h
 s 4000 5fff
 end
 
-//Kirby's Adventure (Canada) (Fr)
+//Kirby's Adventure (Canada) (Fr).chr
 hash 24fca0fe86464c807ab5d58a2d56155a3fa1994e9bd78d119e3f8f84c8aee785
 p 1 h
 s 80000 bffff
 end
 
-//Kirby's Adventure (Europe)
+//Kirby's Adventure (Europe).chr
 hash c6f3d15f8c9b60aff995e7e2559db82a5659a3fc9cf9cb6aa9da0e695e5030f3
 p 1 h
 s 80000 bffff
 end
 
-//Kirby's Adventure (France)
+//Kirby's Adventure (France).chr
 hash b9124d9991574d190b8661f11140c5ce319ba050d26609fcf4c0f6349f7602bf
 p 1 h
 s 80000 bffff
 end
 
-//Kirby's Adventure (Germany)
+//Kirby's Adventure (Germany).chr
 hash e57cded0299931b2e2b6dca0be1f251d0f66c7566a49c38a426085afaa175d68
 p 1 h
 s 80000 bffff
 end
 
-//Kirby's Adventure (USA) (Rev 1)
+//Kirby's Adventure (USA) (Rev 1).chr
 hash 1250a80faf865aa5ee5585ad7639e5ef2b3fa541554effda5fad2cc5dc2acef5
 p 1 h
 s 80000 bffff
 end
 
-//Kirby's Adventure (USA)
+//Kirby's Adventure (USA).chr
 hash a6b81fec11c24a33fd763db5c28005e760a1614e70c1bb5ccde0bd4242431000
 p 1 h
 s 80000 bffff
@@ -1057,6 +1057,7 @@ s 14d60 1555f //seg5
 s 18000 18a9f //seg6
 s 18be0 1989f //seg7
 s 19da0 1b8cf //seg8
+end
 
 //Metroid (USA).prg
 hash d2cdc3e8432f104709c17c88b20ceae87780e97cf6a2e3372fd54d0a67972062
@@ -1069,6 +1070,7 @@ s 14d60 1555f //seg5
 s 18000 18a9f //seg6
 s 18be0 1989f //seg7
 s 19da0 1b8cf //seg8
+end
 
 //Super Mario Bros (World).chr
 hash fcb6a0ef3a20c19b356005fbb21dc8009563b1cb5a9aaebc8e9386b4a8c5912e
@@ -1082,16 +1084,114 @@ p 1 h
 s 20000 3ffff
 end
 
+//Ultima - Exodus (USA).prg
+hash af5ac55d6283b709bcd96889708a6e7ad3c77e3bdd377aae796fd87b4b90dc4b
+p 1 h
+s 18000 187ef
+s 19f00 1beff
+p 2 v
+s 1c000 1d5ff
+p 1 h
+s 1d600 1f0ff
+p 2 v
+s 27800 279ff
+p 1 h
+s 28000 28a3f
+p 2 v
+s 28a40 28fff
+p 1 h
+s 29000 2997f
+s 29b00 29d8f
+p 2 v
+s 2a000 2b1ff
+s 2e100 2e1bf
+s 2f8c0 2f8ff
+s 2f9c0 2f9ff //first tile is garbage
+s 2fac0 2faff
+s 2fba0 2fbff
+s 2fcc0 2fcff //first tile is garbage
+s 2fdc0 2fdff
+p 1 h
+s 32f01 33440
+p 2 v
+s 379e0 379ff
+s 37aa0 37aff
+s 37b80 37bff //first tile is garbage
+s 37cc0 37cff
+s 37dc0 37dff //first tile is garbage
+p 1 h
+s 37e00 37f9f
+s 38000 387ef
+s 39f00 3beff //dupe maps inside garbage
+end
+
+//Ultima - Quest of the Avatar (USA).prg //allcompressedgfx!!
+hash bb625b8df6ddbeb991bb1cbf9b818a5352dcd4856d84640612b2df66148c442f
+end
+
+//Ultima - Warriors of Destiny (USA).prg
+hash 1e8966fd8c9baf57c514fbf4d67ddd8c1ffd184be164f99342ccdec62def8db2
+p 1 h
+s 56 85
+s 2a6 1095
+p 2 h
+s 4006 7005
+s 800a a609
+p 1 h
+s d4be cabe
+s dede df2d
+s 105f9 10688
+s 10601 10690
+s 11e8e 12e8d
+s 28006 28245 //start portraits, +4 after each segend
+s 2824a 28489
+s 2848e 286cd
+s 286d2 28911
+s 28916 28b55
+s 28b5a 28d99
+s 28d9e 28fdd
+s 28fe2 29231
+s 29236 29465
+s 2946a 296a9
+s 296ae 298ed
+s 298f2 29b31
+s 29b36 29d75
+s 29d7a 29fb9
+s 29fbe 2a1fd
+s 2a202 2a441
+s 2a446 2a685
+s 2a68a 2a8c9
+s 2a8ce 2ab0d
+s 2b1de 2b41d
+s 2b422 2b661
+s 2b666 2b8a5
+s 2b8aa 2bae9
+s 2baee 2bd2d
+s 2bd32 2bf71
+p 2 h
+s 2c046 2d985
+p 1 h
+s 2e75f 2e78e
+p 2 h
+s 30046 32a85
+p 1 h
+s 3b31a 3b729 
+end
 
 
-//UNLICENSED
+
+
+//*********************************************************************************
+
+//UNLICENSED FREEWARE
+//THIS ENTRY FOR TESTING PURPOSES, RANGES AND COLORS ARE FAKE
 //BladeBuster.nes
 hash 4a4cf5968932f2e7783e2e46cc2b870e73e1d6e7a874ec4a9f79ec217423ba8a
 p 1 h
-s 40000 40fff //seg1
-s 41000 410bf //seg2 less than 16 tiles, needs padding
-s 410c0 420cf //existing padding logic is used, 15 tiles short of 16
-s 45ff0 465df //existing padding logic is used, 1 tile short of 16
-s 52700 5334f //existing padding logic is used, 11 tiles short of 16
-s 55000 55fef //existing padding logic is used, 1 tile short of 16
+s 40000 40fff
+s 41000 410bf
+s 410c0 420cf
+s 45ff0 465df
+s 52700 5334f
+s 55000 55fef
 end
