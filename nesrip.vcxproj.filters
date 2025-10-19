@@ -71,25 +71,28 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\sha_2\LICENSE.txt" />
-    <Text Include="nes_gfxdb.txt" />
     <Text Include="colorizer\4a4cf596.txt" />
     <Text Include="colorizer\085e5397.txt" />
     <Text Include="colorizer\a35e8463.txt" />
     <Text Include="colorizer\e9f4c9d1.txt" />
     <Text Include="colorizer\e8684004.txt" />
     <Text Include="colorizer\fcb6a0ef.txt" />
+    <Text Include="nes_gfx_db.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="compile.bat">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="drag and drop ROMs.bat">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="LICENSE.md" />
     <None Include="Makefile" />
     <None Include="README.md" />
     <None Include="BladeBuster.nes" />
+    <None Include="compile_with_tcc_winpath.bat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="compile_with_tcc_local.bat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="batch_rip.bat">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

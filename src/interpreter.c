@@ -9,6 +9,8 @@
 #include "sha_2/sha-256.h"
 #include "interpreter.h"
 
+extern char* deduplicator;
+
 int foundRom = false;
 char* tokenContextStack[2];
 char** tokenContext = &tokenContextStack[0];
@@ -133,7 +135,8 @@ int handleColorizerSheetCommand(Cache* cache) {
 		for (int x = 0; x < sheet->width; x++) {
 			char* paletteString;
 			PULL_TOKEN("Sheet", paletteString);
-
+			if (strcmp(paletteString, "-") == 0)
+				continue;
 			if (strcmp(paletteString, "end") == 0)
 				goto end;
 

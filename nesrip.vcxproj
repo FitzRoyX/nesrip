@@ -157,14 +157,15 @@
     <Text Include="colorizer\e8684004.txt" />
     <Text Include="colorizer\e9f4c9d1.txt" />
     <Text Include="colorizer\fcb6a0ef.txt" />
-    <Text Include="nes_gfxdb.txt" />
+    <Text Include="nes_gfx_db.txt" />
     <Text Include="src\sha_2\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="batch_rip.bat" />
     <None Include="BladeBuster.nes" />
-    <None Include="compile.bat" />
-    <None Include="drag and drop ROMs.bat" />
+    <None Include="compile_with_tcc_local.bat" />
+    <None Include="compile_with_tcc_winpath.bat" />
     <None Include="LICENSE.md" />
     <None Include="Makefile" />
     <None Include="README.md" />
