@@ -28,13 +28,7 @@ end
 
 ## Command-Line usage
 ```
-nesrip.exe filename [arguments]                                                                                      
-Arguments:
- -s {} {} (section start and end)
- -c {} (compression type)
- -b {1/2} (bitplane type)
- -p {1/2/4/8/16} {h/v} (pattern size and direction)
- -r {true/false} (tile deduplicator)
+nesrip.exe filename
 ```
 
 ## Compression types
