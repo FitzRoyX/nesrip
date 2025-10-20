@@ -15,14 +15,14 @@ The easiest way to build this tool on Windows is by using TCC (TinyCC), a super 
 
 ## Graphics database commands
 ```
-//comments and inline comments are supported
+//trailing and inline comments are supported
 hash {}
-s {} {} (section start and end)
 c {} (compression type)
 b {1/2} (bitplane type)
 p {1/2/4/8/16} {h/v} (pattern size and direction)
 r {true/false} (tile deduplicator)
 k (clear tile deduplicator cache)
+s {} {} (section start and end)
 end
 ```
 
