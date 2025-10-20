@@ -227,17 +227,6 @@ int handlePatternCommand(Cache* cache) {
 	return 0;
 }
 
-int handlePaletteCommand(Cache* cache) {
-	char* token;
-	PULL_TOKEN("Palette", token);
-
-	if (paletteOverride)
-		return 0;
-
-	paletteDescription = token;
-	return 0;
-}
-
 int handleSectionCommand(Cache* cache) {
 	char* sectionStart, * sectionEnd;
 
@@ -250,7 +239,6 @@ int handleSectionCommand(Cache* cache) {
 		bitplaneType,
 		patternSize,
 		patternDirection,
-		paletteDescription,
 		deduplicator,
 		sectionStart,
 		sectionEnd,
