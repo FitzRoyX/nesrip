@@ -11,12 +11,10 @@ extern char* outputFilename;
 extern char* compressionType;
 extern char* patternSize;
 extern char* patternDirection;
-extern char* paletteDescription;
 extern char* bitplaneType;
 extern char* databaseFilename;
 extern char* deduplicator;
 extern int patternOverride;
-extern int paletteOverride;
 extern int bitplaneOverride;
 extern int deduplicatorOverride;
 
