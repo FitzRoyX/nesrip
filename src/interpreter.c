@@ -242,7 +242,6 @@ int handleSectionCommand(Cache* cache) {
 		deduplicator,
 		sectionStart,
 		sectionEnd,
-		outputFolder,
 	};
 
 	ripSection(&rom, cache, &args);
