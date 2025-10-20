@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <Windows.h>
-#include "args.h"
+///#include "args.h"
 #include "globals.h"
 #include "interpreter.h"
 #include "logger.h"
@@ -44,20 +44,12 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
-	if (checkHelpArg(argv[1]))
-		return 0;
-
 	char* inputRomName = argv[1];
 	rom = readRom(inputRomName);
 
 	if (rom.size < 0) {
 		printf("An error occured while opening input ROM file.\n");
 		return 0;
-	}
-
-	if (argc > 2) {
-		if (handleAdditionalArgs(0, argc - 2, argv + 2))
-			quitProgram(0);
 	}
 
 	char* inputFilename = getFilename(inputRomName);
@@ -88,10 +80,6 @@ int main(int argc, char** argv) {
 	CreateDirectoryA("output", 0);
 	CreateDirectoryA(outputFolder, 0);
 
-	if (argc > 2) {
-		if (handleAdditionalArgs(1, argc - 2, argv + 2))
-			quitProgram(0);
-	}
 
 	//TODO: Handle ROM hash detection and graphics ripping here
 	int capacity = 10;
