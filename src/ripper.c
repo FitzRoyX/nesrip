@@ -99,23 +99,6 @@ int allocTilesheet(ExtractionContext* context, int tileCount) {
 	return 0;
 }
 
-char* getColor(char color, char* paletteDescription) {
-	char c = paletteDescription[color];
-
-	switch (c) {
-		case 'b':
-			return paletteData;
-		case 'w':
-			return paletteData + 4;
-		case 'l':
-			return paletteData + 8;
-		case 'd':
-			return paletteData + 12;
-	}
-	
-	return paletteData;
-}
-
 void drawPixel(char* sheet, int x, int y, char* color) {
 	for (int i = 0; i < 4; i++)	{
 		sheet[(y * 128 + x) * 4 + i] = color[i];
@@ -262,7 +245,11 @@ int writeLine(ExtractionContext* context, int y, unsigned int data) {
 		px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
 
 		char color[4];
-		memcpy(color, getColor(c, context->args->paletteDescription), sizeof(color));
+        int colorIndex = c * 4;
+
+        for (int i = 0; i < 4; i++) {
+            color[i] = paletteData[colorIndex + i];
+        }
 
 		ColorizerSheet* sheet = &colorSheet;
 		int cx = (colorSheetIndex + context->index) % 16;
