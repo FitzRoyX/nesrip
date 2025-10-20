@@ -19,12 +19,10 @@ char* outputFilename = NULL;
 char* bitplaneType = "2";
 char* patternSize = "1";
 char* patternDirection = "h";
-char* paletteDescription = "bwld";
 char* compressionType = "raw";
 char* databaseFilename = "nes_gfx_db.txt";
 char* deduplicator = "true";
 int patternOverride = false;
-int paletteOverride = false;
 int bitplaneOverride = false;
 int deduplicatorOverride = false;
 
