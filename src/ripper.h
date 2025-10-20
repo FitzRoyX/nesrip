@@ -10,7 +10,6 @@ typedef struct {
 	char* bitplaneType;
 	char* patternSizeString;
 	char* patternDirectionString;
-	char* paletteDescription;
 	char* deduplicator;
 	char* sectionStartString;
 	char* sectionEndString;
