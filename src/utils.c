@@ -6,11 +6,9 @@
 #include <math.h>
 #include <string.h>
 #include <stdint.h>
-
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBI_ONLY_PNG
 #include "stb/stb_image_write.h"   
-
 #include "utils.h"
 #include "globals.h"
 
