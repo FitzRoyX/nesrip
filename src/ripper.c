@@ -187,6 +187,7 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 	else
 		printf("Error: Invalid pattern direction. Use \"h\" or \"v\".\n");
 
+
 	if (strcmp(args->bitplaneType, "1") == 0) {
 		context->bitplaneType = ONE_BPP;
 		context->tileLength = 8;
@@ -194,6 +195,30 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 	else if (strcmp(args->bitplaneType, "2") == 0) {
 		context->bitplaneType = TWO_BPP;
 		context->tileLength = 16;
+	}
+	else if (strcmp(args->bitplaneType, "3") == 0) {
+		context->bitplaneType = THREE_BPP;
+		context->tileLength = 24;
+	}
+	else if (strcmp(args->bitplaneType, "4") == 0) {
+		context->bitplaneType = FOUR_BPP;
+		context->tileLength = 32;
+	}
+	else if (strcmp(args->bitplaneType, "5") == 0) {
+		context->bitplaneType = FIVE_BPP;
+		context->tileLength = 40;
+	}
+	else if (strcmp(args->bitplaneType, "6") == 0) {
+		context->bitplaneType = SIX_BPP;
+		context->tileLength = 48;
+	}
+	else if (strcmp(args->bitplaneType, "7") == 0) {
+		context->bitplaneType = SEVEN_BPP;
+		context->tileLength = 56;
+	}
+	else if (strcmp(args->bitplaneType, "8") == 0) {
+		context->bitplaneType = EIGHT_BPP;
+		context->tileLength = 64;
 	}
 
 	if (strcmp(args->deduplicator, "true") == 0) {
