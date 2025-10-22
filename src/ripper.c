@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-
 #include "globals.h"
 #include "decompressor.h"
 #include "logger.h"
