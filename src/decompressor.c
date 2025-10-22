@@ -1,5 +1,5 @@
-#include "decompressor.h"
 #include <stdlib.h>
+#include "decompressor.h"
 
 unsigned char* decompress_rle_konami(unsigned char* data, int data_len, int* decompressed_len) {
     unsigned char* decompressed = malloc(data_len * sizeof(unsigned char)); // Allocate memory
