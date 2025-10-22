@@ -18,7 +18,7 @@ The easiest way to build this tool on Windows is by using TCC (TinyCC), a super 
 //trailing and inline comments are supported
 hash {}
 c {} (compression type)
-b {1/2} (bitplane type)
+b {1/2/3/4/5/6/7/8} (bitplane type)
 p {1/2/4/8/16} {h/v} (pattern size and direction)
 r {true/false} (tile deduplicator)
 k (clear tile deduplicator cache)
