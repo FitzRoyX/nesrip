@@ -1,6 +1,6 @@
 ## About
 
-This tool extracts graphics from NES roms into modern PNG tilesheets. It has drag-n-drop and command-line functionality. The database, when completed, will effectively document every game's graphics locations, bitplane type, pattern type, compression type, and palettes. It has powerful features like a colorizer and tile deduplicator. Future map and sprite definition tools using these modernized sheets are planned.
+This tool extracts 8x8 tile graphics from NES roms into modern PNG tilesheets. It has drag-n-drop and command-line functionality. The database, when completed, will effectively document every game's graphics locations, bitplane type, pattern type, compression type, and palettes. It has powerful features like a colorizer and tile deduplicator. Future map and sprite definition tools using these modernized sheets are planned.
 
 ## Supported compilers
 * [TCC](https://github.com/TinyCC/tinycc)
@@ -15,12 +15,12 @@ The easiest way to build this tool on Windows is by using TCC (TinyCC), a super 
 
 ## Graphics database commands
 ```
-//trailing and inline comments are supported
+//trailing comments are supported
 hash {}
-c {} (compression type)
-b {1/2/3/4/5/6/7/8} (bitplane type)
-p {1/2/4/8/16} {h/v} (pattern size and direction)
-r {true/false} (tile deduplicator)
+c {} (compression type, default = raw)
+b {1/2/3/4/5/6/7/8} (bitplane type, default = 2)
+p {1/2/4/8/16} {h/v} (pattern size and direction, default = 1 h)
+r {true/false} (tile deduplicator, default = true)
 k (clear tile deduplicator cache)
 s {} {} (section start and end)
 end
