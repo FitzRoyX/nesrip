@@ -73,12 +73,14 @@ size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate) {
     filelen = ftell(fileptr) + zeroTerminate;
     rewind(fileptr);
 
+    // Save errno before malloc, restore after if needed
+    int saved_errno = errno;
     char* result = (char*)malloc(filelen * sizeof(char));
-
     if (result == NULL) {
         printf("Error: Couldn't allocate memory for reading file data.\n");
         return -1;
     }
+    errno = saved_errno;
 
     fread(result, filelen, 1, fileptr);
     fclose(fileptr);
@@ -208,7 +210,7 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
 void initCache(Cache* cache, int initialCapacity) {
     cache->size = 0;
     cache->capacity = initialCapacity;
-	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage));
+	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage*));
 }
 
 // Function to add data to the cache
@@ -216,7 +218,7 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
     if (cache->size == cache->capacity) {
         // Double the capacity if the cache is full
         cache->capacity *= 2;
-        PNGImage** tmp = (PNGImage**)realloc(cache->images, cache->capacity * sizeof(PNGImage));
+        PNGImage** tmp = (PNGImage**)realloc(cache->images, cache->capacity * sizeof(PNGImage*));
         if (tmp == NULL) {
 			free(cache);
             perror("Failed to reallocate memory to increase size of the Cache");
@@ -332,6 +334,8 @@ void processCache(Cache* cache, char* separator, int sep_size) {
         perror("Failed to write combined image\n");
         exit(EXIT_FAILURE);
     }
+
+	free(combinedimage);
 }
 
 

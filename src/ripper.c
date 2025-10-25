@@ -148,6 +148,7 @@ int writeOutput(char* outputData, int width, int height, ExtractionContext* cont
 		printf("An error occurred while writing to output file ");
 		printf("%s", outputFilename);
 		printf(".\n");
+		free(outputFilename);
 		return 0;
 	}
 
@@ -282,7 +283,8 @@ int writeLine(ExtractionContext* context, int y, unsigned int data) {
 		if (sheet->valid && cx < sheet->width && cy < sheet->height) {
 			ColorizerPalette* palette = &palettes[sheet->tiles[cy * sheet->width + cx]];
 			if (palette->valid) {
-				memcpy(color, palette->colors[c], sizeof(color));
+				// Fix: Cast 'c' to unsigned int to avoid char subscript warning
+				memcpy(color, palette->colors[(unsigned int)c], sizeof(color));
 			}
 		}
 
@@ -449,8 +451,8 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 	if (context->sheet == NULL)
 		return 0;
 
-	unsigned char* sectionData = rom->data + context->sectionStart;
-	unsigned char* endPointer = rom->data + context->sectionEnd;
+	unsigned char* sectionData = (unsigned char*)rom->data + context->sectionStart;
+	unsigned char* endPointer = (unsigned char*)rom->data + context->sectionEnd;
 
 	while (sectionData < endPointer) {
 		if (context->deduplicator) {
@@ -471,7 +473,6 @@ int ripSectionRaw(Rom* rom, Cache* cache, ExtractionContext* context) {
 
 	colorSheetIndex += tileCount;
 
-	char* ctr = context->args->filenameOverload;
 	addToCache(cache, context->sheet, 128, context->maxY + 1, 4);
 
 	free(context->sheet);

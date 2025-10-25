@@ -126,7 +126,6 @@ int handleColorizerSheetCommand(Cache* cache) {
 	if (sheet->tiles == NULL) {
 		perror("failed to allocate memory for combined image");
 		free(cache);
-		free(sheet);
 		exit(EXIT_FAILURE);
 	}
 
@@ -161,7 +160,7 @@ void interpretColorizer(char* colorizerFilename, Cache* cache) {
 		return;
 
 	databaseLength = removeCarriageReturns(database, databaseLength);
-	databaseLength = removeComments(database, databaseLength);
+	removeComments(database, databaseLength);
 
 	pushTokenContext();
 
@@ -312,7 +311,7 @@ void interpretDatabase(Cache* cache) {
 	foundRom = false;
 
 	databaseLength = removeCarriageReturns(database, databaseLength);
-	databaseLength = removeComments(database, databaseLength);
+	removeComments(database, databaseLength);
 
 	char* token = updateToken(database);
 	while (token != NULL) {
@@ -349,7 +348,7 @@ void interpretDatabase(Cache* cache) {
 		if (cache->size > 0) {
 			uint8_t separator[128 * 8 * 4];
 			generateSeparator(separator, 16);
-			processCache(cache, separator, sizeof(separator));
+			processCache(cache, (char*)separator, sizeof(separator));
 		}
 	}
 

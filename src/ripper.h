@@ -1,6 +1,7 @@
 #ifndef RIPPER_H
 #define RIPPER_H
 #include "rom.h"
+#include "globals.h"
 
 #define MAX_PATTERN_SIZE 16
 
