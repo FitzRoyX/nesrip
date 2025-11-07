@@ -23,3 +23,10 @@ Generated\ Files/
 /GCC Project.vcxproj
 /GCC Project.vcxproj.filters
 /GCC Project.vcxproj.user
+/interpreter.obj
+/logger.obj
+/main.obj
+/sha-256.obj
+/utils.obj
+/rletest1.unh
+*.obj

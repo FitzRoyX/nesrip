@@ -2,7 +2,7 @@
 #include <string.h>
 #include <malloc.h>
 #include "globals.h"
-#include "decompressor.h"
+
 #include "logger.h"
 #include "utils.h"
 #include "ripper.h"
