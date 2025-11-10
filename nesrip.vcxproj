@@ -107,9 +107,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DisableSpecificWarnings>$(NoWarn);4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,9 +130,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\lib\decompressor.c" />
+    <ClCompile Include="src\args.c" />
     <ClCompile Include="src\interpreter.c" />
-    <ClCompile Include="src\lib\librom.c" />
     <ClCompile Include="src\logger.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\ripper.c" />
@@ -142,10 +140,9 @@
     <ClCompile Include="src\utils.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\lib\decompressor.h" />
+    <ClInclude Include="src\args.h" />
     <ClInclude Include="src\globals.h" />
     <ClInclude Include="src\interpreter.h" />
-    <ClInclude Include="src\lib\librom.h" />
     <ClInclude Include="src\logger.h" />
     <ClInclude Include="src\ripper.h" />
     <ClInclude Include="src\rom.h" />
@@ -172,7 +169,6 @@
     <None Include="LICENSE.md" />
     <None Include="Makefile" />
     <None Include="README.md" />
-    <None Include="rletest2.unh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

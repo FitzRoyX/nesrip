@@ -120,7 +120,7 @@ size_t getFilenameLengthWithoutExtension(char* filename) {
 }
 
 // strtok_r from musl libc
-char* string_tokenize_r(char* s, const char* sep, char** p) {
+char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p) {
 	if (!s && !(s = *p)) return NULL;
 	s += strspn(s, sep);
 	if (!*s) return *p = 0;

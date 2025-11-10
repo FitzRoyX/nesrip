@@ -32,7 +32,7 @@ double numDigits(int n);
 size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate);
 char* getFilename(char* path);
 size_t getFilenameLengthWithoutExtension(char* filename);
-char* string_tokenize_r(char* s, const char* sep, char** p);
+char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p);
 const char* cStdInUse(long int);
 int is_null_terminated(const char* str, size_t max_length);
 void toUpperCase(char* str);

@@ -34,7 +34,7 @@ if (token == NULL) \
 }
 
 char* updateToken(char* string) {
-	char* token = string_tokenize_r(string, " \n", tokenContext);
+	char* token = stringTokenize(string, " \n", tokenContext);
 	return token;
 }
 
