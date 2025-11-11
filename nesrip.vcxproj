@@ -109,6 +109,7 @@
       <LanguageStandard>Default</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DisableSpecificWarnings>$(NoWarn);4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\args.c" />
     <ClCompile Include="src\interpreter.c" />
     <ClCompile Include="src\logger.c" />
     <ClCompile Include="src\main.c" />
@@ -169,6 +169,7 @@
     <None Include="LICENSE.md" />
     <None Include="Makefile" />
     <None Include="README.md" />
+    <None Include="rletest3.unh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

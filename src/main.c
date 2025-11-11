@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <Windows.h>
+
 #include "globals.h"
 #include "interpreter.h"
 #include "logger.h"
@@ -42,6 +43,9 @@ int main(int argc, char** argv) {
 		printNoInput();
 		return 0;
 	}
+
+	const char *compressionTypes[] = { "raw", "rle_konami" };
+	const int lengthofCompressionTypes = sizeof(compressionTypes) / sizeof(compressionTypes[0]);
 
 	char* inputRomName = argv[1];
 	rom = readRom(inputRomName);

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
+
 #include "globals.h"
 #include "decompressor.h"
 #include "logger.h"
@@ -80,6 +81,10 @@ Pattern* patterns[BPP_COUNT];
 ColorizerPalette palettes[MAX_PALETTES];
 ColorizerSheet colorSheet;
 int colorSheetIndex = 0;
+
+const char *compressionTypes[];
+const int lengthofCompressionTypes;
+
 
 int allocTilesheet(ExtractionContext* context, int tileCount) {
 	int width = 128;
@@ -513,12 +518,11 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
 		arguments
 	};
 
-	if (strcmp(arguments->compressionType, "raw") != 0)	{
-		printf("Error: Unknown compression type \"");
+	if (!contains(compressionTypes, lengthofCompressionTypes, arguments->compressionType)) {
+		printf("Error: Unsupported compression type \"");
 		printf("%s", arguments->compressionType);
 		printf("\".\n");
 		return 0;
-		
 	}
 
 	if (!ripSectionRaw(rom, cache, &context)) {

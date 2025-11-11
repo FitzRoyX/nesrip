@@ -1202,3 +1202,14 @@ hash f2a432600f7397d8a34efd759910fde568f3b869e62f0a3fe620c9c682011975
 p 1 h
 s 0 19ff
 end
+
+//rletest3.unh
+hash 1272bc1fe4fd9393864abcc9f06fddb167feaea17dd884e047a3bf3500236e40
+c rle_konami //uncomment this when feature is implemented
+p 1 h
+s 0 120f
+c raw
+s 1210 2a5f
+c rle_konami //uncomment this when feature is implemented
+s 2a60 3c66
+end
