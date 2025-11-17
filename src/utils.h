@@ -1,9 +1,7 @@
-
 #ifndef UTILS_H
 #define UTILS_H
 
 #include <stdint.h>
-
 #include "globals.h"
 
 typedef enum {
@@ -38,7 +36,6 @@ int is_null_terminated(const char* str, size_t max_length);
 void toUpperCase(char* str);
 int fileExists(const char* filename);
 void deleteCharacters(char* str, size_t pos, size_t n);
-
 void initCache(Cache* cache, int initialCapacity);
 void addToCache(Cache* cache, char* value, int x, int y, int comp);
 void processCache(Cache* cache, char* separator, int sep_size);
