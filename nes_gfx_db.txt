@@ -1179,6 +1179,41 @@ s 3b31a 3b729
 end
 
 
+//Contra (USA).prg
+hash d41e28b1a33b3b6768e7c39c9fdfb1fda4b49940542d14085911fabd399e1ca9
+//p 1 h
+//s 9242 aff1
+c rle_konami
+//s 12a2f 136b8
+s 12a2f 13c30
+//s 12a2f 14000
+//s 10001 x
+//s 105ae 107a0
+//s 107a1 1086b
+//s 1086c 119cc
+//s 119cd 119fb
+//s 119fc 12004
+//s 12005 12345
+//s 12346 123e6
+//s 123e7 1293f
+//s 12940 x
+//s 12a2d x
+//s 14001 x
+//s 14a61 x
+//s 153e0 x
+//s 1631b x
+//s 16500 x
+//s 16814 x
+//s 16ddf x
+//s 18001 x
+//s 18cdc x
+//s 19bd6 x
+//s 1b07a x
+//s 1b15c x
+end
+
+
+
 
 
 //*********************************************************************************
@@ -1196,9 +1231,74 @@ s 52700 5334f
 s 55000 55fef
 end
 
-//rletest2.unh
-hash f2a432600f7397d8a34efd759910fde568f3b869e62f0a3fe620c9c682011975
-//c rle_konami //uncomment this when feature is implemented
+
+//*********************************************************************************
+rle testing
+//*********************************************************************************
+
+//this works, but I can't remember how I created it, it ends in lots of 0x00
+//and ripping any shorter causes no output
+//does not include control or termination bytes
+//contra_sec_old.bin
+hash bce437b134e5634d8aa1d1e5dbb8946f17968d3abb52dcbfb5e6ecee99411af6
+c rle_konami
 p 1 h
-s 0 19ff
+s 0 120f
 end
+
+
+
+//these don't work, starts with 2 control bytes and ends with 1 or 2 termination bytes?
+//graphic_data_01.bin
+hash 68e63ef8f11cea07c85e531b75824706bcc97df9a058305548dc361a98eaa2ac
+c rle_konami
+p 1 h
+s 0 e8b
+end
+
+//graphic_data_02.bin
+hash 21ee39dbcf67acce2ea62453d49c2db97c9b8ef5579cefafae3b79252e70755a
+c rle_konami
+p 1 h
+s 0 1ba
+end
+
+//graphic_data_03.bin
+hash 3e8fcf755960de5c39c2be6c851dc1dea1e68cef7b1cf9c944d66374a78d7f30
+c rle_konami
+p 1 h
+s 0 5ac
+end
+
+
+***********************************************************
+cut versions, command bytes and terminate bytes removed
+************************************************************
+//graphic_data_01_cut.bin
+hash 97b6869981b0610a8f74ba8507015bcd6c489ccdfd05df5e6ba383da487b0407
+c rle_konami
+p 1 h
+s 0 e88
+end
+
+//graphic_data_02_cut.bin
+hash 4758a5e91da5a0bf6266431298ebead2115d045767cfae252fdcb0df59897c30
+c rle_konami
+p 1 h
+s 0 1b7
+end
+
+//graphic_data_03_cut.bin
+hash 686e25194bf15e4842bf513a43503e46ec23e21337e3d565fc7c6a82e8532c8f
+c rle_konami
+p 1 h
+s 0 5a9
+end
+
+
+
+
+
+
+
+

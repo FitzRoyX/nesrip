@@ -1,7 +1,15 @@
 #ifndef DECOMPRESSOR_H
 #define DECOMPRESSOR_H
 
-unsigned char* decompress_rle_konami(unsigned char* data, int data_len, int* decompressed_len);
+#include <stddef.h>
+#include <stdint.h>
+
+typedef struct {
+	uint8_t* output;
+	size_t size;
+} Result;
+
+Result* decompressRleKonami(const uint8_t* rom_data, size_t offset, size_t section_size);
+int read_byte(const uint8_t* data, int* cursor);
 
 #endif
-

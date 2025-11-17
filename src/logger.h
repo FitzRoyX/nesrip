@@ -7,4 +7,5 @@ void findProgramName(char* programPath);
 void printProgamName();
 void printNoInput();
 void printInvalidDatabaseCommand(const char* arg, const char* error);
+
 #endif
