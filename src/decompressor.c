@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int read_byte(const uint8_t* data, int* cursor) {
+uint8_t read_byte(const uint8_t* data, size_t* cursor) {
 	return data[(*cursor)++];
 }
 
 Result* decompressRleKonami(const uint8_t* rom_data, size_t offset, size_t section_size) {
-	int cursor = offset;
+	size_t cursor = offset;
 	const uint8_t* data = rom_data + offset;
 	Result* result = malloc(sizeof(Result));
 	if (!result) {
@@ -42,4 +42,5 @@ Result* decompressRleKonami(const uint8_t* rom_data, size_t offset, size_t secti
 		}
 	}
 	return result;
+
 }
