@@ -1272,23 +1272,23 @@ s 0 5ac
 end
 
 
-//****cut versions, command bytes and terminate bytes removed
+//****cut versions, command bytes removed, but termination byte is there
 //graphic_data_01_cut.bin
-hash 97b6869981b0610a8f74ba8507015bcd6c489ccdfd05df5e6ba383da487b0407
+hash 3f6063d9bd77825d4c3b554cfa36f050ee938534f3a659b0a65c7072889eddfc
 c rle_konami
 p 1 h
 s 0 e88
 end
 
 //graphic_data_02_cut.bin
-hash 4758a5e91da5a0bf6266431298ebead2115d045767cfae252fdcb0df59897c30
+hash afe10778a14c337e0525edff63966a9e5429e004eed27bd2005463d703403b65
 c rle_konami
 p 1 h
 s 0 1b7
 end
 
 //graphic_data_03_cut.bin
-hash 686e25194bf15e4842bf513a43503e46ec23e21337e3d565fc7c6a82e8532c8f
+hash 4e66d0a34a8a949832adbb7ac7d403dda2fc1b7dae2f4a51ce8107dd54384eff
 c rle_konami
 p 1 h
 s 0 5a9
