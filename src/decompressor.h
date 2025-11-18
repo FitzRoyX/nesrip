@@ -10,6 +10,6 @@ typedef struct {
 } Result;
 
 Result* decompressRleKonami(const uint8_t* rom_data, size_t offset, size_t section_size);
-uint8_t read_byte(const uint8_t* data, size_t* cursor);
+int read_byte(const uint8_t* data, int* cursor);
 
 #endif
