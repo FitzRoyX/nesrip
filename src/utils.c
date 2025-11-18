@@ -383,13 +383,3 @@ void generateSeparator(uint8_t* image, int repeat_count) {
 		}
 	}
 }
-
-
-bool contains(char *arr[], int size, char* value) {
-    for (int i = 0; i < size; i++) {
-        if (strcmp(arr[i], value) == 0) {
-            return true;
-        }
-    }
-    return false;
-}

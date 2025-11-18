@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-
 #include "globals.h"
 #include "decompressor.h"
 #include "logger.h"
@@ -79,10 +78,6 @@ Pattern* patterns[BPP_COUNT];
 ColorizerPalette palettes[MAX_PALETTES];
 ColorizerSheet colorSheet;
 int colorSheetIndex = 0;
-
-const char *compressionTypes[];
-const int lengthofCompressionTypes;
-
 
 int allocTilesheet(ExtractionContext* context, int tileCount) {
 	int width = 128;
