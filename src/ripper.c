@@ -37,12 +37,13 @@ char deduplicatedTileColor[] = {
 typedef enum {
 	ONE_BPP,
 	TWO_BPP,
-	THREE_BPP,
+	TWO_BPP_SNES,
+	THREE_BPP_SNES,
 	FOUR_BPP_SNES,
 	FIVE_BPP,
 	SIX_BPP,
 	SEVEN_BPP,
-	EIGHT_BPP,
+	EIGHT_BPP_SNES,
 	BPP_COUNT
 } BitplaneType;
 
@@ -172,8 +173,12 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
         context->bitplaneType = TWO_BPP;
         context->tileLength = 16;
     }
+    else if (strcmp(args->bitplaneType, "2snes") == 0) {
+        context->bitplaneType = TWO_BPP_SNES;
+        context->tileLength = 16;
+    }
     else if (strcmp(args->bitplaneType, "3") == 0) {
-        context->bitplaneType = THREE_BPP;
+        context->bitplaneType = THREE_BPP_SNES;
         context->tileLength = 24;
     }
     else if (strcmp(args->bitplaneType, "4") == 0) {
@@ -193,7 +198,7 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
         context->tileLength = 56;
     }
     else if (strcmp(args->bitplaneType, "8") == 0) {
-        context->bitplaneType = EIGHT_BPP;
+        context->bitplaneType = EIGHT_BPP_SNES;
         context->tileLength = 64;
     }
     if (strcmp(args->deduplicator, "true") == 0) {
@@ -273,12 +278,19 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
         case TWO_BPP:
             data = (sectionData[y] | (sectionData[y + 8] << 8));
             break;
+        case TWO_BPP_SNES:
+            data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
+            break;
+        case THREE_BPP_SNES:
+            data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
+            break;
         case FOUR_BPP_SNES: {
-            // SNES 4bpp tiles: two 8-byte planes for each 8x8 tile
-            unsigned int lowerNibble = sectionData[y];  // Lower 4 bits for each pixel
-            unsigned int upperNibble = sectionData[y + 8];  // Upper 4 bits for each pixel
-            // Combine lower and upper nibbles for each pixel in the 8x8 tile (16-bit format)
-            data = (upperNibble << 8) | lowerNibble;
+            unsigned int lowerNibble1 = sectionData[y * 2];
+            unsigned int lowerNibble2 = sectionData[y * 2 + 1];
+            unsigned int upperNibble1 = sectionData[y * 2 + 16];
+            unsigned int upperNibble2 = sectionData[y * 2 + 17];
+            data = (upperNibble1 << 8) | lowerNibble1;
+            data |= (upperNibble2 << 24) | (lowerNibble2 << 16);
             break;
         }
         default:
