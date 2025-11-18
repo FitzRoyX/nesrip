@@ -31,7 +31,7 @@ char paletteData[] = {
 };
 
 char deduplicatedTileColor[] = {
-	255, 0, 255, 255
+	255, 0, 255, 255 //magenta
 };
 
 typedef enum {
@@ -164,7 +164,6 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
         context->patternDirection = true;
     else
         printf("Error: Invalid pattern direction. Use \"h\" or \"v\".\n");
-
     if (strcmp(args->bitplaneType, "1") == 0) {
         context->bitplaneType = ONE_BPP;
         context->tileLength = 8;
