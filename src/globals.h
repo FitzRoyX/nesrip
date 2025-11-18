@@ -56,4 +56,7 @@ extern Cache* cache;
 extern PNGImage image;
 extern PNGInfo imageInfo;
 
+extern const char *compressionTypes[];
+extern const int lengthofCompressionTypes;
+
 #endif
