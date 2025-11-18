@@ -36,6 +36,9 @@
     <ClCompile Include="src\sha_2\sha-256.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\decompressor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globals.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\stb\stb_image_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\decompressor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -88,5 +94,6 @@
     <None Include="batch_rip.bat">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="rletest3.unh" />
   </ItemGroup>
 </Project>
