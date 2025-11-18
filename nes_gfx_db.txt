@@ -1294,11 +1294,3 @@ c rle_konami
 p 1 h
 s 0 5a9
 end
-
-
-
-
-
-
-
-

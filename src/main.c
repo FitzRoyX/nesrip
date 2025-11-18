@@ -39,15 +39,16 @@ int main(int argc, char** argv) {
 		printNoInput();
 		return 0;
 	}
+
 	char* inputRomName = argv[1];
 	rom = readRom(inputRomName);
-	if (rom.size < 0) {
+	if (rom.size == -1) {
 		printf("An error occured while opening input ROM file.\n");
 		return 0;
 	}
 	char* inputFilename = getFilename(inputRomName);
 	size_t outputFolderLength = getFilenameLengthWithoutExtension(inputFilename);
-	outputFolder = (char*)malloc(outputFolderLength + 9);
+ 	outputFolder = (char*)malloc(outputFolderLength + 9);
 	if (outputFolder == NULL) {
 		printf("Error: Couldn't allocate memory for output folder string.\n");
 		quitProgram(0);

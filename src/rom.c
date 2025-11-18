@@ -4,8 +4,12 @@
 #include "utils.h"
 
 Rom readRom(char* romName) {
-	Rom result = {(char*)NULL, (char*)NULL};
-	result.size = readAllBytesFromFile(romName, &result.originalData, false);
+	Rom result = {NULL, NULL, 0};
+	size_t size = readAllBytesFromFile(romName, &result.originalData, false);
+	if (size == -1) {
+		result.size = -1;
+		return result;
+	}
 	result.data = result.originalData;
 	if (result.size < 0)
 		return result;

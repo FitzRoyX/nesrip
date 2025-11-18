@@ -4,6 +4,7 @@
 #include "rom.h"
 #include <stdbool.h>
 
+
 extern Rom rom;
 extern char* programName;
 extern char* outputFolder;
@@ -55,5 +56,8 @@ extern ColorizerSheet colorSheet;
 extern Cache* cache;
 extern PNGImage image;
 extern PNGInfo imageInfo;
+
+extern const char *compressionTypes[];
+extern const int lengthofCompressionTypes;
 
 #endif
