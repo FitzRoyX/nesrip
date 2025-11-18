@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 	}
 	char* inputRomName = argv[1];
 	rom = readRom(inputRomName);
-	if (rom.size < 0) {
+	if (rom.size == -1) {
 		printf("An error occured while opening input ROM file.\n");
 		return 0;
 	}
