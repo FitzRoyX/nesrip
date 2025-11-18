@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 	}
 	char* inputFilename = getFilename(inputRomName);
 	size_t outputFolderLength = getFilenameLengthWithoutExtension(inputFilename);
- 	outputFolder = (char*)malloc(outputFolderLength + 9);
+	outputFolder = (char*)malloc(outputFolderLength + 9);
 	if (outputFolder == NULL) {
 		printf("Error: Couldn't allocate memory for output folder string.\n");
 		quitProgram(0);
