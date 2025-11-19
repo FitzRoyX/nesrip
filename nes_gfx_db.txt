@@ -1236,23 +1236,11 @@ s 55000 55fef
 end
 
 
-//rle testing
-//this works, but I can't remember how I created it, it ends in lots of 0x00
-//and ripping any shorter causes no output
-//does not include control or termination bytes
-//contra_sec_old.bin
-hash bce437b134e5634d8aa1d1e5dbb8946f17968d3abb52dcbfb5e6ecee99411af6
-c rle_konami
-p 1 h
-s 0 120f
-end
-
 
 
 //command bytes removed, but termination byte is there, this proper file doesn't work
 //gd1_sec_proper.bin
 hash 3f6063d9bd77825d4c3b554cfa36f050ee938534f3a659b0a65c7072889eddfc
-r false
 c rle_konami
 p 1 h
 s 0 e88
