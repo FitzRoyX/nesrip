@@ -1249,54 +1249,30 @@ end
 
 
 
-//****these don't work, starts with 2 control bytes and ends with 1 or 2 termination bytes?
-//graphic_data_01.bin
-hash 68e63ef8f11cea07c85e531b75824706bcc97df9a058305548dc361a98eaa2ac
-c rle_konami
-p 1 h
-s 0 e8b
-end
-
-//graphic_data_02.bin
-hash 21ee39dbcf67acce2ea62453d49c2db97c9b8ef5579cefafae3b79252e70755a
-c rle_konami
-p 1 h
-s 0 1ba
-end
-
-//graphic_data_03.bin
-hash 3e8fcf755960de5c39c2be6c851dc1dea1e68cef7b1cf9c944d66374a78d7f30
-c rle_konami
-p 1 h
-s 0 5ac
-end
-
-
-//****cut versions, command bytes removed, but termination byte is there
-//graphic_data_01_cut.bin
+//command bytes removed, but termination byte is there, this proper file doesn't work
+//gd1_sec_proper.bin
 hash 3f6063d9bd77825d4c3b554cfa36f050ee938534f3a659b0a65c7072889eddfc
+r false
 c rle_konami
 p 1 h
 s 0 e88
 end
 
-//graphic_data_02_cut.bin
-hash afe10778a14c337e0525edff63966a9e5429e004eed27bd2005463d703403b65
+//this works for some reason, has lots of pointless data after term byte
+//gd1_sec_old.bin
+hash bce437b134e5634d8aa1d1e5dbb8946f17968d3abb52dcbfb5e6ecee99411af6
 c rle_konami
 p 1 h
-s 0 1b7
+s 0 120f
 end
 
-//graphic_data_03_cut.bin
-hash 4e66d0a34a8a949832adbb7ac7d403dda2fc1b7dae2f4a51ce8107dd54384eff
+//and this doesn't, all I did was cut one pointless byte off the end
+//gd1_sec_old_cut.bin
+hash 9fb039e4855281b821281947f7c1b51ce9367f043506203269acd82b3b2d02b5
 c rle_konami
 p 1 h
-s 0 5a9
+s 0 120e
 end
-
-
-
-
 
 //###################################################################
 //BEGINNING OF SNES DB
