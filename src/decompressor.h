@@ -9,7 +9,6 @@ typedef struct {
 	size_t size;
 } Result;
 
-Result* decompressRleKonami(const uint8_t* rom_data, size_t offset, size_t section_size);
+Result* decompressRleKonami(const uint8_t* compressedData, size_t sectionSize);
 
 #endif
-
