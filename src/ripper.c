@@ -370,20 +370,28 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 }
 
 void drawDeduplicatedTile(ExtractionContext* context) {
-	int stx = (context->patternDirection) ? context->sty : context->stx;
-	int sty = (context->patternDirection) ? context->stx : context->sty;
-	int px, py;
-	for (int y = 0; y < 8; y++)	{
-		py = (context->ty * context->patternSize + sty) * 8 + y;
-		for (int x = 0; x < 8; x++)	{
-			px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
-			drawPixel(context->sheet, px, py, deduplicatedTileColor);
-		}
-		if (px + 7 > context->maxX)
-			context->maxX = px + 7;
-		if (py > context->maxY)
-			context->maxY = py;
-	}
+    int stx, sty;
+    if (context->patternDirection) {
+        stx = context->sty;
+        sty = context->stx;
+    } else {
+        stx = context->stx;
+        sty = context->sty;
+    }
+    int px, py;
+    for (int y = 0; y < 8; y++) {
+        py = (context->ty * context->patternSize + sty) * 8 + y;
+        for (int x = 0; x < 8; x++) {
+            px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
+            drawPixel(context->sheet, px, py, deduplicatedTileColor);
+        }
+        if (px + 7 > context->maxX) {
+            context->maxX = px + 7;
+        }
+        if (py > context->maxY) {
+            context->maxY = py;
+        }
+    }
 }
 
 void initPatternChains() {
@@ -416,34 +424,24 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
         arguments
     };
     printf("Ripping section %s to %s.\n", context.args->sectionStartString, context.args->sectionEndString);
-    
     if (!getSectionDetails(rom, &context))
         return 0;
-    
     int tileCount = 0;
     unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
     unsigned char* endPointer = (unsigned char*)rom->data + context.sectionEnd;
-
-    // Handle decompression if the section is compressed
     if (strcmp(context.args->compressionType, "rle_konami") == 0) {
-        // Decompress the section
-        Result* decompressedData = decompressRleKonami(rom->data, context.sectionStart, context.sectionEnd - context.sectionStart + 1);
+        size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
+        Result* decompressedData = decompressRleKonami(sectionData, sectionSize);
         if (!decompressedData) {
             printf("Error: Failed to decompress the section.\n");
             return 0;
         }
-
-        // Calculate the tile count AFTER decompression
-        // The number of tiles is the size of the decompressed data divided by 16 bytes per tile
         tileCount = decompressedData->size / 16;
         if (decompressedData->size % 16 != 0) {
             printf("Warning: Decompressed data is not a multiple of 16 bytes, truncating the extra bytes.\n");
-            // Optionally, handle the remaining bytes if necessary, such as padding or skipping
         }
-        
-        // Allocate memory for the tilesheet
         if (allocTilesheet(&context, tileCount)) {
-            free(decompressedData->output);  // Ensure decompressed data is freed in case of failure
+            free(decompressedData->output);
             free(decompressedData);
             return 0;
         }
@@ -452,11 +450,8 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
             free(decompressedData);
             return 0;
         }
-
-        // Process decompressed tiles
         unsigned char* decompressedPtr = decompressedData->output;
         unsigned char* decompressedEnd = decompressedData->output + decompressedData->size;
-        
         while (decompressedPtr < decompressedEnd) {
             if (context.deduplicator) {
                 context.workingHash = 0;
@@ -471,25 +466,19 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
             incrementTilePos(&context);
             decompressedPtr += context.tileLength;
         }
-        
         free(decompressedData->output);
         free(decompressedData);
     }
-    // If the section is raw, process directly without decompression
     else if (strcmp(context.args->compressionType, "raw") == 0) {
-        // If the section length is not a multiple of tile size, adjust the section end address.
         if (((context.sectionEnd - context.sectionStart) + 1) % context.tileLength != 0) {
             printf("Warning: Targeted section has some extra bytes that cannot be used to make a full tile.\n Rounding down section end address.\n");
             context.sectionEnd -= (context.sectionEnd - context.sectionStart + 1) % context.tileLength;
         }
-        
         tileCount = (context.sectionEnd - context.sectionStart + 1) / context.tileLength;
-        
         if (allocTilesheet(&context, tileCount))
             return 0;
         if (context.sheet == NULL)
             return 0;
-        // Process raw tile data directly
         while (sectionData < endPointer) {
             if (context.deduplicator) {
                 context.workingHash = 0;
@@ -508,11 +497,8 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
         printf("Error: Unknown compression type \"%s\".\n", context.args->compressionType);
         return 0;
     }
-    
-    // After processing the section, update the color sheet index and add to the cache
     colorSheetIndex += tileCount;
     addToCache(cache, context.sheet, 128, context.maxY + 1, 4);
     free(context.sheet);
-    
     return 1;
 }
