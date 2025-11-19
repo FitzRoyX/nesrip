@@ -427,7 +427,7 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
     // Handle decompression if the section is compressed
     if (strcmp(context.args->compressionType, "rle_konami") == 0) {
         // Decompress the section
-        Result* decompressedData = decompressRleKonami(rom->data, context.sectionStart, context.sectionEnd - context.sectionStart + 1);
+        Result* decompressedData = decompressRleKonami((uint8_t *)rom->data, context.sectionStart, context.sectionEnd - context.sectionStart + 1);
         if (!decompressedData) {
             printf("Error: Failed to decompress the section.\n");
             return 0;
@@ -435,7 +435,7 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
 
         // Calculate the tile count AFTER decompression
         // The number of tiles is the size of the decompressed data divided by 16 bytes per tile
-        tileCount = decompressedData->size / 16;
+        tileCount = (int)decompressedData->size / 16;
         if (decompressedData->size % 16 != 0) {
             printf("Warning: Decompressed data is not a multiple of 16 bytes, truncating the extra bytes.\n");
             // Optionally, handle the remaining bytes if necessary, such as padding or skipping
