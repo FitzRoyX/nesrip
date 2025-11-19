@@ -944,6 +944,19 @@ p 2 v
 s 1b117 1b636 //seg3
 end
 
+//Contra (USA).prg
+hash d41e28b1a33b3b6768e7c39c9fdfb1fda4b49940542d14085911fabd399e1ca9
+c rle_konami
+//s 9099 9251 //02 which has no gfx
+p 2 v
+s 10003 105ad //03
+s 105b0 107a0 //04
+s 119fe 12002 //06
+p 1 h
+s 12a2f 138b8 //01
+//s 14073 14a60 //05 has subsections, doesnt work
+end
+
 //Dark Lord (Japan).chr
 hash d5426d3c26dc11200610044e3ff84ed13d09c372460bf09134ac8b770e69d724
 p 1 h
@@ -1183,46 +1196,10 @@ s 3b31a 3b729
 end
 
 
-//Contra (USA).prg
-hash d41e28b1a33b3b6768e7c39c9fdfb1fda4b49940542d14085911fabd399e1ca9
-//p 1 h
-//s 9242 aff1
-c rle_konami
-//s 12a2f 136b8
-s 12a2f 13c30
-//s 12a2f 14000
-//s 10001 x
-//s 105ae 107a0
-//s 107a1 1086b
-//s 1086c 119cc
-//s 119cd 119fb
-//s 119fc 12004
-//s 12005 12345
-//s 12346 123e6
-//s 123e7 1293f
-//s 12940 x
-//s 12a2d x
-//s 14001 x
-//s 14a61 x
-//s 153e0 x
-//s 1631b x
-//s 16500 x
-//s 16814 x
-//s 16ddf x
-//s 18001 x
-//s 18cdc x
-//s 19bd6 x
-//s 1b07a x
-//s 1b15c x
-end
 
-
-
-
-
-//*********************************************************************************
-
+//###################################################################
 //UNLICENSED FREEWARE
+//###################################################################
 //THIS ENTRY FOR TESTING PURPOSES, RANGES AND COLORS ARE FAKE
 //BladeBuster.nes
 hash 4a4cf5968932f2e7783e2e46cc2b870e73e1d6e7a874ec4a9f79ec217423ba8a
@@ -1236,31 +1213,6 @@ s 55000 55fef
 end
 
 
-
-
-//command bytes removed, but termination byte is there, this proper file doesn't work
-//gd1_sec_proper.bin
-hash 3f6063d9bd77825d4c3b554cfa36f050ee938534f3a659b0a65c7072889eddfc
-c rle_konami
-p 1 h
-s 0 e88
-end
-
-//this works for some reason, has lots of pointless data after term byte
-//gd1_sec_old.bin
-hash bce437b134e5634d8aa1d1e5dbb8946f17968d3abb52dcbfb5e6ecee99411af6
-c rle_konami
-p 1 h
-s 0 120f
-end
-
-//and this doesn't, all I did was cut one pointless byte off the end
-//gd1_sec_old_cut.bin
-hash 9fb039e4855281b821281947f7c1b51ce9367f043506203269acd82b3b2d02b5
-c rle_konami
-p 1 h
-s 0 120e
-end
 
 //###################################################################
 //BEGINNING OF SNES DB
