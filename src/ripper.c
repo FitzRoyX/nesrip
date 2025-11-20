@@ -429,7 +429,7 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
     int tileCount = 0;
     unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
     unsigned char* endPointer = (unsigned char*)rom->data + context.sectionEnd;
-    if (strcmp(context.args->compressionType, "rle_konami") == 0) {
+    if (strcmp(context.args->compressionType, "rle_konami") == 0 || strcmp(context.args->compressionType, "lzss") == 0) {
         size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
         Result* decompressedData = decompressRleKonami(sectionData, sectionSize);
         if (!decompressedData) {
