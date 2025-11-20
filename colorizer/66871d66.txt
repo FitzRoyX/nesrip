@@ -1,7 +1,6 @@
 //lttp
 p
-//0 spr_link       000000 fffff b5bd31 b56329 f7a56b 292929 f77b84 bd424a f77b84 f77b84 f77b84 f77b84 f77b84 f77b84 f77b84 f77b84
-0 spr_link        ffffff f77b84 f77b84 f77b84
+0 spr_link       00ffff f8f8f8 f0a068 282828 f0d840 b86820 f87800 c01820 e860b0 389068 40d870 e09050 78b820 509010 885828 c080f0
 end
 
 s
@@ -100,3 +99,4 @@ s
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 end
+
