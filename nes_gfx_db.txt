@@ -967,14 +967,16 @@ s 12a2f 138b8 //01
 //s 14003 14a60 //05 has subs
 //s 14a63 1631a //0b has subs
 //s 15253 153df //07 has subs
-//s 1631d 164ff //19
-//s 16502 16813 //1a
-//s 16816 16dde //14
+p 2 v
+s 1631d 164ff //19
+s 16502 16813 //1a
+p 1 h
+s 16816 16dde //14
 //s 16de1 1730c //17 has subs
 //s 1730f 1735d //18 not gfx
 //s 18003 18cdb //0c has subs
 //s 18cde 19bd5 //0d has subs
-//s 19bd8 1b079 //0e
+s 19bd8 1b079 //0e
 end
 
 //Dark Lord (Japan).chr
