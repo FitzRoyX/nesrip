@@ -11,9 +11,6 @@ typedef enum {
     STR2INT_INCONVERTIBLE
 } str2int_errno;
 
-#define true 1
-#define false 0
-
 #ifndef __STDC_VERSION__ 
     #define __STDC_VERSION__ 0
 #endif // !__STDC_VERSION__
@@ -32,7 +29,7 @@ char* getFilename(char* path);
 size_t getFilenameLengthWithoutExtension(char* filename);
 char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p);
 const char* cStdInUse(long int);
-int is_null_terminated(const char* str, size_t max_length);
+int isNullTerminated(const char* str, size_t max_length);
 void toUpperCase(char* str);
 int fileExists(const char* filename);
 void deleteCharacters(char* str, size_t pos, size_t n);
@@ -44,3 +41,4 @@ void generateSeparator(uint8_t* image, int repeat_count);
 void generateTransparentImage(uint8_t* image, int repeat_count);
 
 #endif
+
