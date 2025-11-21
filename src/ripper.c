@@ -142,76 +142,76 @@ int writeOutput(char* outputData, int width, int height, ExtractionContext* cont
 }
 
 int getSectionDetails(Rom* rom, ExtractionContext* context) {
-    ExtractionArguments* args = context->args;
-    if (str2int(&(context->sectionStart), args->sectionStartString, 16) != STR2INT_SUCCESS || context->sectionStart < 0 || context->sectionStart >= rom->size) {
-        printf("Error: Invalid section start address.\n");
-        return 0;
-    }
-    if (str2int(&(context->sectionEnd), args->sectionEndString, 16) != STR2INT_SUCCESS || context->sectionEnd < 0 || context->sectionEnd >= rom->size) {
-        printf("Error: Invalid section end address.\n");
-        return 0;
-    }
-    if (str2int(&(context->patternSize), args->patternSizeString, 10) != STR2INT_SUCCESS || numberOfSetBits(context->patternSize) > 1 || (unsigned int)context->patternSize > MAX_PATTERN_SIZE) {
-        printf("Error: Invalid pattern size.\n");
-        return 0;
-    }
-    if (context->sectionEnd < context->sectionStart) {
-        printf("Error: Section end is placed before start.\n");
-        return 0;
-    }
-    if (strcmp(args->patternDirectionString, "h") == 0)
-        context->patternDirection = false;
-    else if (strcmp(args->patternDirectionString, "v") == 0)
-        context->patternDirection = true;
-    else
-        printf("Error: Invalid pattern direction. Use \"h\" or \"v\".\n");
-    if (strcmp(args->bitplaneType, "1") == 0) {
-        context->bitplaneType = ONE_BPP;
-        context->tileLength = 8;
-    }
-    else if (strcmp(args->bitplaneType, "2") == 0) {
-        context->bitplaneType = TWO_BPP;
-        context->tileLength = 16;
-    }
-    else if (strcmp(args->bitplaneType, "2snes") == 0) {
-        context->bitplaneType = TWO_BPP_SNES;
-        context->tileLength = 16;
-    }
-    else if (strcmp(args->bitplaneType, "3") == 0) {
-        context->bitplaneType = THREE_BPP_SNES;
-        context->tileLength = 24;
-    }
-    else if (strcmp(args->bitplaneType, "4") == 0) {
-        context->bitplaneType = FOUR_BPP_SNES;
-        context->tileLength = 32;
-    }
-    else if (strcmp(args->bitplaneType, "5") == 0) {
-        context->bitplaneType = FIVE_BPP;
-        context->tileLength = 40;
-    }
-    else if (strcmp(args->bitplaneType, "6") == 0) {
-        context->bitplaneType = SIX_BPP;
-        context->tileLength = 48;
-    }
-    else if (strcmp(args->bitplaneType, "7") == 0) {
-        context->bitplaneType = SEVEN_BPP;
-        context->tileLength = 56;
-    }
-    else if (strcmp(args->bitplaneType, "8") == 0) {
-        context->bitplaneType = EIGHT_BPP_SNES;
-        context->tileLength = 64;
-    }
-    if (strcmp(args->deduplicator, "true") == 0) {
-        context->deduplicator = true;
-    }
-    else if (strcmp(args->deduplicator, "false") == 0) {
-        context->deduplicator = false;
-    }
-    else {
-        printf("Error: Invalid deduplicator value. Use \"true\" or \"false\". Defaulting to \"true\".\n");
-        context->deduplicator = true;
-    }
-    return 1;
+	ExtractionArguments* args = context->args;
+	if (str2int(&(context->sectionStart), args->sectionStartString, 16) != STR2INT_SUCCESS || context->sectionStart < 0 || context->sectionStart >= rom->size) {
+		printf("Error: Invalid section start address.\n");
+		return 0;
+	}
+	if (str2int(&(context->sectionEnd), args->sectionEndString, 16) != STR2INT_SUCCESS || context->sectionEnd < 0 || context->sectionEnd >= rom->size) {
+		printf("Error: Invalid section end address.\n");
+		return 0;
+	}
+	if (str2int(&(context->patternSize), args->patternSizeString, 10) != STR2INT_SUCCESS || numberOfSetBits(context->patternSize) > 1 || (unsigned int)context->patternSize > MAX_PATTERN_SIZE) {
+		printf("Error: Invalid pattern size.\n");
+		return 0;
+	}
+	if (context->sectionEnd < context->sectionStart) {
+		printf("Error: Section end is placed before start.\n");
+		return 0;
+	}
+	if (strcmp(args->patternDirectionString, "h") == 0)
+		context->patternDirection = false;
+	else if (strcmp(args->patternDirectionString, "v") == 0)
+		context->patternDirection = true;
+	else
+		printf("Error: Invalid pattern direction. Use \"h\" or \"v\".\n");
+	if (strcmp(args->bitplaneType, "1") == 0) {
+		context->bitplaneType = ONE_BPP;
+		context->tileLength = 8;
+	}
+	else if (strcmp(args->bitplaneType, "2") == 0) {
+		context->bitplaneType = TWO_BPP;
+		context->tileLength = 16;
+	}
+	else if (strcmp(args->bitplaneType, "2snes") == 0) {
+		context->bitplaneType = TWO_BPP_SNES;
+		context->tileLength = 16;
+	}
+	else if (strcmp(args->bitplaneType, "3") == 0) {
+		context->bitplaneType = THREE_BPP_SNES;
+		context->tileLength = 24;
+	}
+	else if (strcmp(args->bitplaneType, "4") == 0) {
+		context->bitplaneType = FOUR_BPP_SNES;
+		context->tileLength = 32;
+	}
+	else if (strcmp(args->bitplaneType, "5") == 0) {
+		context->bitplaneType = FIVE_BPP;
+		context->tileLength = 40;
+	}
+	else if (strcmp(args->bitplaneType, "6") == 0) {
+		context->bitplaneType = SIX_BPP;
+		context->tileLength = 48;
+	}
+	else if (strcmp(args->bitplaneType, "7") == 0) {
+		context->bitplaneType = SEVEN_BPP;
+		context->tileLength = 56;
+	}
+	else if (strcmp(args->bitplaneType, "8") == 0) {
+		context->bitplaneType = EIGHT_BPP_SNES;
+		context->tileLength = 64;
+	}
+	if (strcmp(args->deduplicator, "true") == 0) {
+		context->deduplicator = true;
+	}
+	else if (strcmp(args->deduplicator, "false") == 0) {
+		context->deduplicator = false;
+	}
+	else {
+		printf("Error: Invalid deduplicator value. Use \"true\" or \"false\". Defaulting to \"true\".\n");
+		context->deduplicator = true;
+	}
+	return 1;
 }
 
 void incrementTilePos(ExtractionContext* context) {
@@ -270,33 +270,33 @@ int addToHash(ExtractionContext* context, int y, unsigned int data) {
 }
 
 unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData, int y) {
-    unsigned int data = 0;
-    switch (context->bitplaneType) {
-        case ONE_BPP:
-            data = sectionData[y];
-            break;
-        case TWO_BPP:
-            data = (sectionData[y] | (sectionData[y + 8] << 8));
-            break;
-        case TWO_BPP_SNES:
-            data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
-            break;
-        case THREE_BPP_SNES:
-            data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
-            break;
-        case FOUR_BPP_SNES: {
-            unsigned int lowerNibble1 = sectionData[y * 2];
-            unsigned int lowerNibble2 = sectionData[y * 2 + 1];
-            unsigned int upperNibble1 = sectionData[y * 2 + 16];
-            unsigned int upperNibble2 = sectionData[y * 2 + 17];
-            data = (upperNibble1 << 8) | lowerNibble1;
-            data |= (upperNibble2 << 24) | (lowerNibble2 << 16);
-            break;
-        }
-        default:
-            break;
-    }
-    return data;
+	unsigned int data = 0;
+	switch (context->bitplaneType) {
+		case ONE_BPP:
+			data = sectionData[y];
+			break;
+		case TWO_BPP:
+			data = (sectionData[y] | (sectionData[y + 8] << 8));
+			break;
+		case TWO_BPP_SNES:
+			data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
+			break;
+		case THREE_BPP_SNES:
+			data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
+			break;
+		case FOUR_BPP_SNES: {
+			unsigned int lowerNibble1 = sectionData[y * 2];
+			unsigned int lowerNibble2 = sectionData[y * 2 + 1];
+			unsigned int upperNibble1 = sectionData[y * 2 + 16];
+			unsigned int upperNibble2 = sectionData[y * 2 + 17];
+			data = (upperNibble1 << 8) | lowerNibble1;
+			data |= (upperNibble2 << 24) | (lowerNibble2 << 16);
+			break;
+		}
+		default:
+			break;
+	}
+	return data;
 }
 
 void processTile(ExtractionContext* context, unsigned char* sectionData, int(*callback)(ExtractionContext*,int,unsigned int)) {
@@ -370,28 +370,28 @@ int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsig
 }
 
 void drawDeduplicatedTile(ExtractionContext* context) {
-    int stx, sty;
-    if (context->patternDirection) {
-        stx = context->sty;
-        sty = context->stx;
-    } else {
-        stx = context->stx;
-        sty = context->sty;
-    }
-    int px, py;
-    for (int y = 0; y < 8; y++) {
-        py = (context->ty * context->patternSize + sty) * 8 + y;
-        for (int x = 0; x < 8; x++) {
-            px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
-            drawPixel(context->sheet, px, py, deduplicatedTileColor);
-        }
-        if (px + 7 > context->maxX) {
-            context->maxX = px + 7;
-        }
-        if (py > context->maxY) {
-            context->maxY = py;
-        }
-    }
+	int stx, sty;
+	if (context->patternDirection) {
+		stx = context->sty;
+		sty = context->stx;
+	} else {
+		stx = context->stx;
+		sty = context->sty;
+	}
+	int px, py;
+	for (int y = 0; y < 8; y++) {
+		py = (context->ty * context->patternSize + sty) * 8 + y;
+		for (int x = 0; x < 8; x++) {
+			px = (context->tx * context->patternSize + stx) * 8 + 7 - x;
+			drawPixel(context->sheet, px, py, deduplicatedTileColor);
+		}
+		if (px + 7 > context->maxX) {
+			context->maxX = px + 7;
+		}
+		if (py > context->maxY) {
+			context->maxY = py;
+		}
+	}
 }
 
 void initPatternChains() {
@@ -419,86 +419,94 @@ void cleanupPatternChains() {
 }
 
 int ripSection(Rom* rom, ExtractionArguments* arguments) {
-    ExtractionContext context = {
-        rom,
-        arguments
-    };
-    printf("Ripping section %s to %s.\n", context.args->sectionStartString, context.args->sectionEndString);
-    if (!getSectionDetails(rom, &context))
-        return 0;
-    int tileCount = 0;
-    unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
-    unsigned char* endPointer = (unsigned char*)rom->data + context.sectionEnd;
-    if (strcmp(context.args->compressionType, "rle_konami") == 0 || strcmp(context.args->compressionType, "lzss") == 0) {
-        size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
-        Result* decompressedData = decompressRleKonami(sectionData, sectionSize);
-        if (!decompressedData) {
-            printf("Error: Failed to decompress the section.\n");
-            return 0;
-        }
-        tileCount = decompressedData->size / 16;
-        if (decompressedData->size % 16 != 0) {
-            printf("Warning: Decompressed data is not a multiple of 16 bytes, truncating the extra bytes.\n");
-        }
-        if (allocTilesheet(&context, tileCount)) {
-            free(decompressedData->output);
-            free(decompressedData);
-            return 0;
-        }
-        if (context.sheet == NULL) {
-            free(decompressedData->output);
-            free(decompressedData);
-            return 0;
-        }
-        unsigned char* decompressedPtr = decompressedData->output;
-        unsigned char* decompressedEnd = decompressedData->output + decompressedData->size;
-        while (decompressedPtr < decompressedEnd) {
-            if (context.deduplicator) {
-                context.workingHash = 0;
-                processTile(&context, decompressedPtr, &addToHash);
-                if (!checkHasTileMatch(&context, decompressedPtr, context.workingHash))
-                    processTile(&context, decompressedPtr, &writeLine);
-                else
-                    drawDeduplicatedTile(&context);
-            } else {
-                processTile(&context, decompressedPtr, &writeLine);
-            }
-            incrementTilePos(&context);
-            decompressedPtr += context.tileLength;
-        }
-        free(decompressedData->output);
-        free(decompressedData);
-    }
-    else if (strcmp(context.args->compressionType, "raw") == 0) {
-        if (((context.sectionEnd - context.sectionStart) + 1) % context.tileLength != 0) {
-            printf("Warning: Targeted section has some extra bytes that cannot be used to make a full tile.\n Rounding down section end address.\n");
-            context.sectionEnd -= (context.sectionEnd - context.sectionStart + 1) % context.tileLength;
-        }
-        tileCount = (context.sectionEnd - context.sectionStart + 1) / context.tileLength;
-        if (allocTilesheet(&context, tileCount))
-            return 0;
-        if (context.sheet == NULL)
-            return 0;
-        while (sectionData < endPointer) {
-            if (context.deduplicator) {
-                context.workingHash = 0;
-                processTile(&context, sectionData, &addToHash);
-                if (!checkHasTileMatch(&context, sectionData, context.workingHash))
-                    processTile(&context, sectionData, &writeLine);
-                else
-                    drawDeduplicatedTile(&context);
-            } else {
-                processTile(&context, sectionData, &writeLine);
-            }
-            incrementTilePos(&context);
-            sectionData += context.tileLength;
-        }
-    } else {
-        printf("Error: Unknown compression type \"%s\".\n", context.args->compressionType);
-        return 0;
-    }
+	ExtractionContext context = {
+		rom,
+		arguments
+	};
+	printf("Ripping section %s to %s.\n", context.args->sectionStartString, context.args->sectionEndString);
+	if (!getSectionDetails(rom, &context))
+		return 0;
+	int tileCount = 0;
+	unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
+	unsigned char* endPointer = (unsigned char*)rom->data + context.sectionEnd;
+	if (strcmp(context.args->compressionType, "rle_konami") == 0 || strcmp(context.args->compressionType, "lzss") == 0) {
+		size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
+		Result* decompressedData = decompressRleKonami(sectionData, sectionSize);
+		if (!decompressedData) {
+			printf("Error: Failed to decompress the section.\n");
+			return 0;
+		}
+		tileCount = decompressedData->size / 16;
+		if (decompressedData->size % 16 != 0) {
+			printf("Warning: Decompressed data is not a multiple of 16 bytes, truncating the extra bytes.\n");
+		}
+		if (allocTilesheet(&context, tileCount)) {
+			free(decompressedData->output);
+			free(decompressedData);
+			return 0;
+		}
+		if (context.sheet == NULL) {
+			free(decompressedData->output);
+			free(decompressedData);
+			return 0;
+		}
+		unsigned char* decompressedPtr = decompressedData->output;
+		unsigned char* decompressedEnd = decompressedData->output + decompressedData->size;
+		while (decompressedPtr < decompressedEnd) {
+			if (context.deduplicator) {
+				context.workingHash = 0;
+				processTile(&context, decompressedPtr, &addToHash);
+				if (!checkHasTileMatch(&context, decompressedPtr, context.workingHash))
+					processTile(&context, decompressedPtr, &writeLine);
+				else
+					drawDeduplicatedTile(&context);
+			} else {
+				processTile(&context, decompressedPtr, &writeLine);
+			}
+			incrementTilePos(&context);
+			decompressedPtr += context.tileLength;
+		}
+		free(decompressedData->output);
+		free(decompressedData);
+	}
+	else if (strcmp(context.args->compressionType, "raw") == 0) {
+		if (((context.sectionEnd - context.sectionStart) + 1) % context.tileLength != 0) {
+			printf("Warning: Targeted section has some extra bytes that cannot be used to make a full tile.\n Rounding down section end address.\n");
+			context.sectionEnd -= (context.sectionEnd - context.sectionStart + 1) % context.tileLength;
+		}
+		tileCount = (context.sectionEnd - context.sectionStart + 1) / context.tileLength;
+		if (allocTilesheet(&context, tileCount))
+			return 0;
+		if (context.sheet == NULL)
+			return 0;
+		while (sectionData < endPointer) {
+			if (context.deduplicator) {
+				context.workingHash = 0;
+				processTile(&context, sectionData, &addToHash);
+				if (!checkHasTileMatch(&context, sectionData, context.workingHash))
+					processTile(&context, sectionData, &writeLine);
+				else
+					drawDeduplicatedTile(&context);
+			} else {
+				processTile(&context, sectionData, &writeLine);
+			}
+			incrementTilePos(&context);
+			sectionData += context.tileLength;
+		}
+	} else {
+		printf("Error: Unknown compression type \"%s\".\n", context.args->compressionType);
+		return 0;
+	}
 	colorSheetIndex += tileCount;
 	appendSectionToOutput(context.sheet, 128, context.maxY + 1);
 	free(context.sheet);
+	// If section used compressed graphics, the deduplicator has stored
+	// pointers into decompressedData->output, which we've just freed.
+	// Clear the pattern chains so later sections don't see dangling pointers.
+	if (strcmp(context.args->compressionType, "rle_konami") == 0 ||
+		strcmp(context.args->compressionType, "lzss") == 0) {
+		cleanupPatternChains();
+		initPatternChains();
+	}
 	return 1;
 }
