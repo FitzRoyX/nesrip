@@ -12,6 +12,9 @@
 #include "utils.h"
 #include "globals.h"
 
+static uint8_t* g_outputImage = NULL;
+static int g_outputWidth = 0;
+static int g_outputHeight = 0;
 
 str2int_errno str2int(int* out, char* s, int base) {
 	char* end;
@@ -192,109 +195,6 @@ void deleteCharacters(char* str, size_t pos, size_t n) {
 	str[len - n] = '\0';
 }
 
-void initCache(Cache* cache, int initialCapacity) {
-	cache->size = 0;
-	cache->capacity = initialCapacity;
-	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage*));
-}
-
-void addToCache(Cache* cache, char* value, int width, int height, int comp) {
-	if (cache->size == cache->capacity) {
-		cache->capacity *= 2;
-		PNGImage** tmp = (PNGImage**)realloc(cache->images, cache->capacity * sizeof(PNGImage*));
-		if (tmp == NULL) {
-			free(cache);
-			perror("Failed to reallocate memory to increase size of the Cache");
-			exit(EXIT_FAILURE);
-		}
-		cache->images = tmp;
-	}
-	int idx = cache->size++;
-	size_t imageSize = (size_t)width * height * comp * sizeof(char);
-	char* image_data = (char*)calloc(1, imageSize);
-	if (image_data == NULL) {
-		free(cache);
-		perror("Failed to allocate memory for image data in Cache");
-		exit(EXIT_FAILURE);
-	}
-	memmove(image_data, value, imageSize);
-	PNGImage* image = (PNGImage*)calloc(1, sizeof(PNGImage));
-	if (image == NULL) {
-		free(cache);
-		perror("Failed to allocate memory for PNGImage");
-		exit(EXIT_FAILURE);
-	}
-	image->imageInfo.width = width;
-	image->imageInfo.height = height;
-	image->imageInfo.channels = comp;
-	image->data = image_data;
-	image->size = (int)imageSize;
-	cache->images[idx] = image;
-}
-
-void processCache(Cache* cache, char* separator, int sep_size) {
-	if (cache->size == 0) {
-		printf("No images in cache to process.\n");
-		return;
-	}
-	if (separator == NULL) {
-		printf("No separator image provided.\n");
-		return;
-	}
-	int maxSize = 0;
-	for (size_t i = 0; i < cache->size; i++) {
-		PNGImage* image = cache->images[i];
-		maxSize = maxSize + image->size;
-	}
-	int totalSepSize = sep_size * (cache->size -1);
-	char* combinedimage = (char*)calloc((size_t)maxSize + totalSepSize, sizeof(char));
-	if (!combinedimage) {
-		perror("failed to allocate memory for combined image");
-		free(separator);
-		free(cache);
-		exit(EXIT_FAILURE);
-	}
-	int offset = 0, height = 0, width = 0, combined_height = 0;
-	char filename[256];
-	for (int i = 0; i < cache->size; i++) {
-		PNGImage* image = cache->images[i];
-		height = image->imageInfo.height;
-		width = image->imageInfo.width;
-		if (i == 0) {
-			memcpy(combinedimage + offset, image->data, image->size);
-			offset += image->size;
-			combined_height += height;
-			continue;
-		}
-		char* prep_image = (char*)calloc((size_t)image->size + sep_size, sizeof(char));
-		if (!prep_image) {
-			perror("failed to allocate memory for prep image");
-			free(separator);
-			free(cache);
-			exit(EXIT_FAILURE);
-		}
-		memcpy(prep_image, separator, sep_size);
-		memcpy(prep_image + sep_size, image->data, image->size);
-		memcpy(combinedimage + offset, prep_image, (size_t)sep_size + image->size);
-		offset += (sep_size + image->size);
-		combined_height += (8 + height);
-		free(prep_image);
-	}
-	snprintf(filename, sizeof(filename), "%s0.png", outputFolder);
-	printf("  Writing combined sheets to \"");
-	printf("%s", filename);
-	printf("\".\n");
-	if (combinedimage == NULL) {
-		perror("No images in cache to combine");
-		exit(EXIT_FAILURE);
-	}
-	if (!stbi_write_png(filename, width, combined_height, 4, combinedimage, 128 * 4)) {
-		perror("Failed to write combined image\n");
-		exit(EXIT_FAILURE);
-	}
-	free(combinedimage);
-}
-
 #define TILE_SIZE 8
 
 static void generateTransparentTile(uint8_t* image) {
@@ -371,3 +271,102 @@ void generateSeparator(uint8_t* image, int repeat_count) {
 		}
 	}
 }
+
+void appendSectionToOutput(const char* sheet, int width, int height) {
+    if (sheet == NULL || width <= 0 || height <= 0) {
+        return;
+    }
+
+    int bytesPerRow = width * 4;
+    int sectionBytes = bytesPerRow * height;
+
+    // First section: just copy
+    if (g_outputImage == NULL) {
+        g_outputWidth = width;
+        g_outputHeight = height;
+        g_outputImage = (uint8_t*)malloc((size_t)sectionBytes);
+        if (!g_outputImage) {
+            perror("failed to allocate memory for output image");
+            exit(EXIT_FAILURE);
+        }
+        memcpy(g_outputImage, sheet, (size_t)sectionBytes);
+        return;
+    }
+
+    // Subsequent sections: append separator + new section
+    if (width != g_outputWidth) {
+        fprintf(stderr,
+            "Error: section width (%d) does not match output width (%d)\n",
+            width, g_outputWidth);
+        exit(EXIT_FAILURE);
+    }
+
+    int separatorHeight = TILE_SIZE; // 8
+    int repeat_count = width / TILE_SIZE;
+    int separatorBytes = bytesPerRow * separatorHeight;
+
+    size_t oldBytes = (size_t)bytesPerRow * g_outputHeight;
+    size_t newBytes = oldBytes + (size_t)separatorBytes + (size_t)sectionBytes;
+
+    uint8_t* newImage = (uint8_t*)malloc(newBytes);
+    if (!newImage) {
+        perror("failed to allocate memory for combined output");
+        exit(EXIT_FAILURE);
+    }
+
+    // Copy old data
+    memcpy(newImage, g_outputImage, oldBytes);
+
+    // Build separator band
+    uint8_t* separator = (uint8_t*)malloc((size_t)separatorBytes);
+    if (!separator) {
+        free(newImage);
+        perror("failed to allocate memory for separator");
+        exit(EXIT_FAILURE);
+    }
+    generateSeparator(separator, repeat_count);
+    memcpy(newImage + oldBytes, separator, (size_t)separatorBytes);
+    free(separator);
+
+    // Append new section data
+    memcpy(newImage + oldBytes + separatorBytes, sheet, (size_t)sectionBytes);
+
+    free(g_outputImage);
+    g_outputImage = newImage;
+    g_outputHeight += separatorHeight + height;
+}
+
+void finalizeOutputImage(void) {
+    if (g_outputImage == NULL) {
+        // No sections ripped => nothing to write
+        return;
+    }
+
+    char filename[260];
+    snprintf(filename, sizeof(filename), "%s0.png", outputFolder);
+
+    printf("  Writing combined sheets to \"");
+    printf("%s", filename);
+    printf("\".\n");
+
+    if (!stbi_write_png(
+            filename,
+            g_outputWidth,
+            g_outputHeight,
+            4,
+            g_outputImage,
+            g_outputWidth * 4)) {
+        perror("Failed to write combined image");
+        free(g_outputImage);
+        g_outputImage = NULL;
+        g_outputWidth = 0;
+        g_outputHeight = 0;
+        exit(EXIT_FAILURE);
+    }
+
+    free(g_outputImage);
+    g_outputImage = NULL;
+    g_outputWidth = 0;
+    g_outputHeight = 0;
+}
+

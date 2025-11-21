@@ -418,7 +418,7 @@ void cleanupPatternChains() {
 	}
 }
 
-int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
+int ripSection(Rom* rom, ExtractionArguments* arguments) {
     ExtractionContext context = {
         rom,
         arguments
@@ -497,8 +497,8 @@ int ripSection(Rom* rom, Cache* cache, ExtractionArguments* arguments) {
         printf("Error: Unknown compression type \"%s\".\n", context.args->compressionType);
         return 0;
     }
-    colorSheetIndex += tileCount;
-    addToCache(cache, context.sheet, 128, context.maxY + 1, 4);
-    free(context.sheet);
-    return 1;
+	colorSheetIndex += tileCount;
+	appendSectionToOutput(context.sheet, 128, context.maxY + 1);
+	free(context.sheet);
+	return 1;
 }

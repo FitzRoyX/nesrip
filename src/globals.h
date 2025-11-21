@@ -31,30 +31,11 @@ typedef struct {
 	unsigned char* tiles;
 } ColorizerSheet;
 
-typedef struct {
-	int width, height, channels;
-} PNGInfo;
-
-typedef struct {
-	PNGInfo imageInfo;
-	int size;
-	char* data;
-} PNGImage;
-
-typedef struct {
-	int size;          // Current number of elements in the cache images
-	int capacity;      // Maximum capacity of the cache images
-	PNGImage** images; // pointer to array of PNGImages
-} Cache;
-
 #define MAX_PALETTES    256
 #define MAX_COLOR_ROWS  16384
 
 extern ColorizerPalette palettes[MAX_PALETTES];
 extern ColorizerSheet colorSheet;
-extern Cache* cache;
-extern PNGImage image;
-extern PNGInfo imageInfo;
 
 extern const char *compressionTypes[];
 extern const int lengthofCompressionTypes;

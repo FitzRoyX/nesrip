@@ -947,14 +947,34 @@ end
 //Contra (USA).prg
 hash d41e28b1a33b3b6768e7c39c9fdfb1fda4b49940542d14085911fabd399e1ca9
 c rle_konami
-//s 9099 9251 //02 which has no gfx
+//s 9099 9251 //02 not gfx
 p 2 v
 s 10003 105ad //03
 s 105b0 107a0 //04
+s 107a3 1086b //13
+s 1086e 119cc //08
+s 1b07c 1b15b //15
+s 1b15e 1b261 //16
+s 119cf 119fb //09
 s 119fe 12002 //06
 p 1 h
+//s 12005 12345 //10 just a flipped version, redundant
+s 12007 12345 //0a
+s 12348 123e6 //0f
+s 123e9 1293f //11
+s 12942 12a2c //12
 s 12a2f 138b8 //01
-//s 14073 14a60 //05 has subsections, doesnt work
+//s 14003 14a60 //05 has subs
+//s 14a63 1631a //0b has subs
+//s 15253 153df //07 has subs
+//s 1631d 164ff //19
+//s 16502 16813 //1a
+//s 16816 16dde //14
+//s 16de1 1730c //17 has subs
+//s 1730f 1735d //18 not gfx
+//s 18003 18cdb //0c has subs
+//s 18cde 19bd5 //0d has subs
+//s 19bd8 1b079 //0e
 end
 
 //Dark Lord (Japan).chr
@@ -1212,6 +1232,20 @@ s 52700 5334f
 s 55000 55fef
 end
 
+//gd1_sec_proper.bin
+hash 3f6063d9bd77825d4c3b554cfa36f050ee938534f3a659b0a65c7072889eddfc
+c rle_konami
+p 1 h
+s 0 e89
+end
+
+//gd1_sec_proper2.bin
+hash 1051b6c1b85cdb6c621c5c9ac90da629974968c93d76322eb7dfe2f2dc67ad8f
+c rle_konami
+p 1 h
+s 3 e8c
+end
+
 
 
 //###################################################################
@@ -1229,4 +1263,3 @@ s 80000 86fff
 c lzss
 s 87000 c3fff
 end
-

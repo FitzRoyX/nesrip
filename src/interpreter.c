@@ -13,14 +13,13 @@ int foundRom = false;
 char* tokenContextStack[2];
 char** tokenContext = &tokenContextStack[0];
 
-#define CHECK_COMMAND(command, callback, cache) \
+#define CHECK_COMMAND(command, callback) \
 if (strcmp(token, command) == 0) \
 { \
-	if (callback(cache)) \
-		break; \
-	\
-	token = updateToken(NULL); \
-	continue; \
+    if (callback()) \
+        break; \
+    token = updateToken(NULL); \
+    continue; \
 }
 
 #define PULL_TOKEN(command, token) \
@@ -75,7 +74,7 @@ size_t removeComments(char* string, size_t length) {
 	return length - removed;
 }
 
-int handleColorizerPaletteCommand(Cache* cache) {
+int handleColorizerPaletteCommand(void) {
 	while (true) {
 		char* indexString, * name, * colors[4];
 		PULL_TOKEN("Palette", indexString);
@@ -106,7 +105,7 @@ int handleColorizerPaletteCommand(Cache* cache) {
 	return 0;
 }
 
-int handleColorizerSheetCommand(Cache* cache) {
+int handleColorizerSheetCommand(void) {
 	ColorizerSheet* sheet = &colorSheet;
 	sheet->valid = true;
 	sheet->width = 16;
@@ -114,7 +113,6 @@ int handleColorizerSheetCommand(Cache* cache) {
 	sheet->tiles = malloc(sheet->width * sheet->height);
 	if (sheet->tiles == NULL) {
 		perror("failed to allocate memory for combined image");
-		free(cache);
 		exit(EXIT_FAILURE);
 	}
 	for (int y = 0; y < MAX_COLOR_ROWS; y++) {
@@ -138,7 +136,7 @@ end:
 	return 0;
 }
 
-void interpretColorizer(char* colorizerFilename, Cache* cache) {
+void interpretColorizer(char* colorizerFilename) {
 	char* database;
 	size_t databaseLength = readAllBytesFromFile(colorizerFilename, &database, true);
 	if (databaseLength <= 0)
@@ -148,8 +146,8 @@ void interpretColorizer(char* colorizerFilename, Cache* cache) {
 	pushTokenContext();
 	char* token = updateToken(database);
 	while (token != NULL) {
-		CHECK_COMMAND("p", handleColorizerPaletteCommand, cache);
-		CHECK_COMMAND("s", handleColorizerSheetCommand, cache);
+		CHECK_COMMAND("p", handleColorizerPaletteCommand);
+		CHECK_COMMAND("s", handleColorizerSheetCommand);
 		if (strcmp(token, "end") == 0)
 			break;
 		printf("Invalid database token: ");
@@ -161,7 +159,7 @@ void interpretColorizer(char* colorizerFilename, Cache* cache) {
 	free(database);
 }
 
-int handleHashCommand(char *hashString, Cache* cache) {
+int handleHashCommand(char *hashString) {
 	char* token;
 	PULL_TOKEN("Hash", token);
 	if (strlen(token) < SIZE_OF_SHA_256_HASH) {
@@ -177,13 +175,13 @@ int handleHashCommand(char *hashString, Cache* cache) {
 		char colorizerFilename[32] = "";
 		sprintf_s(colorizerFilename, sizeof(colorizerFilename), "colorizer/%.8s.txt", hashString);
 		if (fileExists(colorizerFilename)) {
-			interpretColorizer(colorizerFilename, cache);
+			interpretColorizer(colorizerFilename);
 		}
 	}
 	return 0;
 }
 
-int handlePatternCommand(Cache* cache) {
+int handlePatternCommand(void) {
 	char* size, * direction;
 	PULL_TOKEN("Pattern", size);
 	PULL_TOKEN("Pattern", direction);
@@ -194,7 +192,7 @@ int handlePatternCommand(Cache* cache) {
 	return 0;
 }
 
-int handleSectionCommand(Cache* cache) {
+int handleSectionCommand(void) {
 	char* sectionStart, * sectionEnd;
 	PULL_TOKEN("Section", sectionStart);
 	PULL_TOKEN("Section", sectionEnd);
@@ -207,18 +205,18 @@ int handleSectionCommand(Cache* cache) {
 		sectionStart,
 		sectionEnd,
 	};
-	ripSection(&rom, cache, &args);
+	ripSection(&rom, &args);
 	return 0;
 }
 
-int handleCompressionCommand(Cache* cache) {
+int handleCompressionCommand(void) {
 	char* token;
 	PULL_TOKEN("Compression", token);
 	compressionType = token;
 	return 0;
 }
 
-int handleBitplaneCommand(Cache* cache) {
+int handleBitplaneCommand(void) {
 	char* token;
 	PULL_TOKEN("Bitplane", token);
 	if (bitplaneOverride)
@@ -227,7 +225,7 @@ int handleBitplaneCommand(Cache* cache) {
 	return 0;
 }
 
-int handleDeduplicatorCommand(Cache* cache) {
+int handleDeduplicatorCommand(void) {
 	char* token;
 	PULL_TOKEN("Deduplicator", token);
 	if (deduplicatorOverride)
@@ -236,13 +234,13 @@ int handleDeduplicatorCommand(Cache* cache) {
 	return 0;
 }
 
-int handleClearDeduplicatorCommand(Cache* cache) {
+int handleClearDeduplicatorCommand(void) {
 	cleanupPatternChains();
 	initPatternChains();
 	return 0;
 }
 
-void interpretDatabase(Cache* cache) {
+void interpretDatabase(void) {
 	initPatternChains();
 	uint8_t hash[SIZE_OF_SHA_256_HASH];
 	calc_sha_256(hash, rom.data, rom.size);
@@ -270,18 +268,18 @@ void interpretDatabase(Cache* cache) {
 	while (token != NULL) {
 		if (!foundRom) {
 			if (strcmp(token, "hash") == 0) {
-				if (handleHashCommand(hashString, cache))
+				if (handleHashCommand(hashString))
 					break;
 			}
 			token = updateToken(NULL);
 			continue;
 		}
-		CHECK_COMMAND("c", handleCompressionCommand, cache);
-		CHECK_COMMAND("b", handleBitplaneCommand, cache);
-		CHECK_COMMAND("p", handlePatternCommand, cache);
-		CHECK_COMMAND("r", handleDeduplicatorCommand, cache);
-		CHECK_COMMAND("k", handleClearDeduplicatorCommand, cache);
-		CHECK_COMMAND("s", handleSectionCommand, cache);
+		CHECK_COMMAND("c", handleCompressionCommand);
+		CHECK_COMMAND("b", handleBitplaneCommand);
+		CHECK_COMMAND("p", handlePatternCommand);
+		CHECK_COMMAND("r", handleDeduplicatorCommand);
+		CHECK_COMMAND("k", handleClearDeduplicatorCommand);
+		CHECK_COMMAND("s", handleSectionCommand);
 		if (strcmp(token, "end") == 0)
 			break;
 		printf("Invalid database token: ");
@@ -292,11 +290,7 @@ void interpretDatabase(Cache* cache) {
 	if (!foundRom)
 		printf("Error: Could not match ROM with database.\n");
 	else {
-		if (cache->size > 0) {
-			uint8_t separator[128 * 8 * 4];
-			generateSeparator(separator, 16);
-			processCache(cache, (char*)separator, sizeof(separator));
-		}
+		finalizeOutputImage();
 	}
-	cleanupPatternChains();
+cleanupPatternChains();
 }

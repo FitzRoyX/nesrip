@@ -5,6 +5,6 @@
 
 #define hash_size SIZE_OF_SHA_256_HASH * 2 + 1
 
-void interpretDatabase(Cache* cache);
+void interpretDatabase(void);
 
 #endif
