@@ -46,41 +46,38 @@ double numDigits(int n) {
 
 size_t readAllBytesFromFile(char* filename, char** output, int zeroTerminate) {
 	FILE* fileptr;
-	errno_t err;
+	errno_t err; //annex k type alias, not standard c
 	long filelen;
-	int error = false;
+	int error = 0;
 	#if C99
 		fileptr = fopen(filename, "rb");
 		if (fileptr == NULL) {
-			error = true;
+			error = 1;
 		}
-	#else
-		err = fopen_s(&fileptr, filename, "rb");
-		if (err != 0) {
-			error = true;
-		}
-	#endif
+    #else
+        if (fopen_s(&fileptr, filename, "rb") != 0) {
+            error = 1;
+        }
+    #endif
 	if (error) {
-		printf("Error: Can't find file \"");
-		printf("%s", filename);
-		printf("\".\n");
+		printf("Error: Can't find file \"%s\".\n", filename);
 		return -1;
 	}
 	fseek(fileptr, 0, SEEK_END);
 	filelen = ftell(fileptr) + zeroTerminate;
 	rewind(fileptr);
-	// Save errno before malloc, restore after if needed
-	int saved_errno = errno;
-	char* result = (char*)malloc(filelen * sizeof(char));
+	int saved_errno = errno; //annex k type alias, not standard c
+	char* result = malloc(filelen);
 	if (result == NULL) {
 		printf("Error: Couldn't allocate memory for reading file data.\n");
+		fclose(fileptr);
 		return -1;
 	}
-	errno = saved_errno;
-	fread(result, filelen, 1, fileptr);
+	errno = saved_errno; //annex k type alias, not standard c
+	fread(result, filelen - zeroTerminate, 1, fileptr);
 	fclose(fileptr);
-	for (int i = filelen - zeroTerminate; i < filelen; i++) {
-		result[i] = 0;
+	if (zeroTerminate) {
+		result[filelen - 1] = 0;
 	}
 	*output = result;
 	return filelen;
@@ -108,13 +105,21 @@ size_t getFilenameLengthWithoutExtension(char* filename) {
 
 // strtok_r from musl libc
 char* stringTokenize(char* restrict s, const char* restrict sep, char** restrict p) {
-	if (!s && !(s = *p)) return NULL;
-	s += strspn(s, sep);
-	if (!*s) return *p = 0;
-	*p = s + strcspn(s, sep);
-	if (**p) *(*p)++ = 0;
-	else *p = 0;
-	return s;
+    if (!s && !(s = *p)) {
+        return NULL;
+    }
+    s += strspn(s, sep);
+    if (!*s) {
+        *p = 0;
+        return NULL;
+    }
+    *p = s + strcspn(s, sep);
+    if (**p) {
+        *(*p)++ = 0;
+    } else {
+        *p = 0;
+    }
+    return s;
 }
 
 const char* cStdInUse(long int stdc) {
@@ -142,13 +147,13 @@ const char* cStdInUse(long int stdc) {
 	return version;
 }
 
-int is_null_terminated(const char* str, size_t max_length) {
+int isNullTerminated(const char* str, size_t max_length) {
 	for (size_t i = 0; i <= max_length; i++) {
 		if (str[i] == '\0') {
-			return 1;  // Null-terminated
+			return 1;
 		}
 	}
-	return 0;  // Not null-terminated
+	return 0;
 }
 
 void toUpperCase(char* str) {
@@ -167,7 +172,7 @@ int fileExists(const char* filename) {
 		return 1;
 	}
 #else
-	errno_t error = fopen_s(&file, filename, "r");
+	errno_t error = fopen_s(&file, filename, "r"); //non-standard c
 	if (error == 0) {
 		fclose(file);
 		return 1;
@@ -178,16 +183,12 @@ int fileExists(const char* filename) {
 
 void deleteCharacters(char* str, size_t pos, size_t n) {
 	size_t len = strlen(str);
-	// Ensure position and range are valid
-	if (pos < 0 || pos >= len || n <= 0) {
-		printf("Invalid position or range.\n");
+	if (pos >= len || n == 0) {
 		return;
 	}
-	// Shift characters to the left
 	for (size_t i = pos; i < len - n; i++) {
 		str[i] = str[i + n];
 	}
-	// Null-terminate the string
 	str[len - n] = '\0';
 }
 
@@ -197,10 +198,8 @@ void initCache(Cache* cache, int initialCapacity) {
 	cache->images = (PNGImage**)calloc(initialCapacity, sizeof(PNGImage*));
 }
 
-// Function to add data to the cache
 void addToCache(Cache* cache, char* value, int width, int height, int comp) {
 	if (cache->size == cache->capacity) {
-		// Double the capacity if the cache is full
 		cache->capacity *= 2;
 		PNGImage** tmp = (PNGImage**)realloc(cache->images, cache->capacity * sizeof(PNGImage*));
 		if (tmp == NULL) {
@@ -211,11 +210,7 @@ void addToCache(Cache* cache, char* value, int width, int height, int comp) {
 		cache->images = tmp;
 	}
 	int idx = cache->size++;
-	// First copy the image before it is freed in the ripper logic
 	size_t imageSize = (size_t)width * height * comp * sizeof(char);
-  //  if (imageSize <= 4000) {
-		//imageSize = 4000; // minimum size to avoid small allocations is a deeper bug somewhere
-  //  }
 	char* image_data = (char*)calloc(1, imageSize);
 	if (image_data == NULL) {
 		free(cache);
@@ -262,18 +257,15 @@ void processCache(Cache* cache, char* separator, int sep_size) {
 	int offset = 0, height = 0, width = 0, combined_height = 0;
 	char filename[256];
 	for (int i = 0; i < cache->size; i++) {
-		//if (i != 1) { continue; }
 		PNGImage* image = cache->images[i];
 		height = image->imageInfo.height;
 		width = image->imageInfo.width;
 		if (i == 0) {
-			// Copy the current image
 			memcpy(combinedimage + offset, image->data, image->size);
 			offset += image->size;
 			combined_height += height;
 			continue;
 		}
-		// Prepare image with separator
 		char* prep_image = (char*)calloc((size_t)image->size + sep_size, sizeof(char));
 		if (!prep_image) {
 			perror("failed to allocate memory for prep image");
@@ -283,13 +275,10 @@ void processCache(Cache* cache, char* separator, int sep_size) {
 		}
 		memcpy(prep_image, separator, sep_size);
 		memcpy(prep_image + sep_size, image->data, image->size);
-		// Merge the prepared image into the combined image
 		memcpy(combinedimage + offset, prep_image, (size_t)sep_size + image->size);
 		offset += (sep_size + image->size);
 		combined_height += (8 + height);
 		free(prep_image);
-		//if(i < 2) { continue; }
-		//break;
 	}
 	snprintf(filename, sizeof(filename), "%s0.png", outputFolder);
 	printf("  Writing combined sheets to \"");
@@ -305,7 +294,6 @@ void processCache(Cache* cache, char* separator, int sep_size) {
 	}
 	free(combinedimage);
 }
-
 
 #define TILE_SIZE 8
 
@@ -325,13 +313,13 @@ static void generateTransparentTile(uint8_t* image) {
 void generateTransparentImage(uint8_t* image, int repeat_count) {
 	uint8_t tile[TILE_SIZE * TILE_SIZE * 4]; // RGBA format
 	generateTransparentTile(tile);
-	int image_width = (TILE_SIZE * repeat_count);
+	int image_width = TILE_SIZE * repeat_count;
 	for (int y = 0; y < TILE_SIZE; y++) {
 		for (int repeat = 0; repeat < repeat_count; repeat++) {
 			for (int x = 0; x < TILE_SIZE; x++) {
 				int src_idx = (y * TILE_SIZE + x) * 4;
 				int dest_idx = (y * image_width + repeat * TILE_SIZE + x) * 4;
-				image[dest_idx] = tile[src_idx];
+				image[dest_idx + 0] = tile[src_idx + 0];
 				image[dest_idx + 1] = tile[src_idx + 1];
 				image[dest_idx + 2] = tile[src_idx + 2];
 				image[dest_idx + 3] = tile[src_idx + 3];
@@ -369,13 +357,13 @@ void generateSeparator(uint8_t* image, int repeat_count) {
 	uint8_t color2[4] = { 255, 255, 0, 255 }; // Yellow
 	// Generate the tile
 	generateSeparatorTile(tile, color1, color2);
-	int image_width = (TILE_SIZE * repeat_count);
+	int image_width = TILE_SIZE * repeat_count;
 	for (int y = 0; y < TILE_SIZE; y++) {
 		for (int repeat = 0; repeat < repeat_count; repeat++) {
 			for (int x = 0; x < TILE_SIZE; x++) {
 				int src_idx = (y * TILE_SIZE + x) * 4;
 				int dest_idx = (y * image_width + repeat * TILE_SIZE + x) * 4;
-				image[dest_idx] = tile[src_idx];
+				image[dest_idx + 0] = tile[src_idx + 0];
 				image[dest_idx + 1] = tile[src_idx + 1];
 				image[dest_idx + 2] = tile[src_idx + 2];
 				image[dest_idx + 3] = tile[src_idx + 3];
