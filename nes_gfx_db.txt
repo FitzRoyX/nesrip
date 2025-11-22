@@ -1271,10 +1271,11 @@ end
 hash 0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b
 b 4
 p 1 h
-c lclz2
+c smwlz2
 //s 40000 43fbf //GFX32
 //s 43fc0 459fb //GFX33
-s 459fc 46233 //GFX00
+//s 459fc 46233 //GFX00
+s 45a5c 46230
 //s 46234 46cbe //GFX01
 //s 46cbf 47558 //GFX02
 //s 47559 47f8c //GFX03
@@ -1329,6 +1330,7 @@ end
 //gfx00_compressed.bin
 hash c9660c03f35a2bc810cb151401e9d5ada536577b391db46e3e29b7c003e7f2e0
 b 4
-c lclz2
-s 0 837
+c smwlz2
+s 60 7d5
 end
+
