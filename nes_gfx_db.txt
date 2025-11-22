@@ -1254,7 +1254,7 @@ end
 //BEGINNING OF SNES DB
 //###################################################################
 
-//zelda3usa.sfc
+//zelda3_usa.sfc
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
 b 4
 p 1 h
@@ -1264,4 +1264,64 @@ c raw
 s 80000 86fff
 c lzss
 s 87000 c3fff
+end
+
+
+//smw_usa.sfc
+hash 0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b
+b 4
+p 1 h
+c lzss
+//s 40000 43fbf //GFX32
+//s 43fc0 459fb //GFX33
+s 459fc 46233 //GFX00
+//s 46234 46cbe //GFX01
+//s 46cbf 47558 //GFX02
+//s 47559 47f8c //GFX03
+//s 47f8d 48975 //GFX04
+//s 48976 49385 //GFX05
+//s 49386 49d27 //GFX06
+//s 49d28 4a671 //GFX07
+//s 4a672 4afb5 //GFX08
+//s 4afb6 4ba32 //GFX09
+//s 4ba33 4c3b8 //GFX0A
+//s 4c3b9 4cd7f //GFX0B
+//s 4cd80 4d5f0 //GFX0C
+//s 4d5f1 4dde8 //GFX0D
+//s 4dde9 4e704 //GFX0E
+//s 4e705 4ef45 //GFX0F
+//s 4ef46 4f7d6 //GFX10
+//s 4f7d7 4ffe4 //GFX11
+//s 4ffe5 58938 //GFX12
+//s 58939 59373 //GFX13
+//s 59374 59b19 //GFX14
+//s 59b1a 5a3a5 //GFX15
+//s 5a3a6 5a9f0 //GFX16
+//s 5a9f1 5b2ee //GFX17
+//s 5b2ef 5c325 //GFX18
+//s 5c326 5c3cd //GFX19
+//s 5c3ce 5ccb3 //GFX1A
+//s 5ccb4 5d4cb //GFX1B
+//s 5d4cc 5dcd5 //GFX1C
+//s 5dcd6 5e6cb //GFX1D
+//s 5e6cc 5ee8f //GFX1E
+//s 5ee90 5f6f9 //GFX1F
+//s 5f6fa 5ffc3 //GFX20
+//s 5ffc4 5892d //GFX21
+//s 5892e 5922b //GFX22
+//s 5922c 59b48 //GFX23
+//s 59b49 5a418 //GFX24
+//s 5a419 5ae84 //GFX25
+//s 5ae85 5b7aa //GFX26
+//s 5b7ab 5c0dc //GFX27
+//s 5c0dd 5c713 //GFX28
+//s 5c714 5cbe9 //GFX29
+//s 5cbea 5d16d //GFX2A
+//s 5d16e 5d842 //GFX2B
+//s 5d843 5e093 //GFX2C
+//s 5e094 5e9c3 //GFX2D
+//s 5e9c4 5f212 //GFX2E
+//s 5f213 5f448 //GFX2F
+//s 5f449 5f88d //GFX30
+//s 5f88e 5ffff //GFX31
 end
