@@ -59,7 +59,7 @@ Result* decompressLzss(const uint8_t* compressedData, size_t sectionSize) {
     return result;
 }
 
-Result* decompressLcLz2(const uint8_t* compressedData, size_t sectionSize) {
+Result* decompressSmwLz2(const uint8_t* compressedData, size_t sectionSize) {
     const uint8_t* data = compressedData;
     const uint8_t* end  = compressedData + sectionSize;
 
@@ -69,8 +69,7 @@ Result* decompressLcLz2(const uint8_t* compressedData, size_t sectionSize) {
         return NULL;
     }
 
-    /* Start with a generous buffer: LC_LZ2 rarely expands more than ~8×,
-       but we grow the buffer if needed. */
+    /* LC_LZ2 rarely blows up more than ~8×, but grow as needed. */
     size_t capacity = sectionSize * 8;
     if (capacity < 0x1000) {
         capacity = 0x1000;
@@ -87,13 +86,13 @@ Result* decompressLcLz2(const uint8_t* compressedData, size_t sectionSize) {
     while (data < end) {
         uint8_t header = *data++;
 
-        /* 0xFF = end of compressed data */
+        /* 0xFF = end of compressed stream */
         if (header == 0xFF) {
             break;
         }
 
-        uint8_t cmd = header >> 5;        /* top 3 bits */
-        uint32_t length = header & 0x1F;  /* low 5 bits */
+        uint8_t  cmd    = header >> 5;       /* top 3 bits */
+        uint32_t length = header & 0x1F;     /* low 5 bits */
 
         /* Long-length form: 111CCCLL LLLLLLLL */
         if (cmd == 0x07) {
@@ -102,11 +101,11 @@ Result* decompressLcLz2(const uint8_t* compressedData, size_t sectionSize) {
                 break;
             }
             uint8_t header2 = *data++;
-            cmd    = (header & 0x1C) >> 2;                  /* CCC */
-            length = ((header & 0x03) << 8) | header2;      /* 10-bit length */
+            cmd    = (header & 0x1C) >> 2;               /* CCC */
+            length = ((header & 0x03) << 8) | header2;   /* 10-bit length */
         }
 
-        /* In LC_LZ2, effective length is always length + 1 */
+        /* Effective length is always (L + 1) */
         length += 1;
 
         /* Ensure we have enough space for the new bytes */
@@ -174,7 +173,10 @@ Result* decompressLcLz2(const uint8_t* compressedData, size_t sectionSize) {
                 break;
             }
 
-            case 0b100: { /* Repeat */
+            /* 100 / 101 / 110 -> SMW repeat, overlap-safe */
+            case 0b100:
+            case 0b101:
+            case 0b110: {
                 if (end - data < 2) {
                     printf("Error: Unexpected end of data in repeat command.\n");
                     break;
@@ -183,31 +185,28 @@ Result* decompressLcLz2(const uint8_t* compressedData, size_t sectionSize) {
                 uint8_t lo = *data++;
                 /* LC_LZ2 uses a big-endian address into the already-decompressed buffer */
                 uint16_t addr = ((uint16_t)hi << 8) | lo;
-                if ((size_t)addr + length > result->size) {
-                    printf("Error: Invalid repeat address (%u, len %u, out %zu).\n",
-                           (unsigned)addr, (unsigned)length, result->size);
+
+                if ((size_t)addr >= result->size) {
+                    printf("Error: Invalid repeat address (%u, out %zu).\n",
+                           (unsigned)addr, result->size);
                     break;
                 }
-                memcpy(result->output + result->size,
-                       result->output + addr,
-                       length);
-                result->size += length;
+
+                /* Overlap-safe copy: behave like the original 65816 loop. */
+                uint32_t i;
+                for (i = 0; i < length; i++) {
+                    result->output[result->size] = result->output[addr + i];
+                    result->size++;
+                }
                 break;
             }
 
-            case 0b101:
-            case 0b110:
-                /* Unused in vanilla LC_LZ2; treat as error for now. */
-                printf("Error: Encountered unsupported LC_LZ2 command %u.\n", cmd);
-                /* You could choose to abort or skip; aborting is safer: */
-                data = end;
-                break;
-
-            default:
-                /* Should never happen because 0b111 handled above. */
+            default: {
+                /* Should never happen (111 is handled via long-length header). */
                 printf("Error: Unknown LC_LZ2 command %u.\n", cmd);
                 data = end;
                 break;
+            }
         }
     }
 
