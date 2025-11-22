@@ -1325,3 +1325,11 @@ s 459fc 46233 //GFX00
 //s 5f449 5f88d //GFX30
 //s 5f88e 5ffff //GFX31
 end
+
+//gfx00_compressed.bin
+hash c9660c03f35a2bc810cb151401e9d5ada536577b391db46e3e29b7c003e7f2e0
+b 4
+c lzss
+s 0 837
+end
+
