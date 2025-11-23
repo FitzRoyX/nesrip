@@ -9,29 +9,29 @@
 #include "stb/stb_image_write.h"
 
 char paletteData[] = {
-	0, 0, 0, 255, //black
-	255, 255, 255, 255, //white
-	175, 175, 175, 255, //lgray
-	100, 100, 100, 255, //dgray
+	0, 0, 0, 255, //000000 black
+	255, 255, 255, 255, //ffffff white
+	175, 175, 175, 255, //afafaf lgray
+	100, 100, 100, 255, //646464 dgray
 //
-	150, 0, 0, 255, //dred
-	200, 0, 0, 255, //lred
-	0, 150, 0, 255, //dgreen
-	0, 200, 0, 255, //lgreen
+	150, 0, 0, 255, //960000 dred
+	200, 0, 0, 255, //c80000 lred
+	0, 150, 0, 255, //009600 dgreen
+	0, 200, 0, 255, //00c800 lgreen
 //
-	0, 0, 150, 255, //dblue
-	0, 0, 200, 255, //lblue
-	0, 150, 150, 255, //dteal
-	0, 200, 200, 255, //lteal
+	0, 0, 150, 255, //000096 dblue
+	0, 0, 200, 255, //0000c8 lblue
+	0, 150, 150, 255, //009696 dteal
+	0, 200, 200, 255, //00c8c8 lteal
 //
-	150, 150, 0, 255, //dyellow
-	200, 200, 0, 255, //lyellow
-	150, 0, 150, 255, //dpurple
-	200, 0, 200, 255, //lpurple
+	150, 150, 0, 255, //969600 dyellow
+	200, 200, 0, 255, //c8c800 lyellow
+	150, 0, 150, 255, //960096 dpurple
+	200, 0, 200, 255, //c800c8 lpurple
 };
 
 char deduplicatedTileColor[] = {
-	255, 0, 255, 255 //magenta
+	255, 0, 255, 255 //ff00ff magenta
 };
 
 typedef enum {
