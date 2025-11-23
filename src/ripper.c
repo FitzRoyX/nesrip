@@ -439,12 +439,12 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 
     //
     // =====================================================================
-    //  COMPRESSED BRANCH: rle_konami, lzss, lclz2
+    //  COMPRESSED BRANCH: rle_konami, lzss, smwlz2
     // =====================================================================
     //
     if (strcmp(compressionType, "rle_konami") == 0 ||
         strcmp(compressionType, "lzss") == 0 ||
-        strcmp(compressionType, "lclz2") == 0)
+        strcmp(compressionType, "smwlz2") == 0)
     {
         size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
         Result* decompressedData = NULL;
@@ -454,8 +454,8 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
             decompressedData = decompressRleKonami(sectionData, sectionSize);
         } else if (strcmp(compressionType, "lzss") == 0) {
             decompressedData = decompressLzss(sectionData, sectionSize);
-        } else if (strcmp(compressionType, "lclz2") == 0) {
-            decompressedData = decompressLcLz2(sectionData, sectionSize);
+        } else if (strcmp(compressionType, "smwlz2") == 0) {
+            decompressedData = decompressSmwLz2(sectionData, sectionSize);
         }
 
         if (!decompressedData) {
