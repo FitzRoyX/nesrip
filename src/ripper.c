@@ -575,7 +575,7 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
     // cleanup pattern chains if decompressed formats were used
     if (strcmp(compressionType, "rle_konami") == 0 ||
         strcmp(compressionType, "lzss") == 0 ||
-        strcmp(compressionType, "lclz2") == 0)
+        strcmp(compressionType, "smwlz2") == 0)
     {
         cleanupPatternChains();
         initPatternChains();
