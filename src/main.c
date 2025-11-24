@@ -66,7 +66,6 @@ int main(int argc, char** argv) {
 	printf("Ensuring output folder exists.\n");
 	CreateDirectoryA("output", 0);
 	CreateDirectoryA(outputFolder, 0);
-	//TODO: Handle ROM hash detection and graphics ripping here
 	interpretDatabase();
 	quitProgram(0);
 }
