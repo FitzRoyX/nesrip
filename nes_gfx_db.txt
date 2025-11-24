@@ -1257,11 +1257,12 @@ end
 //zelda3_usa.sfc
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
 r false
-b 4
+b 3
 p 1 h
 c lz2
 s c2f0d fffff //this end range isn't right, but it includes the term byte and gets output
 c raw
+b 4
 s 80000 86fff
 b 3
 s 87000 8b7ff
@@ -1274,14 +1275,15 @@ r false
 b 4
 p 1 h
 c lz2
-s 40000 43fbf //GFX32 //16320 bytes, divisible by 32
-s 43fc0 459f8 //GFX33 //6713 bytes, not divisible by 32
-s 459f9 46230 //GFX00
-s 46231 46cba //GFX01
-s 46cbb 47554 //GFX02
-s 47555 47f88 //GFX03
-s 47f89 48971 //GFX04
-s 48972 49381 //GFX05
+s 40000 43fbf //GFX32 //working
+b 3
+s 43fc0 459f8 //GFX33 //working
+s 459f9 46230 //GFX00 //working
+s 46231 46cba //GFX01 //working
+s 46cbb 47555 //GFX02 //working
+//f 47556 48000 //GFX03 //garbled
+//s 47f89 48971 //GFX04 //garbled
+//s 48972 49381 //GFX05 //early exit condition
 //s 49382 49d23 //GFX06
 //s 49d24 4a66d //GFX07
 //s 4a66e 4afb1 //GFX08
