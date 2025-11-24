@@ -209,6 +209,24 @@ int handleSectionCommand(void) {
 	return 0;
 }
 
+/* NEW: f command handler */
+int handleFindCompressedCommand(void) {
+	char* sectionStart, * sectionEnd;
+	PULL_TOKEN("FindCompressed", sectionStart);
+	PULL_TOKEN("FindCompressed", sectionEnd);
+	ExtractionArguments args = {
+		compressionType,
+		bitplaneType,
+		patternSize,
+		patternDirection,
+		deduplicator,
+		sectionStart,
+		sectionEnd,
+	};
+	findCompressedGraphics(&rom, &args);
+	return 0;
+}
+
 int handleCompressionCommand(void) {
 	char* token;
 	PULL_TOKEN("Compression", token);
@@ -264,7 +282,7 @@ void interpretDatabase(void) {
 	foundRom = false;
 	databaseLength = removeCarriageReturns(database, databaseLength);
 	removeComments(database, databaseLength);
-	char* token = updateToken(database);
+char* token = updateToken(database);
 	while (token != NULL) {
 		if (!foundRom) {
 			if (strcmp(token, "hash") == 0) {
@@ -280,6 +298,7 @@ void interpretDatabase(void) {
 		CHECK_COMMAND("r", handleDeduplicatorCommand);
 		CHECK_COMMAND("k", handleClearDeduplicatorCommand);
 		CHECK_COMMAND("s", handleSectionCommand);
+		CHECK_COMMAND("f", handleFindCompressedCommand);
 		if (strcmp(token, "end") == 0)
 			break;
 		printf("Invalid database token: ");
