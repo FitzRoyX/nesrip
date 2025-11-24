@@ -8,6 +8,8 @@
 #include "ripper.h"
 #include "stb/stb_image_write.h"
 
+#define MAX_FF_LOCATIONS 100000
+
 char paletteData[] = {
 	0, 0, 0, 255, //000000 black
 	255, 255, 255, 255, //ffffff white
@@ -79,6 +81,35 @@ Pattern* patterns[BPP_COUNT];
 ColorizerPalette palettes[MAX_PALETTES];
 ColorizerSheet colorSheet;
 int colorSheetIndex = 0;
+static uint32_t* sheetChecksums = NULL;
+static int sheetChecksumCount = 0;
+static int sheetChecksumCapacity = 0;
+
+static int sheetChecksumSeen(uint32_t hash) {
+    for (int i = 0; i < sheetChecksumCount; i++) {
+        if (sheetChecksums[i] == hash)
+            return 1;
+    }
+    return 0;
+}
+
+static void sheetChecksumStore(uint32_t hash) {
+    if (sheetChecksumCount >= sheetChecksumCapacity) {
+        sheetChecksumCapacity = (sheetChecksumCapacity == 0 ? 16 : sheetChecksumCapacity * 2);
+        sheetChecksums = realloc(sheetChecksums, sheetChecksumCapacity * sizeof(uint32_t));
+    }
+    sheetChecksums[sheetChecksumCount++] = hash;
+}
+
+// Simple FNV-1a hash for bytes (used on the RGBA sheet)
+static uint32_t hashBytes(const unsigned char* data, int size) {
+    uint32_t hash = 0x811C9DC5;
+    for (int i = 0; i < size; i++) {
+        hash ^= data[i];
+        hash *= 0x01000193;
+    }
+    return hash;
+}
 
 int allocTilesheet(ExtractionContext* context, int tileCount) {
 	int width = 128;
@@ -418,6 +449,286 @@ void cleanupPatternChains() {
 	}
 }
 
+/* 
+ * Compute the average run length of identical pixels horizontally
+ * across the whole RGBA sheet.
+ */
+static double computeFrequencyOfChange(const unsigned char* sheet, int width, int height) {
+	if (sheet == NULL || width <= 0 || height <= 0)
+		return 0.0;
+
+	long long totalRunLength = 0;
+	long long runCount = 0;
+
+	for (int y = 0; y < height; ++y) {
+		int x = 0;
+		while (x < width) {
+			const unsigned char* p = sheet + (size_t)(y * width + x) * 4;
+			int run = 1;
+			++x;
+			while (x < width) {
+				const unsigned char* q = sheet + (size_t)(y * width + x) * 4;
+				if (q[0] == p[0] &&
+				    q[1] == p[1] &&
+				    q[2] == p[2] &&
+				    q[3] == p[3]) {
+					++run;
+					++x;
+				} else {
+					break;
+				}
+			}
+			totalRunLength += run;
+			++runCount;
+		}
+	}
+
+	if (runCount == 0)
+		return 0.0;
+
+	return (double)totalRunLength / (double)runCount;
+}
+
+/*
+ * Build a tilesheet (into context->sheet) from decompressed tile data
+ * using the existing writeLine/processTile/incrementTilePos logic.
+ */
+static int buildTilesheetFromDecompressed(
+	ExtractionContext* baseContext,
+	unsigned char* decompressedData,
+	size_t decompressedSize,
+	unsigned char** outSheet,
+	int* outWidth,
+	int* outHeight)
+{
+	if (!baseContext || !decompressedData || decompressedSize == 0)
+		return 0;
+
+	if (decompressedSize % baseContext->tileLength != 0)
+		return 0;
+
+	int tileCount = (int)(decompressedSize / baseContext->tileLength);
+	if (tileCount <= 0)
+		return 0;
+
+	ExtractionContext ctx = *baseContext;
+	ctx.sheet = NULL;
+	ctx.index = 0;
+	ctx.tx = ctx.ty = 0;
+	ctx.stx = ctx.sty = 0;
+	ctx.maxX = ctx.maxY = 0;
+
+	if (allocTilesheet(&ctx, tileCount))
+		return 0;
+
+	unsigned char* ptr = decompressedData;
+	unsigned char* end = decompressedData + decompressedSize;
+
+	while (ptr < end) {
+		/* For detection, ignore dedup to avoid pattern chain overhead */
+		processTile(&ctx, ptr, &writeLine);
+		incrementTilePos(&ctx);
+		ptr += ctx.tileLength;
+	}
+
+	*outSheet = (unsigned char*)ctx.sheet;
+	*outWidth = 128;
+	*outHeight = ctx.maxY + 1;
+
+	return 1;
+}
+
+// A helper function to compute a checksum hash for the decompressed data (or sheet)
+static uint32_t computeChecksum(const unsigned char* data, size_t size) {
+    uint32_t hash = 0x811C9DC5; // FNV-1a initial hash value
+    for (size_t i = 0; i < size; ++i) {
+        hash ^= data[i];
+        hash *= 0x01000193; // FNV-1a prime
+    }
+    return hash;
+}
+
+// Global array to store hashes of previously seen decompressed data
+static uint32_t* checksumHashes = NULL;
+static int checksumCount = 0;
+static int checksumCapacity = 0;
+
+// Function to check if a hash already exists in the array
+int hasChecksum(uint32_t hash) {
+    for (int i = 0; i < checksumCount; i++) {
+        if (checksumHashes[i] == hash)
+            return 1;
+    }
+    return 0;
+}
+
+// Function to store a new hash in the array
+void storeChecksum(uint32_t hash) {
+    if (checksumCount >= checksumCapacity) {
+        checksumCapacity = (checksumCapacity == 0 ? 16 : checksumCapacity * 2);
+        checksumHashes = realloc(checksumHashes, checksumCapacity * sizeof(uint32_t));
+    }
+    checksumHashes[checksumCount++] = hash;
+}
+
+int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
+    ExtractionContext context = {
+        rom,
+        arguments
+    };
+
+    printf("Finding compressed graphics between %s and %s.\n",
+           context.args->sectionStartString,
+           context.args->sectionEndString);
+
+    if (!getSectionDetails(rom, &context))
+        return 0;
+
+    const char* compressionType = context.args->compressionType;
+
+    /* This command is meant for compressed data. */
+    if (strcmp(compressionType, "rle_konami") != 0 &&
+        strcmp(compressionType, "lzss") != 0 &&
+        strcmp(compressionType, "smwlz2") != 0) {
+        printf("Error: f command is only supported for compressed types "
+               "\"rle_konami\", \"lzss\" or \"smwlz2\".\n");
+        return 0;
+    }
+
+    int originalStart = context.sectionStart;
+    int originalEnd   = context.sectionEnd;
+
+    /* 1. Collect all 0xFF byte locations in the region */
+    int ffLocations[MAX_FF_LOCATIONS];
+    int ffCount = 0;
+
+    unsigned char* romBytes = (unsigned char*)rom->data;
+
+    for (int addr = originalStart; addr <= originalEnd; ++addr) {
+        if (ffCount >= MAX_FF_LOCATIONS)
+            break;
+        if (romBytes[addr] == 0xFF) {
+            ffLocations[ffCount++] = addr;
+        }
+    }
+
+    if (ffCount == 0) {
+        printf("f: No 0xFF bytes found in specified range.\n");
+        return 0;
+    }
+
+    if (ffCount >= MAX_FF_LOCATIONS) {
+        printf("f: Warning, hit 0xFF location limit (%d); some candidates may be skipped.\n",
+               MAX_FF_LOCATIONS);
+    }
+
+    int totalMatches = 0;
+
+    /* 2–4. Slide the start byte through the region, combining with all 0xFF endpoints */
+    for (int start = originalStart; start <= originalEnd; ++start) {
+        for (int i = 0; i < ffCount; ++i) {
+            int endAddr = ffLocations[i];
+            if (endAddr < start)
+                continue;
+            if (endAddr > originalEnd)
+                break;
+
+            size_t sectionSize = (size_t)(endAddr - start + 1);
+            unsigned char* sectionData = romBytes + start;
+
+            /* 4a. Decompress this candidate range */
+            Result* decompressedData = NULL;
+
+            if (strcmp(compressionType, "rle_konami") == 0) {
+                decompressedData = decompressRleKonami(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "lzss") == 0) {
+                decompressedData = decompressLzss(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "smwlz2") == 0) {
+                decompressedData = decompressSmwLz2(sectionData, sectionSize);
+            }
+
+            if (!decompressedData || !decompressedData->output || decompressedData->size == 0) {
+                if (decompressedData) {
+                    free(decompressedData->output);
+                    free(decompressedData);
+                }
+                continue;
+            }
+
+            /* 4a. Tile multiple check (no partial tiles) */
+            if (decompressedData->size % context.tileLength != 0) {
+                free(decompressedData->output);
+                free(decompressedData);
+                continue;
+            }
+
+            /* Build tilesheet for this decompressed candidate */
+            unsigned char* sheet = NULL;
+            int width = 0, height = 0;
+
+            if (!buildTilesheetFromDecompressed(&context,
+                                                decompressedData->output,
+                                                decompressedData->size,
+                                                &sheet,
+                                                &width,
+                                                &height)) {
+                free(decompressedData->output);
+                free(decompressedData);
+                continue;
+            }
+
+            /* 4b. Frequency-of-change check */
+            double freq = computeFrequencyOfChange(sheet, width, height);
+            int qualifierTileMultiple = 1; /* already true above */
+            int qualifierFrequency = (freq >= 2.5 && freq <= 8.0);
+
+            // Hash the sheet data for checksum comparison
+            uint32_t checksumHash = computeChecksum(sheet, width * height * 4); // Assume RGBA format (4 bytes per pixel)
+
+            // Set the qualifierChecksum flag based on hash uniqueness
+            int qualifierChecksum = !hasChecksum(checksumHash);
+
+            if (qualifierChecksum) {
+                storeChecksum(checksumHash); // Store the hash if it is unique
+            }
+
+            /* 4c. If all three qualifiers are true, write PNG named start_end.png */
+            if (qualifierTileMultiple && qualifierFrequency && qualifierChecksum) {
+                char filename[512];
+
+#ifdef _MSC_VER
+                _snprintf_s(filename, sizeof(filename), _TRUNCATE,
+                            "%s%X_%X.png", outputFolder, start, endAddr);
+#else
+                snprintf(filename, sizeof(filename),
+                         "%s%X_%X.png", outputFolder, start, endAddr);
+#endif
+
+                printf("  f: candidate %X-%X, freq=%.2f, checksum match, writing \"%s\".\n",
+                       start, endAddr, freq, filename);
+
+                if (!stbi_write_png(filename, width, height, 4, sheet, width * 4)) {
+                    printf("  Error: Failed to write \"%s\".\n", filename);
+                } else {
+                    ++totalMatches;
+                }
+            }
+
+            free(sheet);
+            free(decompressedData->output);
+            free(decompressedData);
+        }
+    }
+
+    printf("f: Finished scan. %d matching compressed graphic range(s) saved.\n",
+           totalMatches);
+
+    // Free the checksum hashes array
+    free(checksumHashes);
+
+    return 1;
+}
+
 int ripSection(Rom* rom, ExtractionArguments* arguments) {
     ExtractionContext context = {
         rom,
@@ -439,7 +750,7 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 
     //
     // =====================================================================
-    //  COMPRESSED BRANCH: rle_konami, lzss, smwlz2
+    //  COMPRESSED BRANCH: rle_konami, lzss, lclz2
     // =====================================================================
     //
     if (strcmp(compressionType, "rle_konami") == 0 ||
