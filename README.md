@@ -22,6 +22,7 @@ b {1/2/3/4/5/6/7/8} (bitplane type, default = 2)
 p {1/2/4/8/16} {h/v} (pattern size and direction, default = 1 h)
 r {true/false} (tile deduplicator, default = true)
 k (clear tile deduplicator cache)
+f {} {} (compressed gfx finder start and end)
 s {} {} (section start and end)
 end
 ```
@@ -33,7 +34,7 @@ nesrip.exe filename
 
 ## Compression types
 
-* `raw`: Uncompressed graphics
+* `raw`: Uncompressed
 * `rle_konami`: RLE_Konami
 * `lzss`: LZSS
 * `lz2`: LZ2
