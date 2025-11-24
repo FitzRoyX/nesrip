@@ -240,10 +240,10 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 		case TWO_BPP_SNES:
 			data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
 			break;
-		case THREE_BPP_SNES:
-			unsigned int p0 = sectionData[y];
-			unsigned int p1 = sectionData[8 + y];
-	unsigned int p2 = sectionData[16 + y];
+		case THREE_BPP_SNES: //this may be a 3BPP variant smw and lttp only?
+			unsigned int p0 = sectionData[y * 2];
+			unsigned int p1 = sectionData[y * 2 + 1];
+			unsigned int p2 = sectionData[y * 1 + 16];
 			data  =  p0;
 			data |= (p1 << 8);
 			data |= (p2 << 16);
