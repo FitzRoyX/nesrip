@@ -11,7 +11,7 @@ typedef struct {
 
 Result* decompressRleKonami(const uint8_t* compressedData, size_t sectionSize);
 Result* decompressLzss(const uint8_t* compressedData, size_t sectionSize);
-Result* decompressSmwLz2(const uint8_t* compressedData, size_t sectionSize);
+Result* decompressLz2(const uint8_t* compressedData, size_t sectionSize);
 
 #endif
 

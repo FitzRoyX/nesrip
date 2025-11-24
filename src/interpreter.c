@@ -7,6 +7,7 @@
 #include "utils.h"
 #include "sha_2/sha-256.h"
 #include "interpreter.h"
+#include "finder.h" 
 
 extern char* deduplicator;
 int foundRom = false;

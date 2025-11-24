@@ -34,7 +34,9 @@ nesrip.exe filename
 ## Compression types
 
 * `raw`: Uncompressed graphics
-* `rle_konami`: RLE Konami
+* `rle_konami`: RLE_Konami
+* `lzss`: LZSS
+* `lz2`: LZ2
 
 ## Version History
 

@@ -4,6 +4,11 @@
 #include "rom.h"
 #include <stdbool.h>
 
+#define MAX_PATTERN_SIZE 16
+#define MAX_PALETTES 256
+#define MAX_COLOR_ROWS 16384
+#define MAX_FF_LOCATIONS 100000
+
 extern Rom rom;
 extern char* programName;
 extern char* outputFolder;
@@ -30,9 +35,6 @@ typedef struct {
 	int height;
 	unsigned char* tiles;
 } ColorizerSheet;
-
-#define MAX_PALETTES    256
-#define MAX_COLOR_ROWS  16384
 
 extern ColorizerPalette palettes[MAX_PALETTES];
 extern ColorizerSheet colorSheet;

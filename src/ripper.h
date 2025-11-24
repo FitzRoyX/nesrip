@@ -4,9 +4,20 @@
 #include "rom.h"
 #include "globals.h"
 
-#define MAX_PATTERN_SIZE 16
+typedef enum BitPlaneType {
+	ONE_BPP,
+	TWO_BPP,
+	TWO_BPP_SNES,
+	THREE_BPP_SNES,
+	FOUR_BPP_SNES,
+	FIVE_BPP,
+	SIX_BPP,
+	SEVEN_BPP,
+	EIGHT_BPP_SNES,
+	BPP_COUNT
+} BitplaneType;
 
-typedef struct {
+typedef struct ExtractionArguments {
 	//String arguments
 	char* compressionType;
 	char* bitplaneType;
@@ -20,9 +31,41 @@ typedef struct {
 	char* filenameOverload;
 } ExtractionArguments;
 
-int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments);
-int ripSection(Rom* rom, ExtractionArguments* arguments);
+typedef struct ExtractionContext {
+    Rom* rom;
+    ExtractionArguments* args;
+    int sectionStart;
+    int sectionEnd;
+    BitplaneType bitplaneType;
+    int patternSize;
+    int patternDirection;
+    int deduplicator;
+    int tileLength;
+    char* sheet;
+    int index;
+    int tx;
+    int ty;
+    int stx;
+    int sty;
+    int maxX;
+    int maxY;
+    unsigned int workingHash;
+} ExtractionContext;
+
+typedef struct Pattern {
+	unsigned char* data;
+	unsigned int hash;
+	struct Pattern *next;
+	struct Pattern *down;
+} Pattern;
+
+int getSectionDetails(Rom* rom, ExtractionContext* context);
+void incrementTilePos(ExtractionContext* context);
+int allocTilesheet(ExtractionContext* context, int tileCount);
+void processTile(ExtractionContext* context, unsigned char* sectionData, int (*callback)(ExtractionContext*, int, unsigned int));
+int writeLine(ExtractionContext* context, int y, unsigned int data);
 void initPatternChains();
 void cleanupPatternChains();
+int ripSection(Rom* rom, ExtractionArguments* arguments);
 
 #endif

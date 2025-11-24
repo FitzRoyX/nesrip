@@ -1256,14 +1256,15 @@ end
 
 //zelda3_usa.sfc
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
+r false
 b 4
 p 1 h
-c smwlz2
-s 40000 7ffff
+c lz2
+s c2f0d fffff //this end range isn't right, but it includes the term byte and gets output
 c raw
 s 80000 86fff
-c smwlz2
-s 87000 fffff
+b 3
+s 87000 8b7ff
 end
 
 
@@ -1272,15 +1273,31 @@ hash 0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b
 r false
 b 4
 p 1 h
-c smwlz2
-//s 40000 43fbf //GFX32 //16320 bytes, divisible by 32
-//s 43fc0 459f8 //GFX33 //6713 bytes, not divisible by 32
+c lz2
+s 40000 43fbf //GFX32 //16320 bytes, divisible by 32
+s 43fc0 459f8 //GFX33 //6713 bytes, not divisible by 32
+s 459f9 46230 //GFX00
+s 46231 46cba //GFX01
+s 46cbb 47554 //GFX02
+s 47555 47f88 //GFX03
+s 47f89 48971 //GFX04
+s 48972 49381 //GFX05
+//s 49382 49d23 //GFX06
+//s 49d24 4a66d //GFX07
+//s 4a66e 4afb1 //GFX08
+//s 4afb2 4ba2e //GFX09
+//s 4ba2f 4c3b4 //GFX0A
+//s 4c3b5 4cd7b //GFX0B
+//s 4cd7c 4d5ec //GFX0C
+//s 4d5ed 4dde4 //GFX0D
+//s 4dde5 4e700 //GFX0E
+//s 4e701 4ef41 //GFX0F
 end
 
 //gfx00_compressed.bin
 hash c9660c03f35a2bc810cb151401e9d5ada536577b391db46e3e29b7c003e7f2e0
 r false
 b 4
-c smwlz2
+c lz2
 s 60 7d5
 end
