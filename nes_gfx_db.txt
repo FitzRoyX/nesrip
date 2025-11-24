@@ -949,34 +949,34 @@ hash d41e28b1a33b3b6768e7c39c9fdfb1fda4b49940542d14085911fabd399e1ca9
 c rle_konami
 //s 9099 9251 //02 not gfx
 p 2 v
-s 10003 105ad //03
-s 105b0 107a0 //04
-s 107a3 1086b //13
-s 1086e 119cc //08
-s 1b07c 1b15b //15
-s 1b15e 1b261 //16
-s 119cf 119fb //09
-s 119fe 12002 //06
-p 1 h
+//s 10003 105ad //03
+//s 105b0 107a0 //04
+//s 107a3 1086b //13
+//s 1086e 119cc //08
+//s 1b07c 1b15b //15
+//s 1b15e 1b261 //16
+//s 119cf 119fb //09
+//s 119fe 12002 //06
+//p 1 h
 //s 12005 12345 //10 just a flipped version, redundant
-s 12007 12345 //0a
-s 12348 123e6 //0f
-s 123e9 1293f //11
-s 12942 12a2c //12
-s 12a2f 138b8 //01
-//s 14003 14a60 //05 has subs
+//s 12007 12345 //0a
+//s 12348 123e6 //0f
+//s 123e9 1293f //11
+//s 12942 12a2c //12
+//s 12a2f 138b8 //01
+f 14003 14a60 //05 has subs
 //s 14a63 1631a //0b has subs
 //s 15253 153df //07 has subs
-p 2 v
-s 1631d 164ff //19
-s 16502 16813 //1a
-p 1 h
-s 16816 16dde //14
+//p 2 v
+//s 1631d 164ff //19
+//s 16502 16813 //1a
+//p 1 h
+//s 16816 16dde //14
 //s 16de1 1730c //17 has subs
 //s 1730f 1735d //18 not gfx
 //s 18003 18cdb //0c has subs
 //s 18cde 19bd5 //0d has subs
-s 19bd8 1b079 //0e
+//s 19bd8 1b079 //0e
 end
 
 //Dark Lord (Japan).chr
@@ -1258,25 +1258,14 @@ end
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
 b 4
 p 1 h
-//c lzss
-//s 40000 7ffff
+c smwlz2
+s 40000 7ffff
 c raw
 s 80000 86fff
-//c lzss
-//s 87000 c3fff
+c smwlz2
+s 87000 fffff
 end
 
-//zelda3_usa.sfc
-hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
-b 4
-p 1 h
-//c lzss
-//s 40000 7ffff
-c raw
-s 80000 86fff
-//c lzss
-//s 87000 c3fff
-end
 
 //smw_usa.sfc
 hash 0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b
@@ -1284,58 +1273,8 @@ r false
 b 4
 p 1 h
 c smwlz2
-s 40000 43fbf //GFX32
-s 43fc0 459f8 //GFX33
-s 459f9 46230 //GFX00
-s 46231 46cba //GFX01
-//s 46cbb 47554 //GFX02
-//s 47555 47f88 //GFX03
-//s 47f89 48971 //GFX04
-//s 48972 49381 //GFX05
-//s 49382 49d23 //GFX06
-//s 49d24 4a66d //GFX07
-//s 4a66e 4afb1 //GFX08
-//s 4afb2 4ba2e //GFX09
-//s 4ba2f 4c3b4 //GFX0A
-//s 4c3b5 4cd7b //GFX0B
-//s 4cd7c 4d5ec //GFX0C
-//s 4d5ed 4dde4 //GFX0D
-//s 4dde5 4e700 //GFX0E
-//s 4e701 4ef41 //GFX0F
-//s 4ef42 4f7d2 //GFX10
-//s 4f7d3 4ffe0 //GFX11
-//s 4ffe1 58934 //GFX12
-//s 58935 5936f //GFX13
-//s 59370 59b15 //GFX14
-//s 59b16 5a3a1 //GFX15
-//s 5a3a2 5a9ec //GFX16
-//s 5a9ed 5b2ea //GFX17
-//s 5b2eb 5c321 //GFX18
-//s 5c322 5c3c9 //GFX19
-//s 5c3ca 5ccaf //GFX1A
-//s 5ccb0 5d4c7 //GFX1B
-//s 5d4c8 5dcd1 //GFX1C
-//s 5dcd2 5e6c7 //GFX1D
-//s 5e6c8 5ee8b //GFX1E
-//s 5ee8c 5f6f5 //GFX1F
-//s 5f6f6 5ffbf //GFX20
-//s 5ffc0 58929 //GFX21
-//s 5892a 59227 //GFX22
-//s 59228 59b44 //GFX23
-//s 59b45 5a414 //GFX24
-//s 5a415 5ae80 //GFX25
-//s 5ae81 5b7a6 //GFX26
-//s 5b7a7 5c0d8 //GFX27
-//s 5c0d9 5c70f //GFX28
-//s 5c710 5cbe5 //GFX29
-//s 5cbe6 5d169 //GFX2A
-//s 5d16a 5d83e //GFX2B
-//s 5d83f 5e08f //GFX2C
-//s 5e090 5e9bf //GFX2D
-//s 5e9c0 5f20e //GFX2E
-//s 5f20f 5f444 //GFX2F
-//s 5f445 5f889 //GFX30
-//s 5f88a 5fffb //GFX31
+//s 40000 43fbf //GFX32 //16320 bytes, divisible by 32
+//s 43fc0 459f8 //GFX33 //6713 bytes, not divisible by 32
 end
 
 //gfx00_compressed.bin
