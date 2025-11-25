@@ -266,10 +266,21 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 continue;
             }
 
-            // 4b. Frequency-of-change check 
+            // 4b. Check if there are exactly 128 tiles
+            int totalTiles = (decompressedData->size / context.tileLength);
+            int qualifierTileCount = (totalTiles < 4096);  // Ensure exactly 128 tiles
+
+            if (!qualifierTileCount) {
+                printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
+                free(decompressedData->output);
+                free(decompressedData);
+                free(sheet);
+                continue;
+            }
+
+            // 4c. Frequency-of-change check 
             double freq = computeFrequencyOfChange(sheet, width, height);
-            int qualifierTileMultiple = 1; // already true above
-            int qualifierFrequency = (freq >= 2.5 && freq <= 8.0);
+            int qualifierFrequency = (freq >= 2.0 && freq <= 8.0);
 
             // Hash the sheet data for checksum comparison
             uint32_t checksumHash = computeChecksum(sheet, width * height * 4); // Assume RGBA format (4 bytes per pixel)
@@ -281,8 +292,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 storeChecksum(checksumHash); // Store the hash if it is unique
             }
 
-            // 4c. If all three qualifiers are true, write PNG named start_end.png
-            if (qualifierTileMultiple && qualifierFrequency && qualifierChecksum) {
+            // 4d. If all three qualifiers are true, write PNG named start_end.png
+            if (qualifierTileCount && qualifierFrequency && qualifierChecksum) {
                 char filename[512];
 
 #ifdef _MSC_VER

@@ -132,15 +132,19 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 		context->bitplaneType = TWO_BPP;
 		context->tileLength = 16;
 	}
-	else if (strcmp(args->bitplaneType, "2snes") == 0) {
+	else if (strcmp(args->bitplaneType, "2_snes") == 0) {
 		context->bitplaneType = TWO_BPP_SNES;
 		context->tileLength = 16;
 	}
-	else if (strcmp(args->bitplaneType, "3") == 0) {
+	else if (strcmp(args->bitplaneType, "3_snes") == 0) {
 		context->bitplaneType = THREE_BPP_SNES;
 		context->tileLength = 24;
 	}
-	else if (strcmp(args->bitplaneType, "4") == 0) {
+	else if (strcmp(args->bitplaneType, "3_snes_mode7") == 0) {
+		context->bitplaneType = THREE_BPP_SNES_MODE7;
+		context->tileLength = 24;
+	}
+	else if (strcmp(args->bitplaneType, "4_snes") == 0) {
 		context->bitplaneType = FOUR_BPP_SNES;
 		context->tileLength = 32;
 	}
@@ -248,7 +252,23 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 			data |= (p1 << 8);
 			data |= (p2 << 16);
 			break;
-		case FOUR_BPP_SNES: {
+		case THREE_BPP_SNES_MODE7: // This is the 3BPP variant used in SMW Mode 7 graphics
+			// Each line of data is 3 bytes, each byte contains 8 pixels, 1-bit each.
+			// We need to read 3 bytes and construct 24 bits (8 pixels per byte).
+			// The bytes we need for this row of pixels:
+			unsigned int byte0 = sectionData[y * 3];	 // Byte 1: hgfedcba
+			unsigned int byte1 = sectionData[y * 3 + 1]; // Byte 2: HGFEDCBA
+			unsigned int byte2 = sectionData[y * 3 + 2]; // Byte 3: 76543210
+			// Reconstruct the 24-bit pixel row by shifting each byte:
+			// Assemble bits into a 24-bit value where each pixel's color is defined by 1 bit.
+			for (int i = 0; i < 8; i++) {
+				unsigned int pixel = ((byte0 >> (7 - i)) & 0x1) | 
+									 (((byte1 >> (7 - i)) & 0x1) << 1) | 
+									 (((byte2 >> (7 - i)) & 0x1) << 2);
+				data |= (pixel << (i * 3));  // Shift each pixel into its 3-bit position
+			}
+			break;
+		case FOUR_BPP_SNES:
 			unsigned int lowerNibble1 = sectionData[y * 2];
 			unsigned int lowerNibble2 = sectionData[y * 2 + 1];
 			unsigned int upperNibble1 = sectionData[y * 2 + 16];
@@ -256,7 +276,9 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 			data = (upperNibble1 << 8) | lowerNibble1;
 			data |= (upperNibble2 << 24) | (lowerNibble2 << 16);
 			break;
-		}
+		case EIGHT_BPP_SNES:
+			data = (sectionData[y] | (sectionData[y + 32] << 32));
+			break;
 		default:
 			break;
 	}
@@ -383,167 +405,167 @@ void cleanupPatternChains() {
 }
 
 int ripSection(Rom* rom, ExtractionArguments* arguments) {
-    ExtractionContext context = {
-        rom,
-        arguments
-    };
+	ExtractionContext context = {
+		rom,
+		arguments
+	};
 
-    printf("Ripping section %s to %s.\n",
-           context.args->sectionStartString,
-           context.args->sectionEndString);
+	printf("Ripping section %s to %s.\n",
+		   context.args->sectionStartString,
+		   context.args->sectionEndString);
 
-    if (!getSectionDetails(rom, &context))
-        return 0;
+	if (!getSectionDetails(rom, &context))
+		return 0;
 
-    int tileCount = 0;
-    unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
-    unsigned char* endPointer   = (unsigned char*)rom->data + context.sectionEnd;
+	int tileCount = 0;
+	unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
+	unsigned char* endPointer   = (unsigned char*)rom->data + context.sectionEnd;
 
-    const char* compressionType = context.args->compressionType;
+	const char* compressionType = context.args->compressionType;
 
-    //
-    // =====================================================================
-    //  COMPRESSED BRANCH
-    // =====================================================================
-    //
-    if (strcmp(compressionType, "rle_konami") == 0 ||
-        strcmp(compressionType, "lzss") == 0 ||
-        strcmp(compressionType, "lz2") == 0)
-    {
-        size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
-        Result* decompressedData = NULL;
+	//
+	// =====================================================================
+	//  COMPRESSED BRANCH
+	// =====================================================================
+	//
+	if (strcmp(compressionType, "rle_konami") == 0 ||
+		strcmp(compressionType, "lzss") == 0 ||
+		strcmp(compressionType, "lz2") == 0)
+	{
+		size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
+		Result* decompressedData = NULL;
 
-        // --- dispatch correct decompressor ---
-        if (strcmp(compressionType, "rle_konami") == 0) {
-            decompressedData = decompressRleKonami(sectionData, sectionSize);
-        } else if (strcmp(compressionType, "lzss") == 0) {
-            decompressedData = decompressLzss(sectionData, sectionSize);
-        } else if (strcmp(compressionType, "lz2") == 0) {
-            decompressedData = decompressLz2(sectionData, sectionSize);
-        }
+		// --- dispatch correct decompressor ---
+		if (strcmp(compressionType, "rle_konami") == 0) {
+			decompressedData = decompressRleKonami(sectionData, sectionSize);
+		} else if (strcmp(compressionType, "lzss") == 0) {
+			decompressedData = decompressLzss(sectionData, sectionSize);
+		} else if (strcmp(compressionType, "lz2") == 0) {
+			decompressedData = decompressLz2(sectionData, sectionSize);
+		}
 
-        if (!decompressedData) {
-            printf("Error: Failed to decompress the section.\n");
-            return 0;
-        }
+		if (!decompressedData) {
+			printf("Error: Failed to decompress the section.\n");
+			return 0;
+		}
 
-        // tile count based on REAL tile size
-        tileCount = decompressedData->size / context.tileLength;
-        if (decompressedData->size % context.tileLength != 0) {
-            printf("Warning: Decompressed data is not a multiple of %d bytes, "
-                   "truncating the extra bytes.\n",
-                   context.tileLength);
-        }
+		// tile count based on REAL tile size
+		tileCount = decompressedData->size / context.tileLength;
+		if (decompressedData->size % context.tileLength != 0) {
+			printf("Warning: Decompressed data is not a multiple of %d bytes, "
+				   "truncating the extra bytes.\n",
+				   context.tileLength);
+		}
 
-        if (allocTilesheet(&context, tileCount)) {
-            free(decompressedData->output);
-            free(decompressedData);
-            return 0;
-        }
+		if (allocTilesheet(&context, tileCount)) {
+			free(decompressedData->output);
+			free(decompressedData);
+			return 0;
+		}
 
-        if (context.sheet == NULL) {
-            free(decompressedData->output);
-            free(decompressedData);
-            return 0;
-        }
+		if (context.sheet == NULL) {
+			free(decompressedData->output);
+			free(decompressedData);
+			return 0;
+		}
 
-        // process tiles
-        unsigned char* decompressedPtr = decompressedData->output;
-        unsigned char* decompressedEnd = decompressedData->output + decompressedData->size;
+		// process tiles
+		unsigned char* decompressedPtr = decompressedData->output;
+		unsigned char* decompressedEnd = decompressedData->output + decompressedData->size;
 
-        while (decompressedPtr < decompressedEnd) {
-            if (context.deduplicator) {
-                context.workingHash = 0;
-                processTile(&context, decompressedPtr, &addToHash);
+		while (decompressedPtr < decompressedEnd) {
+			if (context.deduplicator) {
+				context.workingHash = 0;
+				processTile(&context, decompressedPtr, &addToHash);
 
-                if (!checkHasTileMatch(&context, decompressedPtr, context.workingHash))
-                    processTile(&context, decompressedPtr, &writeLine);
-                else
-                    drawDeduplicatedTile(&context);
-            } else {
-                processTile(&context, decompressedPtr, &writeLine);
-            }
+				if (!checkHasTileMatch(&context, decompressedPtr, context.workingHash))
+					processTile(&context, decompressedPtr, &writeLine);
+				else
+					drawDeduplicatedTile(&context);
+			} else {
+				processTile(&context, decompressedPtr, &writeLine);
+			}
 
-            incrementTilePos(&context);
-            decompressedPtr += context.tileLength;
-        }
+			incrementTilePos(&context);
+			decompressedPtr += context.tileLength;
+		}
 
-        free(decompressedData->output);
-        free(decompressedData);
-    }
+		free(decompressedData->output);
+		free(decompressedData);
+	}
 
-    //
-    // =====================================================================
-    //  RAW BRANCH
-    // =====================================================================
-    //
-    else if (strcmp(compressionType, "raw") == 0)
-    {
-        size_t sectionSize = (context.sectionEnd - context.sectionStart) + 1;
+	//
+	// =====================================================================
+	//  RAW BRANCH
+	// =====================================================================
+	//
+	else if (strcmp(compressionType, "raw") == 0)
+	{
+		size_t sectionSize = (context.sectionEnd - context.sectionStart) + 1;
 
-        if (sectionSize % context.tileLength != 0) {
-            printf("Warning: Targeted section has some extra bytes that cannot "
-                   "be used to make a full tile.\n Rounding down section end address.\n");
+		if (sectionSize % context.tileLength != 0) {
+			printf("Warning: Targeted section has some extra bytes that cannot "
+				   "be used to make a full tile.\n Rounding down section end address.\n");
 
-            context.sectionEnd -= (sectionSize % context.tileLength);
-            sectionSize = (context.sectionEnd - context.sectionStart) + 1;
-        }
+			context.sectionEnd -= (sectionSize % context.tileLength);
+			sectionSize = (context.sectionEnd - context.sectionStart) + 1;
+		}
 
-        tileCount = sectionSize / context.tileLength;
+		tileCount = sectionSize / context.tileLength;
 
-        if (allocTilesheet(&context, tileCount))
-            return 0;
+		if (allocTilesheet(&context, tileCount))
+			return 0;
 
-        if (context.sheet == NULL)
-            return 0;
+		if (context.sheet == NULL)
+			return 0;
 
-        while (sectionData <= endPointer - (context.tileLength - 1)) {
-            if (context.deduplicator) {
-                context.workingHash = 0;
-                processTile(&context, sectionData, &addToHash);
+		while (sectionData <= endPointer - (context.tileLength - 1)) {
+			if (context.deduplicator) {
+				context.workingHash = 0;
+				processTile(&context, sectionData, &addToHash);
 
-                if (!checkHasTileMatch(&context, sectionData, context.workingHash))
-                    processTile(&context, sectionData, &writeLine);
-                else
-                    drawDeduplicatedTile(&context);
-            } else {
-                processTile(&context, sectionData, &writeLine);
-            }
+				if (!checkHasTileMatch(&context, sectionData, context.workingHash))
+					processTile(&context, sectionData, &writeLine);
+				else
+					drawDeduplicatedTile(&context);
+			} else {
+				processTile(&context, sectionData, &writeLine);
+			}
 
-            incrementTilePos(&context);
-            sectionData += context.tileLength;
-        }
-    }
+			incrementTilePos(&context);
+			sectionData += context.tileLength;
+		}
+	}
 
-    //
-    // =====================================================================
-    //  UNKNOWN COMPRESSION
-    // =====================================================================
-    //
-    else {
-        printf("Error: Unknown compression type \"%s\".\n", compressionType);
-        return 0;
-    }
+	//
+	// =====================================================================
+	//  UNKNOWN COMPRESSION
+	// =====================================================================
+	//
+	else {
+		printf("Error: Unknown compression type \"%s\".\n", compressionType);
+		return 0;
+	}
 
-    //
-    // =====================================================================
-    //  FINAL OUTPUT + CLEANUP
-    // =====================================================================
-    //
-    colorSheetIndex += tileCount;
+	//
+	// =====================================================================
+	//  FINAL OUTPUT + CLEANUP
+	// =====================================================================
+	//
+	colorSheetIndex += tileCount;
 
-    appendSectionToOutput(context.sheet, 128, context.maxY + 1);
+	appendSectionToOutput(context.sheet, 128, context.maxY + 1);
 
-    free(context.sheet);
+	free(context.sheet);
 
-    // cleanup pattern chains if decompressed formats were used
-    if (strcmp(compressionType, "rle_konami") == 0 ||
-        strcmp(compressionType, "lzss") == 0 ||
-        strcmp(compressionType, "lz2") == 0)
-    {
-        cleanupPatternChains();
-        initPatternChains();
-    }
+	// cleanup pattern chains if decompressed formats were used
+	if (strcmp(compressionType, "rle_konami") == 0 ||
+		strcmp(compressionType, "lzss") == 0 ||
+		strcmp(compressionType, "lz2") == 0)
+	{
+		cleanupPatternChains();
+		initPatternChains();
+	}
 
-    return 1;
+	return 1;
 }

@@ -1258,14 +1258,14 @@ end
 //zelda3_usa.sfc
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
 r false
-b 3
+b 3_snes
 p 1 h
 c lz2
 s c2f0d fffff //this end range isn't right, but it includes the term byte and gets output
 c raw
-b 4
+b 4_snes
 s 80000 86fff
-b 3
+b 3_snes
 s 87000 8b7ff
 end
 
@@ -1273,34 +1273,73 @@ end
 //smw_usa.sfc
 hash 0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b
 r false
-b 4
+b 4_snes
 p 1 h
 c lz2
-s 40000 43fbf //GFX32 //working
-b 3
-s 43fc0 459f8 //GFX33 //working
-s 459f9 46230 //GFX00 //working
-s 46231 46cba //GFX01 //working
-s 46cbb 47555 //GFX02 //working
-//f 47556 48000 //GFX03 //garbled
-//s 47f89 48971 //GFX04 //garbled
-//s 48972 49381 //GFX05 //early exit condition
-//s 49382 49d23 //GFX06
-//s 49d24 4a66d //GFX07
-//s 4a66e 4afb1 //GFX08
-//s 4afb2 4ba2e //GFX09
-//s 4ba2f 4c3b4 //GFX0A
-//s 4c3b5 4cd7b //GFX0B
-//s 4cd7c 4d5ec //GFX0C
-//s 4d5ed 4dde4 //GFX0D
-//s 4dde5 4e700 //GFX0E
-//s 4e701 4ef41 //GFX0F
+s 40000 43fbf //GFX32
+b 3_snes
+s 43fc0 459f8 //GFX33
+s 459f9 46230 //GFX00
+s 46231 46cba //GFX01
+s 46cbb 47551 //GFX02
+s 47552 47f7c //GFX03
+s 47f7d 48962 //GFX04
+s 48963 4936b //GFX05
+s 4936c 49d0f //GFX06
+s 49d10 4a656 //GFX07
+s 4a657 4afa0 //GFX08
+s 4afa1 4ba14 //GFX09
+s 4ba15 4c39b //GFX0A
+s 4c39c 4cd62 //GFX0B
+s 4cd63 4d5d1 //GFX0C
+s 4d5d2 4ddca //GFX0D
+s 4ddcb 4e6e4 //GFX0E
+s 4e6e5 4ef1d //GFX0F
+s 4ef1e 4f7ae //GFX10
+s 4f7af 4ffbc //GFX11
+s 4ffbd 509ff //GFX12
+s 50910 51347 //GFX13
+s 51348 51ae7 //GFX14
+s 51ae8 52373 //GFX15
+s 52374 529b3 //GFX16
+s 529b4 532ac //GFX17 //0xff precedes term byte 0xff
+s 532ad 53be3 //GFX18 //0xff precedes term byte 0xff
+s 53be4 5437f //GFX19 //0xff precedes term byte 0xff
+s 54380 54c65 //GFX1A
+s 54c66 5547d //GFX1B
+s 5547e 55c87 //GFX1C
+s 55c88 5667e //GFX1D //0xff precedes term byte 0xff
+s 5667f 56e42 //GFX1E
+s 56e43 576a0 //GFX1F
+s 576a1 57f64 //GFX20
+s 57f65 588cc //GFX21
+s 588cd 591c9 //GFX22
+s 591ca 59ae4 //GFX23
+s 59ae5 5a3b4 //GFX24
+s 5a3b5 5ae20 //GFX25 //0xff precedes term byte 0xff
+s 5ae21 5b743 //GFX26
+b 3_snes_mode7
+s 5b744 5c06b //GFX27 //3bpp mode7, not quite right
+b 2_snes
+s 5c06c 5c6a2 //GFX28
+s 5c6a3 5cb7a //GFX29 //0xff precedes term byte 0xff
+s 5cb7b 5d0ef //GFX2A //0xff precedes term byte 0xff
+s 5d0ef 5d7b8 //GFX2B
+b 3_snes
+s 5d7b9 5e005 //GFX2C
+s 5e006 5e935 //GFX2D
+s 5e936 5f184 //GFX2E
+b 2_snes
+s 5f185 5f3ba //GFX2F
+b 3_snes
+s 5f3bb 5f7ff //GFX30
+s 5f800 5fd0c //GFX31 //whats the term byte?
 end
 
 //gfx00_compressed.bin
 hash c9660c03f35a2bc810cb151401e9d5ada536577b391db46e3e29b7c003e7f2e0
 r false
-b 4
+b 4_snes
 c lz2
 s 60 7d5
 end
