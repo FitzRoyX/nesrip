@@ -1324,7 +1324,7 @@ b 2_snes
 s 5c06c 5c6a2 //GFX28
 s 5c6a3 5cb7a //GFX29 //0xff precedes term byte 0xff
 s 5cb7b 5d0ef //GFX2A //0xff precedes term byte 0xff
-s 5d0ef 5d7b8 //GFX2B
+s 5d0f0 5d7b8 //GFX2B
 b 3_snes
 s 5d7b9 5e005 //GFX2C
 s 5e006 5e935 //GFX2D
@@ -1336,10 +1336,3 @@ s 5f3bb 5f7ff //GFX30
 s 5f800 5fd0c //GFX31 //whats the term byte?
 end
 
-//gfx00_compressed.bin
-hash c9660c03f35a2bc810cb151401e9d5ada536577b391db46e3e29b7c003e7f2e0
-r false
-b 4_snes
-c lz2
-s 60 7d5
-end
