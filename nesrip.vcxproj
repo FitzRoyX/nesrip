@@ -140,6 +140,7 @@
     <ClCompile Include="src\rom.c" />
     <ClCompile Include="src\sha_2\sha-256.c" />
     <ClCompile Include="src\utils.c" />
+    <ClCompile Include="src\finder.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\decompressor.h" />
@@ -151,10 +152,12 @@
     <ClInclude Include="src\sha_2\sha-256.h" />
     <ClInclude Include="src\stb\stb_image_write.h" />
     <ClInclude Include="src\utils.h" />
+    <ClCompile Include="src\finder.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="colorizer\085e5397.txt" />
     <Text Include="colorizer\4a4cf596.txt" />
+    <Text Include="colorizer\66871d66.txt" />
     <Text Include="colorizer\a35e8463.txt" />
     <Text Include="colorizer\e8684004.txt" />
     <Text Include="colorizer\e9f4c9d1.txt" />
