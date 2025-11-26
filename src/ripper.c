@@ -248,20 +248,19 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 		case TWO_BPP_SNES:
 			data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
 			break;
-		case THREE_BPP_SNES_LTTP: {
+		case THREE_BPP_SNES_LTTP:
 			unsigned int p0 = sectionData[y];
 			unsigned int p1 = sectionData[y + 8];
 			unsigned int p2 = sectionData[y + 16];
-			data  = p0;
+			data = p0;
 			data |= (p1 << 8);
 			data |= (p2 << 16);
 			break;
-}
 		case THREE_BPP_SNES:
 			unsigned int p0 = sectionData[y * 2];
 			unsigned int p1 = sectionData[y * 2 + 1];
 			unsigned int p2 = sectionData[y + 16];
-			data  =  p0;
+			data = p0;
 			data |= (p1 << 8);
 			data |= (p2 << 16);
 			break;
@@ -269,9 +268,35 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 			unsigned int byte0 = sectionData[y * 3];
 			unsigned int byte1 = sectionData[y * 3 + 1];
 			unsigned int byte2 = sectionData[y * 3 + 2];
-			data  = byte0;
-			data |= (byte1 << 8);
-			data |= (byte2 << 16);
+			unsigned int val = byte2;
+			val |= (byte1 << 8);
+			val |= (byte0 << 16);
+			data |= (val & 0x000004) >> 2;
+			data |= (val & 0x000020) >> 4;
+			data |= (val & 0x000100) >> 6;
+			data |= (val & 0x000800) >> 8;
+			data |= (val & 0x004000) >> 10;
+			data |= (val & 0x020000) >> 12;
+			data |= (val & 0x100000) >> 14;
+			data |= (val & 0x800000) >> 16;
+			data = data << 8;
+			data |= (val & 0x000002) >> 1;
+			data |= (val & 0x000010) >> 3;
+			data |= (val & 0x000080) >> 5;
+			data |= (val & 0x000400) >> 7;
+			data |= (val & 0x002000) >> 9;
+			data |= (val & 0x010000) >> 11;
+			data |= (val & 0x080000) >> 13;
+			data |= (val & 0x400000) >> 15;
+			data = data << 8;
+			data |= val & 0x000001;
+			data |= (val & 0x000008) >> 2;
+			data |= (val & 0x000040) >> 4;
+			data |= (val & 0x000200) >> 6;
+			data |= (val & 0x001000) >> 8;
+			data |= (val & 0x008000) >> 10;
+			data |= (val & 0x040000) >> 12;
+			data |= (val & 0x200000) >> 14;
 			break;
 		case FOUR_BPP_SNES:
 			unsigned int lowerNibble1 = sectionData[y * 2];
