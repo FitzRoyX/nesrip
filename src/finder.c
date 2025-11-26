@@ -179,7 +179,9 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
     // This command is meant for compressed data.
     if (strcmp(compressionType, "rle_konami") != 0 &&
         strcmp(compressionType, "lzss") != 0 &&
-        strcmp(compressionType, "lz2") != 0) {
+        strcmp(compressionType, "lz1") != 0 &&
+        strcmp(compressionType, "lz2") != 0 &&
+        strcmp(compressionType, "lz3") != 0) {
         printf("Error: f command is only supported for compressed types.\n");
         return 0;
     }
@@ -232,8 +234,12 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 decompressedData = decompressRleKonami(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lzss") == 0) {
                 decompressedData = decompressLzss(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "lz1") == 0) {
+                decompressedData = decompressLz1(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lz2") == 0) {
                 decompressedData = decompressLz2(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "lz3") == 0) {
+                decompressedData = decompressLz3(sectionData, sectionSize);
             }
 
             if (!decompressedData || !decompressedData->output || decompressedData->size == 0) {
@@ -268,7 +274,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
 
             // 4b. Check if there are exactly 64 or 128 tiles
             int totalTiles = (decompressedData->size / context.tileLength);
-            int qualifierTileCount = (totalTiles == 64 || totalTiles == 128 );
+            int qualifierTileCount = (totalTiles == 32 || totalTiles == 48 || totalTiles == 64 || totalTiles == 72 || totalTiles == 96 || totalTiles == 128 || totalTiles == 256 || totalTiles == 384 || totalTiles == 512);
 
             if (!qualifierTileCount) {
                 printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
@@ -327,5 +333,4 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
     free(checksumHashes);
 
     return 1;
-
 }

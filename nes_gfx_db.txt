@@ -1260,13 +1260,15 @@ hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
 r false
 b 3_snes
 p 1 h
-c lz2
-s c2f0d fffff //this end range isn't right, but it includes the term byte and gets output
+c lz3
+s c1f0d fffff //this end range isn't right, but it includes the term byte and gets output
 c raw
 b 4_snes
-s 80000 86fff
+s 80000 86fff //uncompressed link sprites
 b 3_snes
-s 87000 8b7ff
+c lz3
+//s 87000 8b7ff
+//s 8b7d0 8c7ff
 end
 
 

@@ -140,6 +140,10 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 		context->bitplaneType = THREE_BPP_SNES;
 		context->tileLength = 24;
 	}
+	else if (strcmp(args->bitplaneType, "3_snes_lttp") == 0) {
+		context->bitplaneType = THREE_BPP_SNES_LTTP;
+		context->tileLength = 24;
+	}
 	else if (strcmp(args->bitplaneType, "3_snes_mode7") == 0) {
 		context->bitplaneType = THREE_BPP_SNES_MODE7;
 		context->tileLength = 24;
@@ -244,6 +248,15 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 		case TWO_BPP_SNES:
 			data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
 			break;
+		case THREE_BPP_SNES_LTTP: {
+			unsigned int p0 = sectionData[y];
+			unsigned int p1 = sectionData[y + 8];
+			unsigned int p2 = sectionData[y + 16];
+			data  = p0;
+			data |= (p1 << 8);
+			data |= (p2 << 16);
+			break;
+}
 		case THREE_BPP_SNES:
 			unsigned int p0 = sectionData[y * 2];
 			unsigned int p1 = sectionData[y * 2 + 1];
@@ -422,7 +435,9 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 	//
 	if (strcmp(compressionType, "rle_konami") == 0 ||
 		strcmp(compressionType, "lzss") == 0 ||
-		strcmp(compressionType, "lz2") == 0)
+		strcmp(compressionType, "lz1") == 0 ||
+		strcmp(compressionType, "lz2") == 0 ||
+		strcmp(compressionType, "lz3") == 0)
 	{
 		size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
 		Result* decompressedData = NULL;
@@ -432,8 +447,12 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 			decompressedData = decompressRleKonami(sectionData, sectionSize);
 		} else if (strcmp(compressionType, "lzss") == 0) {
 			decompressedData = decompressLzss(sectionData, sectionSize);
+		} else if (strcmp(compressionType, "lz1") == 0) {
+			decompressedData = decompressLz1(sectionData, sectionSize);
 		} else if (strcmp(compressionType, "lz2") == 0) {
 			decompressedData = decompressLz2(sectionData, sectionSize);
+		} else if (strcmp(compressionType, "lz3") == 0) {
+			decompressedData = decompressLz3(sectionData, sectionSize);
 		}
 
 		if (!decompressedData) {
@@ -553,7 +572,9 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 	// cleanup pattern chains if decompressed formats were used
 	if (strcmp(compressionType, "rle_konami") == 0 ||
 		strcmp(compressionType, "lzss") == 0 ||
-		strcmp(compressionType, "lz2") == 0)
+		strcmp(compressionType, "lz1") == 0 ||
+		strcmp(compressionType, "lz2") == 0 ||
+		strcmp(compressionType, "lz3") == 0)
 	{
 		cleanupPatternChains();
 		initPatternChains();

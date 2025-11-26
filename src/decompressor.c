@@ -54,6 +54,105 @@ Result* decompressLzss(const uint8_t* compressedData, size_t sectionSize) {
     return result;
 }
 
+Result* decompressLz1(const uint8_t* compressedData, size_t sectionSize) {
+    const uint8_t* data = compressedData;
+    const uint8_t* end  = compressedData + sectionSize;
+
+    Result* result = malloc(sizeof(Result));
+    if (!result) {
+        printf("Error: Memory allocation failed.\n");
+        return NULL;
+    }
+
+    // LZ1 usually expands heavily → allocate generously.
+    size_t capacity = sectionSize * 8;
+    if (capacity < 0x2000) {
+        capacity = 0x2000;
+    }
+
+    result->output = malloc(capacity);
+    if (!result->output) {
+        printf("Error: Memory allocation failed.\n");
+        free(result);
+        return NULL;
+    }
+
+    result->size = 0;
+
+    while (data < end) {
+        uint8_t flags = *data++;
+
+        // Process 8 operations MSB → LSB.
+        for (int bit = 7; bit >= 0; bit--) {
+
+            // If we ran out of input, just return what we have.
+            if (data >= end) {
+                return result;
+            }
+
+            // Grow output buffer if needed.
+            if (result->size >= capacity - 32) {
+                size_t newCapacity = capacity * 2;
+                uint8_t* newBuf = realloc(result->output, newCapacity);
+                if (!newBuf) {
+                    printf("Error: Memory reallocation failed.\n");
+                    free(result->output);
+                    free(result);
+                    return NULL;
+                }
+                result->output = newBuf;
+                capacity = newCapacity;
+            }
+
+            if (flags & (1 << bit)) {
+                //
+                // Literal byte
+                //
+                result->output[result->size++] = *data++;
+            } else {
+                //
+                // Backreference: 2 bytes
+                //
+                if (end - data < 2) {
+                    printf("Error: Unexpected end of data in LZ1 backreference.\n");
+                    return result;
+                }
+
+                uint8_t b1 = *data++;
+                uint8_t b2 = *data++;
+
+                // 12-bit offset
+                uint32_t offset = ((uint32_t)(b2 & 0xF0) << 4) | b1;
+
+                // Length = low nibble + 3
+                uint32_t length = (b2 & 0x0F) + 3;
+
+                if (offset >= result->size) {
+                    printf("Error: Invalid LZ1 offset (%u >= %zu).\n",
+                           offset, result->size);
+                    return result;
+                }
+
+                //
+                // Overlap-safe copy (like your LZ2 implementation)
+                //
+                for (uint32_t i = 0; i < length; i++) {
+                    result->output[result->size] =
+                        result->output[result->size - offset - 1];
+                    result->size++;
+                }
+            }
+
+            // If we consumed all input, exit early.
+            if (data >= end) {
+                return result;
+            }
+        }
+    }
+
+    return result;
+}
+
 Result* decompressLz2(const uint8_t* compressedData, size_t sectionSize) {
     const uint8_t* data = compressedData;
     const uint8_t* end  = compressedData + sectionSize;
@@ -180,5 +279,112 @@ Result* decompressLz2(const uint8_t* compressedData, size_t sectionSize) {
             }
         }
     }
+    return result;
+}
+
+Result* decompressLz3(const uint8_t* compressedData, size_t sectionSize) {
+    const uint8_t* data = compressedData;
+    const uint8_t* end  = compressedData + sectionSize;
+
+    Result* result = malloc(sizeof(Result));
+    if (!result) {
+        printf("Error: Memory allocation failed.\n");
+        return NULL;
+    }
+
+    // LZ3 output expands quite a bit, so allocate generously.
+    size_t capacity = sectionSize * 8;
+    if (capacity < 0x2000) {
+        capacity = 0x2000;
+    }
+
+    result->output = malloc(capacity);
+    if (!result->output) {
+        printf("Error: Memory allocation failed.\n");
+        free(result);
+        return NULL;
+    }
+
+    result->size = 0;
+
+    while (data < end) {
+        uint8_t flags = *data++;
+
+        // Process 8 operations MSB → LSB.
+        for (int bit = 7; bit >= 0; bit--) {
+            if (data >= end) {
+                // Ran out of input data
+                return result;
+            }
+
+            if (result->size >= capacity - 20) {
+                // Grow buffer if needed
+                size_t newCapacity = capacity * 2;
+                uint8_t* newBuf = realloc(result->output, newCapacity);
+                if (!newBuf) {
+                    printf("Error: Memory reallocation failed.\n");
+                    free(result->output);
+                    free(result);
+                    return NULL;
+                }
+                result->output = newBuf;
+                capacity = newCapacity;
+            }
+
+            if (flags & (1 << bit)) {
+                //
+                // Literal byte
+                //
+                result->output[result->size++] = *data++;
+            } else {
+                //
+                // Backreference: two bytes
+                //
+                if (end - data < 2) {
+                    printf("Error: Unexpected end of data in LZ3 backreference.\n");
+                    return result;
+                }
+
+                uint8_t b1 = *data++;
+                uint8_t b2 = *data++;
+
+                // Zelda 3 LZ3 format:
+                //
+                // offset = (b2 & 0xF0) << 4  | b1
+                // length = (b2 & 0x0F) + 3
+                //
+                uint32_t offset = ((uint32_t)(b2 & 0xF0) << 4) | b1;
+                uint32_t length = (b2 & 0x0F) + 3;
+
+                if (offset >= result->size) {
+                    printf("Error: Invalid LZ3 offset (%u >= %zu).\n",
+                           offset, result->size);
+                    return result;
+                }
+
+                // Overlap-safe copy (same style as LZ2)
+                for (uint32_t i = 0; i < length; i++) {
+                    result->output[result->size] =
+                        result->output[result->size - offset - 1];
+                    result->size++;
+                }
+            }
+
+            // Safety: if output is huge, reallocate more
+            if (result->size >= capacity - 32) {
+                size_t newCapacity = capacity * 2;
+                uint8_t* newBuf = realloc(result->output, newCapacity);
+                if (!newBuf) {
+                    printf("Error: Memory reallocation failed.\n");
+                    free(result->output);
+                    free(result);
+                    return NULL;
+                }
+                result->output = newBuf;
+                capacity = newCapacity;
+            }
+        }
+    }
+
     return result;
 }
