@@ -244,29 +244,21 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 		case TWO_BPP_SNES:
 			data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
 			break;
-		case THREE_BPP_SNES: //this may be a 3BPP variant smw and lttp only?
+		case THREE_BPP_SNES:
 			unsigned int p0 = sectionData[y * 2];
 			unsigned int p1 = sectionData[y * 2 + 1];
-			unsigned int p2 = sectionData[y * 1 + 16];
+			unsigned int p2 = sectionData[y + 16];
 			data  =  p0;
 			data |= (p1 << 8);
 			data |= (p2 << 16);
 			break;
-		case THREE_BPP_SNES_MODE7: // This is the 3BPP variant used in SMW Mode 7 graphics
-			// Each line of data is 3 bytes, each byte contains 8 pixels, 1-bit each.
-			// We need to read 3 bytes and construct 24 bits (8 pixels per byte).
-			// The bytes we need for this row of pixels:
-			unsigned int byte0 = sectionData[y * 3];	 // Byte 1: hgfedcba
-			unsigned int byte1 = sectionData[y * 3 + 1]; // Byte 2: HGFEDCBA
-			unsigned int byte2 = sectionData[y * 3 + 2]; // Byte 3: 76543210
-			// Reconstruct the 24-bit pixel row by shifting each byte:
-			// Assemble bits into a 24-bit value where each pixel's color is defined by 1 bit.
-			for (int i = 0; i < 8; i++) {
-				unsigned int pixel = ((byte0 >> (7 - i)) & 0x1) | 
-									 (((byte1 >> (7 - i)) & 0x1) << 1) | 
-									 (((byte2 >> (7 - i)) & 0x1) << 2);
-				data |= (pixel << (i * 3));  // Shift each pixel into its 3-bit position
-			}
+		case THREE_BPP_SNES_MODE7:
+			unsigned int byte0 = sectionData[y * 3];
+			unsigned int byte1 = sectionData[y * 3 + 1];
+			unsigned int byte2 = sectionData[y * 3 + 2];
+			data  = byte0;
+			data |= (byte1 << 8);
+			data |= (byte2 << 16);
 			break;
 		case FOUR_BPP_SNES:
 			unsigned int lowerNibble1 = sectionData[y * 2];
