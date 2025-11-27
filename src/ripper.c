@@ -238,6 +238,10 @@ int addToHash(ExtractionContext* context, int y, unsigned int data) {
 
 unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData, int y) {
 	unsigned int data = 0;
+	unsigned int p0 = 0;
+	unsigned int p1 = 0;
+	unsigned int p2 = 0;
+	unsigned int p3 = 0;
 	switch (context->bitplaneType) {
 		case ONE_BPP:
 			data = sectionData[y];
@@ -249,62 +253,62 @@ unsigned int getLineData(ExtractionContext* context, unsigned char* sectionData,
 			data = (sectionData[y * 2] | (sectionData[y * 2 + 1] << 8));
 			break;
 		case THREE_BPP_SNES_LTTP:
-			unsigned int p0 = sectionData[y];
-			unsigned int p1 = sectionData[y + 8];
-			unsigned int p2 = sectionData[y + 16];
+			p0 = sectionData[y];
+			p1 = sectionData[y + 8];
+			p2 = sectionData[y + 16];
 			data = p0;
 			data |= (p1 << 8);
 			data |= (p2 << 16);
 			break;
 		case THREE_BPP_SNES:
-			unsigned int p0 = sectionData[y * 2];
-			unsigned int p1 = sectionData[y * 2 + 1];
-			unsigned int p2 = sectionData[y + 16];
+			p0 = sectionData[y * 2];
+			p1 = sectionData[y * 2 + 1];
+			p2 = sectionData[y + 16];
 			data = p0;
 			data |= (p1 << 8);
 			data |= (p2 << 16);
 			break;
 		case THREE_BPP_SNES_MODE7:
-			unsigned int byte0 = sectionData[y * 3];
-			unsigned int byte1 = sectionData[y * 3 + 1];
-			unsigned int byte2 = sectionData[y * 3 + 2];
-			unsigned int val = byte2;
-			val |= (byte1 << 8);
-			val |= (byte0 << 16);
-			data |= (val & 0x000004) >> 2;
-			data |= (val & 0x000020) >> 4;
-			data |= (val & 0x000100) >> 6;
-			data |= (val & 0x000800) >> 8;
-			data |= (val & 0x004000) >> 10;
-			data |= (val & 0x020000) >> 12;
-			data |= (val & 0x100000) >> 14;
-			data |= (val & 0x800000) >> 16;
-			data = data << 8;
-			data |= (val & 0x000002) >> 1;
-			data |= (val & 0x000010) >> 3;
-			data |= (val & 0x000080) >> 5;
-			data |= (val & 0x000400) >> 7;
-			data |= (val & 0x002000) >> 9;
-			data |= (val & 0x010000) >> 11;
-			data |= (val & 0x080000) >> 13;
-			data |= (val & 0x400000) >> 15;
-			data = data << 8;
-			data |= val & 0x000001;
-			data |= (val & 0x000008) >> 2;
-			data |= (val & 0x000040) >> 4;
-			data |= (val & 0x000200) >> 6;
-			data |= (val & 0x001000) >> 8;
-			data |= (val & 0x008000) >> 10;
-			data |= (val & 0x040000) >> 12;
-			data |= (val & 0x200000) >> 14;
-			break;
+            unsigned int p0 = sectionData[y * 3];
+            unsigned int p1 = sectionData[y * 3 + 1];
+            unsigned int p2 = sectionData[y * 3 + 2];
+            unsigned int val = p2;
+            val |= (p1 << 8);
+            val |= (p0 << 16);
+            data |= (val & 0x000004) >> 2;
+            data |= (val & 0x000020) >> 4;
+            data |= (val & 0x000100) >> 6;
+            data |= (val & 0x000800) >> 8;
+            data |= (val & 0x004000) >> 10;
+            data |= (val & 0x020000) >> 12;
+            data |= (val & 0x100000) >> 14;
+            data |= (val & 0x800000) >> 16;
+            data = data << 8;
+            data |= (val & 0x000002) >> 1;
+            data |= (val & 0x000010) >> 3;
+            data |= (val & 0x000080) >> 5;
+            data |= (val & 0x000400) >> 7;
+            data |= (val & 0x002000) >> 9;
+            data |= (val & 0x010000) >> 11;
+            data |= (val & 0x080000) >> 13;
+            data |= (val & 0x400000) >> 15;
+            data = data << 8;
+            data |= val & 0x000001;
+            data |= (val & 0x000008) >> 2;
+            data |= (val & 0x000040) >> 4;
+            data |= (val & 0x000200) >> 6;
+            data |= (val & 0x001000) >> 8;
+            data |= (val & 0x008000) >> 10;
+            data |= (val & 0x040000) >> 12;
+            data |= (val & 0x200000) >> 14;
+            break;
 		case FOUR_BPP_SNES:
-			unsigned int lowerNibble1 = sectionData[y * 2];
-			unsigned int lowerNibble2 = sectionData[y * 2 + 1];
-			unsigned int upperNibble1 = sectionData[y * 2 + 16];
-			unsigned int upperNibble2 = sectionData[y * 2 + 17];
-			data = (upperNibble1 << 8) | lowerNibble1;
-			data |= (upperNibble2 << 24) | (lowerNibble2 << 16);
+			p0 = sectionData[y * 2];
+			p1 = sectionData[y * 2 + 1];
+			p2 = sectionData[y * 2 + 16];
+			p3 = sectionData[y * 2 + 17];
+			data = (p2 << 8) | p0;
+			data |= (p3 << 24) | (p1 << 16);
 			break;
 		case EIGHT_BPP_SNES:
 			data = (sectionData[y] | (sectionData[y + 32] << 32));
