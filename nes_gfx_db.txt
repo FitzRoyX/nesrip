@@ -1255,16 +1255,15 @@ end
 //BEGINNING OF SNES DB
 //###################################################################
 
-
 //zelda3_usa.sfc
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
-c raw
 b 4_snes
-s 80000 86fff //uncompressed link sprites
+c raw
+s 80000 86fff //link sprites
 b 3_snes
-s 87000 8b7ff //uncompressed misc sprites
+s 87000 8b7ff //misc sprites
 c lz2le
-s 8b800 8bce1 //start of dungeon tiles
+s 8b800 8bce1 //dungeon tiles
 s 8bce2 8c15e
 s 8c15f 8c674
 s 8c675 8cb83
@@ -1451,9 +1450,11 @@ s c1dd2 c203e
 s c203f c24ec
 s c24ed c27b9
 b 2_snes
-c lz2
-//f c27c0 c3fff
-//resume at c40a0-fffff
+s c27ba c2ede
+s c2edf c2f0c
+s c2f0d c351e
+s c3520 c3952
+s c3953 c3fb4
 end
 
 
@@ -1523,4 +1524,3 @@ b 3_snes
 s 5f3bb 5f7ff //GFX30
 s 5f800 5fd0c //GFX31 //whats the term byte?
 end
-
