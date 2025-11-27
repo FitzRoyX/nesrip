@@ -307,13 +307,13 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
 
 #ifdef _MSC_VER
                 _snprintf_s(filename, sizeof(filename), _TRUNCATE,
-                            "%s%X_%X.png", outputFolder, start, endAddr);
+                            "%s%x_%x.png", outputFolder, start, endAddr);
 #else
                 snprintf(filename, sizeof(filename),
-                         "%s%X_%X.png", outputFolder, start, endAddr);
+                         "%s%x_%x.png", outputFolder, start, endAddr);
 #endif
 
-                printf("  f: candidate %X-%X, freq=%.2f, checksum match, writing \"%s\".\n",
+                printf("  f: candidate %x-%x, freq=%.2f, checksum match, writing \"%s\".\n",
                        start, endAddr, freq, filename);
 
                 if (!stbi_write_png(filename, width, height, 4, sheet, width * 4)) {
