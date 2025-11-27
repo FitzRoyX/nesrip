@@ -181,6 +181,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
         strcmp(compressionType, "lzss") != 0 &&
         strcmp(compressionType, "lz1") != 0 &&
         strcmp(compressionType, "lz2") != 0 &&
+        strcmp(compressionType, "lz2le") != 0 &&
         strcmp(compressionType, "lz3") != 0) {
         printf("Error: f command is only supported for compressed types.\n");
         return 0;
@@ -238,6 +239,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 decompressedData = decompressLz1(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lz2") == 0) {
                 decompressedData = decompressLz2(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "lz2le") == 0) {
+                decompressedData = decompressLz2LE(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lz3") == 0) {
                 decompressedData = decompressLz3(sectionData, sectionSize);
             }
