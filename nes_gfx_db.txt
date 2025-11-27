@@ -1255,21 +1255,207 @@ end
 //BEGINNING OF SNES DB
 //###################################################################
 
+
 //zelda3_usa.sfc
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
-r false
-b 3_snes
-p 1 h
-c lz3
-s c1f0d fffff //this end range isn't right, but it includes the term byte and gets output
 c raw
 b 4_snes
 s 80000 86fff //uncompressed link sprites
 b 3_snes
-c lz3
-//s 87000 8b7ff
-//s 8b7d0 8c7ff
+s 87000 8b7ff //uncompressed misc sprites
+c lz2le
+s 8b800 8bce1 //start of dungeon tiles
+s 8bce2 8c15e
+s 8c15f 8c674
+s 8c675 8cb83
+s 8cb84 8cf4b
+s 8cf4c 8d2cd
+s 8d2ce 8d725
+s 8d726 8d9ce
+s 8d9cf 8dec3
+s 8dec4 8e392
+s 8e393 8e892
+s 8e893 8ed7c
+s 8ed7d 8f282
+s 8f283 8f745
+s 8f746 8fc20
+s 8fc21 8fff1 //0xff precedes term byte 0xff
+s 8fff2 90497
+s 90498 90a0d
+s 90a0e 90f2f
+s 90f30 91325 
+s 91326 91803 
+s 91804 91d5a 
+s 91d5b 92271 
+s 92272 926fd 
+s 926fe 92a76 
+s 92a77 92d82 
+s 92d83 93166 
+s 93167 9351c 
+s 9351d 9383f 
+s 93840 93d52 
+s 93d54 941c7 
+s 941c9 9473c 
+s 9473d 94c85 
+s 94c86 95197 
+s 95198 956b0 
+s 956b1 95b69 
+s 95b6a 960e9 
+s 960ea 966bc 
+s 966bd 96b50 
+s 96b51 97134 
+s 97135 976c4 
+s 976c5 97c70 
+s 97c71 98128 
+s 98129 98692 
+s 98693 98bab
+s 98bad 99116
+s 99117 99608 
+s 99609 99b20
+s 99b21 9a073 
+s 9a074 9a618 
+s 9a619 9ab2a 
+s 9ab2b 9b00a 
+s 9b00c 9b4f4
+s 9b4f5 9b9e9
+s 9b9eb 9bebd 
+s 9bebf 9c3cd
+s 9c3ce 9c816 
+s 9c817 9cb67 
+s 9cb68 9cfb4 
+s 9cfb5 9d45f 
+s 9d460 9d8c0 
+s 9d8c2 9dd79 
+s 9dd7a 9e264 
+s 9e266 9e7ad
+s 9e7af 9ece4
+s 9ece5 9f244
+s 9f245 9f6ef
+s 9f6f0 9fc2f
+s 9fc30 a00e7
+s a00e9 a063a
+s a063b a0a7b
+s a0a7c a0f29
+s a0f2a a1345
+s a1346 a17ec
+s a17ed a1cc1
+s a1cc2 a2172
+s a2173 a261c
+s a261d a2b5c
+s a2b5d a3082
+s a3083 a34bb
+s a34bd a394d
+s a394e a3e0d
+s a3e0e a4290
+s a4291 a47b9
+s a47ba a4ce3
+s a4ce4 a51da
+s a51db a56bb
+s a56bd a5b76
+s a5b77 a5ed0
+s a5ed1 a62ab
+s a62ac a6753
+s a6754 a6bad
+s a6bae a6f4d
+s a6f4e a7308
+s a7309 a76f3
+s a76f4 a7a54
+s a7a55 a7f8a
+s a7ffc a85d3
+s a85d4 a8ab5
+s a8ab6 a8fbd
+s a8fbe a93f7
+s a93f8 a99a5
+s a99a6 a9f31
+s a9f32 aa3d5
+s aa3d7 aa8f0
+s aa8f1 aaec5
+s aaec6 ab417
+s ab418 ab946
+s ab947 abecf
+s abed0 ac448
+s ac449 ac974
+s ac975 ace7b
+s ace7c ad393
+s ad394 ad8ab
+s ad8ac addbf
+s addc0 ae34b
+s ae34c ae8e7
+s ae8e8 aee30
+s aee31 af3a5
+s af3a6 af92c
+s af92d afeb9
+s afeba b02fe
+s b02ff b08df
+s b08e0 b0e40
+s b0e41 b12de
+s b12df b1882
+s b1883 b1ccf
+s b1cd0 b226d
+s b2275 b2786
+s b2787 b2a05
+s b2a06 b2e9c
+s b2e9d b33fe
+s b33ff b387d
+s b387e b3e6a
+s b3e6b b413c
+s b413d b4618
+s b4619 b4bba
+s b4bbb b50f0
+s b50f1 b5640
+s b5641 b5959
+s b595a b5d98
+s b5d99 b6277
+s b6278 b675e
+s b6760 b6d24
+s b6d25 b720e
+s b720f b76b6
+s b76b7 b7a5e
+s b7a5f b7d28
+s b7d29 b81cc
+s b81cd b868c
+s b868d b8b61
+s b8b62 b8fd3
+s b8fd5 b9526
+s b9527 b994a
+s b994b b9ea6
+s b9ea7 ba30d
+s ba30e ba804
+s ba805 bacf7
+s bacf8 bb2a0
+s bb2a2 bb7f8
+s bb7f9 bbc92
+s bbc93 bc236
+s bc237 bc78d
+s bc78e bcd54
+s bcd55 bd2bb
+s bd2bc bd82e
+s bd82f bdceb
+s bdcec be1cb
+s be36b be841
+s be842 beb37
+s beb38 bed57
+s bed58 bf06b
+s bf06c bf4fc
+s bf4fd bfa38
+s bfa39 bff85
+s bff86 c045b
+s c045c c09a0
+s c09a1 c0d63
+s c0d64 c119c
+s c119d c160f
+s c1610 c1856
+s c1857 c1b23
+s c1b24 c1dd1
+s c1dd2 c203e
+s c203f c24ec
+s c24ed c27b9
+b 2_snes
+c lz2
+//f c27c0 c3fff
+//resume at c40a0-fffff
 end
+
 
 
 //smw_usa.sfc
