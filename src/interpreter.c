@@ -209,7 +209,6 @@ int handleSectionCommand(void) {
 	return 0;
 }
 
-/* NEW: f command handler */
 int handleFindCompressedCommand(void) {
 	char* sectionStart, * sectionEnd;
 	PULL_TOKEN("FindCompressed", sectionStart);
