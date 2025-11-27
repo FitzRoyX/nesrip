@@ -1455,6 +1455,9 @@ s c2edf c2f0c
 s c2f0d c351e
 s c3520 c3952
 s c3953 c3fb4
+c raw
+b 8_snes_mode7
+s c4000 c7fff //map tiles
 end
 
 
