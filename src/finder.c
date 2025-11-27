@@ -248,8 +248,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             }
             int totalTiles = (decompressedData->size / context.tileLength);
 			//tailor below lines to your snes game's graphic block sizes if known
-			int qualifierTileCount = ((totalTiles % 16) == 0);
-            //int qualifierTileCount = (/*totalTiles == 32 || totalTiles == 48 || */totalTiles == 64/* || totalTiles == 72 || totalTiles == 96 || totalTiles == 128 || totalTiles == 256 || totalTiles == 384 || totalTiles == 512*/);
+			//int qualifierTileCount = ((totalTiles % 16) == 0);
+            int qualifierTileCount = (/*totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || */ totalTiles == 128 /*|| totalTiles == 256 || totalTiles == 512*/);
             if (!qualifierTileCount) {
                 printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
                 free(decompressedData->output);
@@ -258,15 +258,15 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 continue;
             }
             double freq = computeFrequencyOfChange(sheet, width, height);
-            int qualifierFrequency = (freq >= 1.0 && freq <= 8.0);
+            int qualifierFrequency = (freq >= 2.0 && freq <= 8.0);
             uint32_t checksumHash = computeChecksum(sheet, width * height * 4);
             int qualifierChecksum = !hasChecksum(checksumHash);
             if (qualifierChecksum) {
                 storeChecksum(checksumHash);
             }
 			//manipulate the line below to reduce qualifiers if you feel they interfere
-			//checksum in particular is problematic
-            if (qualifierTileCount && qualifierFrequency && qualifierChecksum) {
+			//qualifierChecksum in particular is troublesome
+            if (qualifierTileCount && qualifierFrequency/* && qualifierChecksum*/) {
                 char filename[512];
 #ifdef _MSC_VER
                 _snprintf_s(filename, sizeof(filename), _TRUNCATE,
@@ -288,10 +288,10 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             free(sheet);
             free(decompressedData->output);
             free(decompressedData);
-            if (advanced)
-                break;
+            if (advanced) //comment this out if you don't want to increment past candidates
+                break; //comment this out if you don't want to increment past candidates
         }
-        if (!advanced)
+        if (!advanced) //comment this out if you don't want to increment past candidates
             start++;
     }
     printf("f: Finished scan. %d matching compressed graphic range(s) saved.\n", totalMatches);
