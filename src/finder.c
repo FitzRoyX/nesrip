@@ -166,36 +166,21 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
         rom,
         arguments
     };
-
     printf("Finding compressed graphics between %s and %s.\n",
            context.args->sectionStartString,
            context.args->sectionEndString);
-
     if (!getSectionDetails(rom, &context))
         return 0;
-
     const char* compressionType = context.args->compressionType;
-
-    // This command is meant for compressed data.
-    if (strcmp(compressionType, "rle_konami") != 0 &&
-        strcmp(compressionType, "lzss") != 0 &&
-        strcmp(compressionType, "lz1") != 0 &&
-        strcmp(compressionType, "lz2") != 0 &&
-        strcmp(compressionType, "lz2le") != 0 &&
-        strcmp(compressionType, "lz3") != 0) {
+    if (strcmp(compressionType, "raw") == 0) {
         printf("Error: f command is only supported for compressed types.\n");
         return 0;
     }
-
     int originalStart = context.sectionStart;
     int originalEnd   = context.sectionEnd;
-
-    // 1. Collect all 0xFF byte locations in the region
     int ffLocations[MAX_FF_LOCATIONS];
     int ffCount = 0;
-
     unsigned char* romBytes = (unsigned char*)rom->data;
-
     for (int addr = originalStart; addr <= originalEnd; ++addr) {
         if (ffCount >= MAX_FF_LOCATIONS)
             break;
@@ -203,34 +188,27 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             ffLocations[ffCount++] = addr;
         }
     }
-
     if (ffCount == 0) {
         printf("f: No 0xFF bytes found in specified range.\n");
         return 0;
     }
-
     if (ffCount >= MAX_FF_LOCATIONS) {
         printf("f: Warning, hit 0xFF location limit (%d); some candidates may be skipped.\n",
                MAX_FF_LOCATIONS);
     }
-
     int totalMatches = 0;
-
-    // 2–4. Slide the start byte through the region, combining with all 0xFF endpoints
-    for (int start = originalStart; start <= originalEnd; ++start) {
+    int start = originalStart;
+    while (start <= originalEnd) {
+		int advanced = 0; //comment this out if you don't want to increment past candidates
         for (int i = 0; i < ffCount; ++i) {
             int endAddr = ffLocations[i];
             if (endAddr < start)
                 continue;
             if (endAddr > originalEnd)
                 break;
-
             size_t sectionSize = (size_t)(endAddr - start + 1);
             unsigned char* sectionData = romBytes + start;
-
-            // 4a. Decompress this candidate range
             Result* decompressedData = NULL;
-
             if (strcmp(compressionType, "rle_konami") == 0) {
                 decompressedData = decompressRleKonami(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lzss") == 0) {
@@ -244,7 +222,6 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             } else if (strcmp(compressionType, "lz3") == 0) {
                 decompressedData = decompressLz3(sectionData, sectionSize);
             }
-
             if (!decompressedData || !decompressedData->output || decompressedData->size == 0) {
                 if (decompressedData) {
                     free(decompressedData->output);
@@ -252,18 +229,13 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 }
                 continue;
             }
-
-            // 4a. Tile multiple check (no partial tiles)
             if (decompressedData->size % context.tileLength != 0) {
                 free(decompressedData->output);
                 free(decompressedData);
                 continue;
             }
-
-            // Build tilesheet for this decompressed candidate
             unsigned char* sheet = NULL;
             int width = 0, height = 0;
-
             if (!buildTilesheetFromDecompressed(&context,
                                                 decompressedData->output,
                                                 decompressedData->size,
@@ -274,11 +246,10 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 free(decompressedData);
                 continue;
             }
-
-            // 4b. Check if there are exactly 64 or 128 tiles
             int totalTiles = (decompressedData->size / context.tileLength);
-            int qualifierTileCount = (totalTiles == 32 || totalTiles == 48 || totalTiles == 64 || totalTiles == 72 || totalTiles == 96 || totalTiles == 128 || totalTiles == 256 || totalTiles == 384 || totalTiles == 512);
-
+			//tailor below lines to your snes game's graphic block sizes if known
+			int qualifierTileCount = ((totalTiles % 16) == 0);
+            //int qualifierTileCount = (/*totalTiles == 32 || totalTiles == 48 || */totalTiles == 64/* || totalTiles == 72 || totalTiles == 96 || totalTiles == 128 || totalTiles == 256 || totalTiles == 384 || totalTiles == 512*/);
             if (!qualifierTileCount) {
                 printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
                 free(decompressedData->output);
@@ -286,25 +257,17 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 free(sheet);
                 continue;
             }
-
-            // 4c. Frequency-of-change check 
             double freq = computeFrequencyOfChange(sheet, width, height);
             int qualifierFrequency = (freq >= 1.0 && freq <= 8.0);
-
-            // Hash the sheet data for checksum comparison
-            uint32_t checksumHash = computeChecksum(sheet, width * height * 4); // Assume RGBA format (4 bytes per pixel)
-
-            // Set the qualifierChecksum flag based on hash uniqueness
+            uint32_t checksumHash = computeChecksum(sheet, width * height * 4);
             int qualifierChecksum = !hasChecksum(checksumHash);
-
             if (qualifierChecksum) {
-                storeChecksum(checksumHash); // Store the hash if it is unique
+                storeChecksum(checksumHash);
             }
-
-            // 4d. If all three qualifiers are true, write PNG named start_end.png
+			//manipulate the line below to reduce qualifiers if you feel they interfere
+			//checksum in particular is problematic
             if (qualifierTileCount && qualifierFrequency && qualifierChecksum) {
                 char filename[512];
-
 #ifdef _MSC_VER
                 _snprintf_s(filename, sizeof(filename), _TRUNCATE,
                             "%s%x_%x.png", outputFolder, start, endAddr);
@@ -312,28 +275,26 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 snprintf(filename, sizeof(filename),
                          "%s%x_%x.png", outputFolder, start, endAddr);
 #endif
-
                 printf("  f: candidate %x-%x, freq=%.2f, checksum match, writing \"%s\".\n",
                        start, endAddr, freq, filename);
-
                 if (!stbi_write_png(filename, width, height, 4, sheet, width * 4)) {
                     printf("  Error: Failed to write \"%s\".\n", filename);
                 } else {
                     ++totalMatches;
+                    start = endAddr + 1; //comment this out if you don't want to increment past candidates
+                    advanced = 1; //comment this out if you don't want to increment past candidates
                 }
             }
-
             free(sheet);
             free(decompressedData->output);
             free(decompressedData);
+            if (advanced)
+                break;
         }
+        if (!advanced)
+            start++;
     }
-
-    printf("f: Finished scan. %d matching compressed graphic range(s) saved.\n",
-           totalMatches);
-
-    // Free the checksum hashes array
+    printf("f: Finished scan. %d matching compressed graphic range(s) saved.\n", totalMatches);
     free(checksumHashes);
-
     return 1;
 }
