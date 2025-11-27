@@ -1,6 +1,7 @@
 #ifndef RIPPER_H
 #define RIPPER_H
 
+#include <stdint.h>
 #include "rom.h"
 #include "globals.h"
 
@@ -15,6 +16,7 @@ typedef enum BitPlaneType {
 	SIX_BPP,
 	SEVEN_BPP,
 	EIGHT_BPP_SNES,
+	EIGHT_BPP_SNES_MODE7,
 	BPP_COUNT
 } BitplaneType;
 
@@ -63,8 +65,8 @@ typedef struct Pattern {
 int getSectionDetails(Rom* rom, ExtractionContext* context);
 void incrementTilePos(ExtractionContext* context);
 int allocTilesheet(ExtractionContext* context, int tileCount);
-void processTile(ExtractionContext* context, unsigned char* sectionData, int (*callback)(ExtractionContext*, int, unsigned int));
-int writeLine(ExtractionContext* context, int y, unsigned int data);
+void processTile(ExtractionContext* context, unsigned char* sectionData, int (*callback)(ExtractionContext*, int, uint64_t));
+int writeLine(ExtractionContext* context, int y, uint64_t data);
 void initPatternChains();
 void cleanupPatternChains();
 int ripSection(Rom* rom, ExtractionArguments* arguments);
