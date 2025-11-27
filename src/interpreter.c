@@ -169,7 +169,6 @@ int handleHashCommand(char *hashString) {
 		printf("\"  is too small.\n");
 		return 0;
 	}
-	toUpperCase(token);
 	if (strcmp(hashString, token) == 0) {
 		printf("Matched hash!\n");
 		foundRom = true;
@@ -267,7 +266,7 @@ void interpretDatabase(void) {
 	char temp[4] = ""; // Temporary buffer for each hex value
 	size_t dataSize = sizeof(hash) / sizeof(hash[0]);
 	for (size_t i = 0; i < dataSize; i++) {
-		sprintf_s(temp, sizeof(temp), "%02X", hash[i]);
+		sprintf_s(temp, sizeof(temp), "%02x", hash[i]);
 #ifdef C99
 		strcat(hashString, temp);
 #else
