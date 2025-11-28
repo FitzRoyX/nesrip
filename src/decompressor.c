@@ -510,3 +510,182 @@ Result* decompressLz3(const uint8_t* compressedData, size_t sectionSize) {
     }
     return result;
 }
+
+Result* decompressRleSmet(const uint8_t* compressedData, size_t sectionSize) {
+    const uint8_t* data = compressedData;
+    const uint8_t* end  = compressedData + sectionSize;
+
+    Result* result = malloc(sizeof(Result));
+    if (!result) {
+        printf("Error: Memory allocation failed.\n");
+        return NULL;
+    }
+
+    // SMET can expand a lot, so allocate generously.
+    size_t capacity = sectionSize * 8;
+    if (capacity < 0x4000) {
+        capacity = 0x4000;
+    }
+
+    result->output = malloc(capacity);
+    if (!result->output) {
+        printf("Error: Memory allocation failed.\n");
+        free(result);
+        return NULL;
+    }
+
+    result->size = 0;
+
+    while (data < end) {
+
+        uint8_t header = *data++;
+
+        if (header == 0xFF) {
+            // End marker
+            break;
+        }
+
+        uint8_t opcode;
+        uint32_t length;
+
+        if (header < 0xE0) {
+            // SHORT HEADER (1 byte)
+            opcode = header >> 5;       // top 3 bits
+            length = (header & 0x1F) + 1;
+        } else {
+            // EXTENDED HEADER (2 bytes)
+            if (data >= end) {
+                printf("Error: Unexpected end of data in extended header.\n");
+                break;
+            }
+            uint8_t lo = *data++;
+
+            opcode = (header - 0xE0) >> 2; // 0–7
+            length = ((header & 0x03) << 8) | lo;
+            length += 1;
+        }
+
+        // Make sure output buffer is large enough.
+        if (result->size + length + 32 > capacity) {
+            size_t newCapacity = capacity * 2;
+            while (result->size + length + 32 > newCapacity) {
+                newCapacity *= 2;
+            }
+            uint8_t* newBuf = realloc(result->output, newCapacity);
+            if (!newBuf) {
+                printf("Error: Memory reallocation failed.\n");
+                free(result->output);
+                free(result);
+                return NULL;
+            }
+            result->output = newBuf;
+            capacity = newCapacity;
+        }
+
+        switch (opcode) {
+
+            case 0: { // DIRECT COPY
+                if ((size_t)(end - data) < length) {
+                    printf("Warning: Direct copy truncated.\n");
+                    length = (uint32_t)(end - data);
+                }
+                memcpy(result->output + result->size, data, length);
+                data += length;
+                result->size += length;
+                break;
+            }
+
+            case 1: { // BYTE FILL
+                if (data >= end) {
+                    printf("Error: Unexpected end in byte fill.\n");
+                    return result;
+                }
+                uint8_t value = *data++;
+                memset(result->output + result->size, value, length);
+                result->size += length;
+                break;
+            }
+
+            case 2: { // WORD FILL  (repeat 2-byte word)
+                if (end - data < 2) {
+                    printf("Error: Unexpected end in word fill.\n");
+                    return result;
+                }
+                uint8_t b1 = *data++;
+                uint8_t b2 = *data++;
+                for (uint32_t i = 0; i < length; i++) {
+                    result->output[result->size++] = (i & 1) ? b2 : b1;
+                }
+                break;
+            }
+
+            case 3: { // INCREMENTING FILL
+                if (data >= end) {
+                    printf("Error: Unexpected end in increment fill.\n");
+                    return result;
+                }
+                uint8_t value = *data++;
+                for (uint32_t i = 0; i < length; i++) {
+                    result->output[result->size++] = value + i;
+                }
+                break;
+            }
+
+            case 4: // ABSOLUTE COPY
+            case 5: { // ABSOLUTE COPY + XOR
+                if (end - data < 2) {
+                    printf("Error: Unexpected end in absolute copy.\n");
+                    return result;
+                }
+                uint16_t addr = ((uint16_t)data[0] << 8) | data[1];
+                data += 2;
+
+                if (addr + length > result->size) {
+                    printf("Error: Absolute copy out of range.\n");
+                    return result;
+                }
+
+                int doXor = (opcode == 5);
+
+                for (uint32_t i = 0; i < length; i++) {
+                    uint8_t v = result->output[addr + i];
+                    result->output[result->size++] = doXor ? (v ^ 0xFF) : v;
+                }
+                break;
+            }
+
+            case 6: // MINUS COPY (negative offset)
+            case 7: { // MINUS COPY + XOR
+                if (end - data < 2) {
+                    printf("Error: Unexpected end in minus copy.\n");
+                    return result;
+                }
+                uint16_t offset = ((uint16_t)data[0] << 8) | data[1];
+                data += 2;
+
+                // SMET uses "minus": source index = current_size - offset - 1
+                if (offset >= result->size) {
+                    printf("Error: Minus copy offset too large.\n");
+                    return result;
+                }
+
+                uint32_t src = result->size - offset - 1;
+                int doXor = (opcode == 7);
+
+                // Must be overlap-safe.
+                for (uint32_t i = 0; i < length; i++) {
+                    uint8_t v = result->output[src + i];
+                    result->output[result->size++] = doXor ? (v ^ 0xFF) : v;
+                }
+                break;
+            }
+
+            default:
+                printf("Error: Unknown SMET opcode %u.\n", opcode);
+                return result;
+        }
+    }
+
+    return result;
+}
+
