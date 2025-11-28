@@ -453,8 +453,8 @@ uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int
 		case FOUR_BPP_SNES:
 			return  (uint64_t)sectionData[y * 2 + 0] // p0
 				 | ((uint64_t)sectionData[y * 2 + 16] << 8) // p2
-				 | ((uint64_t)sectionData[y * 2 + 1]  << 16) // p1
-				 | ((uint64_t)sectionData[y * 2 + 17] << 24); // p3
+				 | ((uint64_t)sectionData[y * 2 + 1]  << 16)// p1
+				 | ((uint64_t)sectionData[y * 2 + 17] << 24);// p3
 		case EIGHT_BPP_SNES_MODE7:
 			return ((uint64_t)sectionData[y * 8 + 0] << 56)
 				 | ((uint64_t)sectionData[y * 8 + 1] << 48)
@@ -472,7 +472,6 @@ uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int
 	}
 }
 
-
 void processTile(ExtractionContext* context, unsigned char* sectionData, int (*callback)(ExtractionContext*, int, uint64_t)) {
 	for (int y = 0; y < 8; y++)
 		if (callback(context, y, getLineData(context, sectionData, y)))
@@ -480,13 +479,13 @@ void processTile(ExtractionContext* context, unsigned char* sectionData, int (*c
 }
 
 int isTileMatch(ExtractionContext* context, unsigned char* tileDataA, unsigned char* tileDataB) {
-    for (int y = 0; y < 8; y++) {
-        uint64_t lineA = getLineData(context, tileDataA, y);
-        uint64_t lineB = getLineData(context, tileDataB, y);
-        if (lineA != lineB)
-            return 0;
-    }
-    return 1;
+	for (int y = 0; y < 8; y++) {
+		uint64_t lineA = getLineData(context, tileDataA, y);
+		uint64_t lineB = getLineData(context, tileDataB, y);
+		if (lineA != lineB)
+			return 0;
+	}
+	return 1;
 }
 
 int checkHasTileMatch(ExtractionContext* context, unsigned char* tileData, unsigned int hash) {
