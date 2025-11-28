@@ -186,7 +186,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
     int totalMatches = 0;
     int start = originalStart;
     while (start <= originalEnd) {
-		int advanced = 0; //comment this out if you don't want to increment past candidates
+		//int advanced = 0; //comment this out if you don't want to increment past candidates
         for (int i = 0; i < ffCount; ++i) {
             int endAddr = ffLocations[i];
             if (endAddr < start)
@@ -198,6 +198,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             Result* decompressedData = NULL;
             if (strcmp(compressionType, "rle_konami") == 0) {
                 decompressedData = decompressRleKonami(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "rle_smet") == 0) {
+                decompressedData = decompressRleSmet(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lzss") == 0) {
                 decompressedData = decompressLzss(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lz1") == 0) {
@@ -235,8 +237,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             }
             int totalTiles = (decompressedData->size / context.tileLength);
 			//tailor below lines to your snes game's graphic block sizes if known
-			int qualifierTileCount = totalTiles; //comment this out if using below line
-            //int qualifierTileCount = (/*totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || */ totalTiles == 128 /*|| totalTiles == 256 || totalTiles == 512*/);
+			//int qualifierTileCount = totalTiles; //comment this out if using below line
+            int qualifierTileCount = (totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || totalTiles == 128 || totalTiles == 256 || totalTiles == 512);
             if (!qualifierTileCount) {
                 printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
                 free(decompressedData->output);
@@ -268,17 +270,17 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                     printf("  Error: Failed to write \"%s\".\n", filename);
                 } else {
                     ++totalMatches;
-                    start = endAddr + 1; //comment this out if you don't want to increment past candidates
-                    advanced = 1; //comment this out if you don't want to increment past candidates
+                    //start = endAddr + 1; //comment this out if you don't want to increment past candidates
+                    //advanced = 1; //comment this out if you don't want to increment past candidates
                 }
             }
             free(sheet);
             free(decompressedData->output);
             free(decompressedData);
-            if (advanced) //comment this out if you don't want to increment past candidates
-                break; //comment this out if you don't want to increment past candidates
+            //if (advanced) //comment this out if you don't want to increment past candidates
+                //break; //comment this out if you don't want to increment past candidates
         }
-        if (!advanced) //comment this out if you don't want to increment past candidates
+        //if (!advanced) //comment this out if you don't want to increment past candidates
             start++;
     }
     printf("f: Finished scan. %d matching compressed graphic range(s) saved.\n", totalMatches);
