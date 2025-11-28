@@ -1235,21 +1235,6 @@ s 52700 5334f
 s 55000 55fef
 end
 
-//gd1_sec_proper.bin
-hash 3f6063d9bd77825d4c3b554cfa36f050ee938534f3a659b0a65c7072889eddfc
-c rle_konami
-p 1 h
-s 0 e89
-end
-
-//gd1_sec_proper2.bin
-hash 1051b6c1b85cdb6c621c5c9ac90da629974968c93d76322eb7dfe2f2dc67ad8f
-c rle_konami
-p 1 h
-s 3 e8c
-end
-
-
 
 //###################################################################
 //BEGINNING OF SNES DB
