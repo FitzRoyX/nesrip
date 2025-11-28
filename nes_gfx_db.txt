@@ -1513,3 +1513,39 @@ b 3_snes
 s 5f3bb 5f7ff //GFX30
 s 5f800 5fd0c //GFX31 //correct term byte?
 end
+
+
+//Super Metroid (U).sfc
+hash 12b77c4bc9c1832cee8881244659065ee1d84c70c3d29e6eaf92e6798cc2ca72
+b 4_snes
+//s 0 2ffee //compressed?
+//s 2ffef 38563 //compressed?
+ s 38564 3c963 //raw 4bpp
+// s 3c964 3ffff //compressed?
+// s 40000 47fff //compressed
+ s 48000 497ff //raw 4bpp
+//c rle_smet
+// f 6fff0 77fef //compressed
+c raw
+ s 70000 75bff //raw 4bpp gfx
+//c rle_smet
+// s 78000 a3fff //compressed
+c raw
+ s a4000 a5fff //raw 4bpp gfx
+//c rle_smet
+// f a6000 d01ff //compressed
+c raw
+ s d0200 d31ff //raw 4bpp gfx
+b 2_snes
+ s d3200 d41ff //raw 2bpp gfx
+b 4_snes
+ s d4200 d93ff //raw 4bpp gfx
+ s de000 fffff //raw 4bpp gfx
+ s 12207d 12387c //raw 4bpp gfx
+ s 153279 153878 //raw 4bpp gfx
+ s 158000 16ddff //raw 4bpp gfx
+ s 170000 18ffff //raw 4bpp gfx
+ s 1b0000 1b5fff //raw 4bpp gfx
+ s 1b8000 1c7fff //raw 4bpp gfx
+//f 0 2fffff //this is the full range of rom
+end
