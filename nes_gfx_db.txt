@@ -1255,7 +1255,8 @@ end
 //BEGINNING OF SNES DB
 //###################################################################
 
-//zelda3_usa.sfc
+
+//Legend of Zelda, The - A Link to the Past (U).sfc
 hash 66871d66be19ad2c34c927d6b14cd8eb6fc3181965b6e517cb361f7316009cfb
 b 4_snes
 c raw
@@ -1462,7 +1463,7 @@ end
 
 
 
-//smw_usa.sfc
+//Super Mario World (U).sfc
 hash 0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b
 r false
 b 4_snes
@@ -1525,5 +1526,5 @@ b 2_snes
 s 5f185 5f3ba //GFX2F
 b 3_snes
 s 5f3bb 5f7ff //GFX30
-s 5f800 5fd0c //GFX31 //whats the term byte?
+s 5f800 5fd0c //GFX31 //correct term byte?
 end
