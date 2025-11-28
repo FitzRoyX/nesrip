@@ -9,7 +9,7 @@
 Result* decompressRleKonami(const uint8_t* compressedData, size_t sectionSize) {
     const uint8_t* data = compressedData;
     Result* result = malloc(sizeof(Result));
-    if (!result || !(result->output = malloc(sectionSize * 2 * sizeof(uint8_t)))) {
+    if (!result || !(result->output = malloc(sectionSize * 2))) {
         printf("Error: Memory allocation failed.\n");
         free(result);
         return NULL;
@@ -19,10 +19,11 @@ Result* decompressRleKonami(const uint8_t* compressedData, size_t sectionSize) {
         uint8_t byte = *data++;
         if (byte <= 0x80) {
             uint8_t repeat_byte = *data++;
+            memset(result->output + result->size, repeat_byte, byte);
             result->size += byte;
-            memset(result->output + result->size - byte, repeat_byte, byte);
         } else {
-            for (int i = 0; i < byte - 0x80; i++) {
+            int count = byte - 0x80;
+            while (count--) {
                 result->output[result->size++] = *data++;
             }
         }
@@ -569,3 +570,4 @@ Result* decompressLz3(const uint8_t* compressedData, size_t sectionSize) {
 
     return result;
 }
+
