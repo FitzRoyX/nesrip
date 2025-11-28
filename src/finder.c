@@ -62,21 +62,16 @@ uint32_t hashBytes(const unsigned char* data, int size) {
 double computeFrequencyOfChange(const unsigned char* sheet, int width, int height) {
     int runCount = 0;
     int totalRunLength = 0;
-
     int pixels = width * height;
-
     for (int i = 4; i < pixels * 4; i += 4) {
         int same =
             sheet[i] == sheet[i - 4] &&
             sheet[i + 1] == sheet[i - 3] &&
             sheet[i + 2] == sheet[i - 2];
-
         if (!same)
             runCount++;
     }
-
     if (runCount == 0) return 0.0;
-
     return (double)pixels / (double)runCount;
 }
 
@@ -94,37 +89,29 @@ int buildTilesheetFromDecompressed(
 {
     if (!baseContext || !decompressedData || decompressedSize == 0)
         return 0;
-
     if (decompressedSize % baseContext->tileLength != 0)
         return 0;
-
     int tileCount = (int)(decompressedSize / baseContext->tileLength);
     if (tileCount <= 0)
         return 0;
-
     ExtractionContext ctx = *baseContext;
     ctx.sheet = NULL;
     ctx.index = 0;
     ctx.tx = ctx.ty = 0;
     ctx.stx = ctx.sty = 0;
     ctx.maxX = ctx.maxY = 0;
-
     if (allocTilesheet(&ctx, tileCount))
         return 0;
-
     unsigned char* ptr = decompressedData;
     unsigned char* end = decompressedData + decompressedSize;
-
     while (ptr < end) {
         processTile(&ctx, ptr, &writeLine);
         incrementTilePos(&ctx);
         ptr += ctx.tileLength;
     }
-
     *outSheet = (unsigned char*)ctx.sheet;
     *outWidth = 128;
     *outHeight = ctx.maxY + 1;
-
     return 1;
 }
 
@@ -248,8 +235,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             }
             int totalTiles = (decompressedData->size / context.tileLength);
 			//tailor below lines to your snes game's graphic block sizes if known
-			//int qualifierTileCount = ((totalTiles % 16) == 0);
-            int qualifierTileCount = (/*totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || */ totalTiles == 128 /*|| totalTiles == 256 || totalTiles == 512*/);
+			int qualifierTileCount = totalTiles; //comment this out if using below line
+            //int qualifierTileCount = (/*totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || */ totalTiles == 128 /*|| totalTiles == 256 || totalTiles == 512*/);
             if (!qualifierTileCount) {
                 printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
                 free(decompressedData->output);
@@ -264,8 +251,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             if (qualifierChecksum) {
                 storeChecksum(checksumHash);
             }
-			//manipulate the line below to reduce qualifiers if you feel they interfere
-			//qualifierChecksum in particular is troublesome
+			//comment out qualifiers if you feel they interfere.
+			//qualifierChecksum in particular is troublesome when 0xFF precedes term byte
             if (qualifierTileCount && qualifierFrequency/* && qualifierChecksum*/) {
                 char filename[512];
 #ifdef _MSC_VER
