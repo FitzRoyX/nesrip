@@ -626,8 +626,6 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 		// --- dispatch correct decompressor ---
 		if (strcmp(compressionType, "rle_konami") == 0) {
 			decompressedData = decompressRleKonami(sectionData, sectionSize);
-		} else if (strcmp(compressionType, "rle_smet") == 0) {
-			decompressedData = decompressRleSmet(sectionData, sectionSize);
 		} else if (strcmp(compressionType, "lzss") == 0) {
 			decompressedData = decompressLzss(sectionData, sectionSize);
 		} else if (strcmp(compressionType, "lz1") == 0) {
@@ -638,6 +636,8 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 			decompressedData = decompressLz2LE(sectionData, sectionSize);
 		} else if (strcmp(compressionType, "lz3") == 0) {
 			decompressedData = decompressLz3(sectionData, sectionSize);
+		} else if (strcmp(compressionType, "lz5") == 0) {
+			decompressedData = decompressLz5(sectionData, sectionSize);
 		}
 
 		if (!decompressedData) {
@@ -756,12 +756,12 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 
 	// cleanup pattern chains if decompressed formats were used
 	if (strcmp(compressionType, "rle_konami") == 0 ||
-		strcmp(compressionType, "rle_smet") == 0 ||
 		strcmp(compressionType, "lzss") == 0 ||
 		strcmp(compressionType, "lz1") == 0 ||
 		strcmp(compressionType, "lz2") == 0 ||
 		strcmp(compressionType, "lz2le") == 0 ||
-		strcmp(compressionType, "lz3") == 0)
+		strcmp(compressionType, "lz3") == 0 ||
+		strcmp(compressionType, "lz5") == 0)
 	{
 		cleanupPatternChains();
 		initPatternChains();
