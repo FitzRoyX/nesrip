@@ -15,9 +15,10 @@ Result* decompressLz1(const uint8_t* compressedData, size_t sectionSize);
 Result* decompressLz2(const uint8_t* compressedData, size_t sectionSize);
 Result* decompressLz2LE(const uint8_t* compressedData, size_t sectionSize);
 Result* decompressLz3(const uint8_t* compressedData, size_t sectionSize);
-Result* decompressRleSmet(const uint8_t* compressedData, size_t sectionSize);
+Result* decompressLz5(const uint8_t* compressedData, size_t sectionSize);
 
 #endif
+
 
 
 
