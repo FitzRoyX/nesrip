@@ -247,7 +247,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 continue;
             }
             double freq = computeFrequencyOfChange(sheet, width, height);
-            int qualifierFrequency = (freq >= 2.0 && freq <= 8.0);
+            int qualifierFrequency = (freq >= 2.0 && freq <= 5.0);
             uint32_t checksumHash = computeChecksum(sheet, width * height * 4);
             int qualifierChecksum = !hasChecksum(checksumHash);
             if (qualifierChecksum) {
@@ -255,7 +255,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             }
 			//comment out qualifiers if you feel they interfere.
 			//qualifierChecksum in particular is troublesome when 0xFF precedes term byte
-            if (qualifierTileCount && qualifierFrequency/* && qualifierChecksum*/) {
+            if (qualifierTileCount && qualifierFrequency && qualifierChecksum) {
                 char filename[512];
 #ifdef _MSC_VER
                 _snprintf_s(filename, sizeof(filename), _TRUNCATE,

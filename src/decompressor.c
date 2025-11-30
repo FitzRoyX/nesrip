@@ -654,31 +654,27 @@ Result* decompressRleSmet(const uint8_t* compressedData, size_t sectionSize) {
                 break;
             }
 
-            case 6: // MINUS COPY (negative offset)
-            case 7: { // MINUS COPY + XOR
-                if (end - data < 2) {
-                    printf("Error: Unexpected end in minus copy.\n");
-                    return result;
-                }
-                uint16_t offset = ((uint16_t)data[0] << 8) | data[1];
-                data += 2;
+case 6: // MINUS COPY
+case 7: { // MINUS COPY + XOR
+    if (data >= end) {
+        printf("Error: Unexpected end in minus copy.\n");
+        return result;
+    }
+    uint8_t offset = *data++;
+    if (offset > result->size) {
+        printf("Error: Minus copy offset too large.\n");
+        return result;
+    }
 
-                // SMET uses "minus": source index = current_size - offset - 1
-                if (offset >= result->size) {
-                    printf("Error: Minus copy offset too large.\n");
-                    return result;
-                }
+    uint32_t src = result->size - offset;   // no -1
+    int doXor = (opcode == 7);
 
-                uint32_t src = result->size - offset - 1;
-                int doXor = (opcode == 7);
-
-                // Must be overlap-safe.
-                for (uint32_t i = 0; i < length; i++) {
-                    uint8_t v = result->output[src + i];
-                    result->output[result->size++] = doXor ? (v ^ 0xFF) : v;
-                }
-                break;
-            }
+    for (uint32_t i = 0; i < length; i++) {
+        uint8_t v = result->output[src + i];
+        result->output[result->size++] = doXor ? (v ^ 0xFF) : v;
+    }
+    break;
+}
 
             default:
                 printf("Error: Unknown SMET opcode %u.\n", opcode);
@@ -688,4 +684,3 @@ Result* decompressRleSmet(const uint8_t* compressedData, size_t sectionSize) {
 
     return result;
 }
-

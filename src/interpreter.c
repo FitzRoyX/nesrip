@@ -32,7 +32,7 @@ if (token == NULL) \
 	return 1; \
 }
 
-char* updateToken(char* string) {
+char *updateToken(char* string) {
 	char* token = stringTokenize(string, " \n", tokenContext);
 	return token;
 }

@@ -7,7 +7,7 @@
 
 typedef enum BitPlaneType {
 	ONE_BPP,
-	TWO_BPP,
+	TWO_BPP_NES,
 	TWO_BPP_SNES,
 	THREE_BPP_SNES,
 	THREE_BPP_SNES_MODE7,

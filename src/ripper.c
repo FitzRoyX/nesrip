@@ -284,8 +284,8 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 		context->bitplaneType = ONE_BPP;
 		context->tileLength = 8;
 	}
-	else if (strcmp(args->bitplaneType, "2") == 0) {
-		context->bitplaneType = TWO_BPP;
+	else if (strcmp(args->bitplaneType, "2_nes") == 0) {
+		context->bitplaneType = TWO_BPP_NES;
 		context->tileLength = 16;
 	}
 	else if (strcmp(args->bitplaneType, "2_snes") == 0) {
@@ -423,22 +423,25 @@ int addToHash(ExtractionContext* context, int y, uint64_t data) {
 	return 0;
 }
 
-uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int y)
-{
+uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int y) {
 	switch (context->bitplaneType) {
-		case ONE_BPP:
+		case ONE_BPP: {
 			return sectionData[y];
-		case TWO_BPP:
+		}
+		case TWO_BPP_NES: {
 			return (uint64_t)sectionData[y]
 				 | ((uint64_t)sectionData[y + 8] << 8);
-		case TWO_BPP_SNES:
+		}
+		case TWO_BPP_SNES: {
 			return (uint64_t)sectionData[y * 2]
 				 | ((uint64_t)sectionData[y * 2 + 1] << 8);
-		case THREE_BPP_SNES:
+		}
+		case THREE_BPP_SNES: {
 			return (uint64_t)sectionData[y * 2]
 				 | ((uint64_t)sectionData[y * 2 + 1] << 8)
 				 | ((uint64_t)sectionData[y + 16] << 16);
-		case THREE_BPP_SNES_MODE7:
+		}
+		case THREE_BPP_SNES_MODE7: {
 			uint32_t val = (uint32_t)sectionData[y * 3 + 2]
 			 | ((uint32_t)sectionData[y * 3 + 1] << 8)
 			 | ((uint32_t)sectionData[y * 3 + 0] << 16);
@@ -450,12 +453,22 @@ uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int
 				out |= (uint64_t)(bits & 4) << (14 + k); // plane 2
 			}
 			return out;
-		case FOUR_BPP_SNES:
+		}
+		case FOUR_BPP_SNES: {
 			return  (uint64_t)sectionData[y * 2 + 0] // p0
 				 | ((uint64_t)sectionData[y * 2 + 16] << 8) // p2
 				 | ((uint64_t)sectionData[y * 2 + 1]  << 16)// p1
 				 | ((uint64_t)sectionData[y * 2 + 17] << 24);// p3
-		case EIGHT_BPP_SNES_MODE7:
+		}
+        case EIGHT_BPP_SNES: {
+            uint64_t out = 0;
+            for (int i = 0; i < 8; i++) {
+                out |= ((uint64_t)sectionData[y * 16 + i * 2] << (8 * i));
+                out |= ((uint64_t)sectionData[y * 16 + i * 2 + 1] << (8 * (i + 8)));
+            }
+            return out;
+		}
+		case EIGHT_BPP_SNES_MODE7: {
 			return ((uint64_t)sectionData[y * 8 + 0] << 56)
 				 | ((uint64_t)sectionData[y * 8 + 1] << 48)
 				 | ((uint64_t)sectionData[y * 8 + 2] << 40)
@@ -464,11 +477,10 @@ uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int
 				 | ((uint64_t)sectionData[y * 8 + 5] << 16)
 				 | ((uint64_t)sectionData[y * 8 + 6] << 8)
 				 | ((uint64_t)sectionData[y * 8 + 7]);
-		case EIGHT_BPP_SNES:
-			/* TODO: planar 8bpp if needed */
+		}
+		default: {
 			return 0;
-		default:
-			return 0;
+		}
 	}
 }
 
