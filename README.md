@@ -11,7 +11,11 @@ This tool extracts 8x8 tile graphics from NES & SNES roms into modern PNG tilesh
 
 ## Building and usage
 
-The easiest way to build this tool on Windows is by using TCC (TinyCC), a super small compiler with no installer. A prebuilt version can be found [here](https://github.com/FitzRoyX/tinycc/releases/tag/tcc_20251005). Simply extract it into the nesrip folder so that nesrip/tcc/tcc.exe exists, then run "compile_with_tcc_local.bat". This will create nesrip.exe, onto which roms can be dragged to create PNG output files. A game must be in the database for the tool to work. The database is a text file called nes_gfx_db.txt.
+The easiest way to build this tool on Windows is by using TCC (TinyCC), a super small compiler with no installer. A prebuilt version can be found [here](https://github.com/FitzRoyX/tinycc/releases/tag/tcc_20251005). Simply extract it into the nesrip folder so that nesrip/tcc/tcc.exe exists, then run "compile_with_tcc_local.bat". This will create nesrip.exe, onto which roms can be dragged to create PNG output files. A game must be in the database for the tool to work. The databases are text files called gfxdb_nes.txt and gfxdb_snes.txt.
+
+## Using the "f" finder command
+
+If you have a working decompression routine, and you know the BPP format of the data you're trying to rip, it is possible for this tool to help you find compressed graphics blocks without disassembly. It scans from an incrementing starting position up to every 0xFF byte until all starting positions are exhausted. To filter out false candidates, there are a series of qualifiers in "finder.c" that can be commented in or out. Those qualifiers are "Total Tiles", "Frequency of Change" (between pixels), and Checksum.
 
 ## Graphics database commands
 ```
