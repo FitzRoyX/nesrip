@@ -15,7 +15,7 @@ The easiest way to build this tool on Windows is by using TCC (TinyCC), a super 
 
 ## Using the "f" finder command
 
-If you have a working decompression routine, and you know the BPP format of the data you're trying to rip, it is possible for this tool to help you find compressed graphics blocks without disassembly. It scans from an incrementing starting position up to every 0xFF byte until all starting positions are exhausted. To filter out false candidates, there are a series of qualifiers in "finder.c" that can be commented in or out. Those qualifiers are "Total Tiles", "Frequency of Change" (between pixels), and Checksum.
+If you have a working decompression routine, and you know the BPP format of the data you're trying to rip, it is possible for this tool to help you find compressed graphics blocks without disassembly. It scans from an incrementing starting position up to every 0xFF byte until all starting positions are exhausted. To filter out false candidates, there are a series of qualifiers in "finder.c" that can be commented in or out. Those qualifiers are "Total Tiles", "Frequency of Change" (between pixels), and Checksum. It is also possible to advance the starting byte past a successful candidate. This speeds up discovery of sequential blocks once you find the starting position of the first block.
 
 ## Graphics database commands
 ```
@@ -63,7 +63,7 @@ nesrip.exe filename
 ## Credits
 
 Matys Guéroult - Lead programmer<br>
-FitzRoyX - Designer/commissioner of tool, database maintainer<br>
+FitzRoyX - Designer/commissioner of tool, database maintainer, budding programmer<br>
 Invertego - Colorizer programmer<br>
 Richard Wheeler - Programmer<br>
 
