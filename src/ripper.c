@@ -618,7 +618,8 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 		strcmp(compressionType, "lz1") == 0 ||
 		strcmp(compressionType, "lz2") == 0 ||
 		strcmp(compressionType, "lz2le") == 0 ||
-		strcmp(compressionType, "lz3") == 0)
+		strcmp(compressionType, "lz3") == 0) ||
+		strcmp(compressionType, "lz5") == 0)
 	{
 		size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
 		Result* decompressedData = NULL;
