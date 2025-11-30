@@ -198,8 +198,6 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             Result* decompressedData = NULL;
             if (strcmp(compressionType, "rle_konami") == 0) {
                 decompressedData = decompressRleKonami(sectionData, sectionSize);
-            } else if (strcmp(compressionType, "rle_smet") == 0) {
-                decompressedData = decompressRleSmet(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lzss") == 0) {
                 decompressedData = decompressLzss(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lz1") == 0) {
@@ -210,6 +208,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 decompressedData = decompressLz2LE(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lz3") == 0) {
                 decompressedData = decompressLz3(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "lz5") == 0) {
+                decompressedData = decompressLz5(sectionData, sectionSize);
             }
             if (!decompressedData || !decompressedData->output || decompressedData->size == 0) {
                 if (decompressedData) {
@@ -237,8 +237,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             }
             int totalTiles = (decompressedData->size / context.tileLength);
 			//tailor below lines to your snes game's graphic block sizes if known
-			//int qualifierTileCount = totalTiles; //comment this out if using below line
-            int qualifierTileCount = (totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || totalTiles == 128 || totalTiles == 256 || totalTiles == 512);
+			int qualifierTileCount = totalTiles; //comment this out if using below line
+            //int qualifierTileCount = (totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || totalTiles == 128 || totalTiles == 256 || totalTiles == 512);
             if (!qualifierTileCount) {
                 printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
                 free(decompressedData->output);
