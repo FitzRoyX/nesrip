@@ -285,7 +285,7 @@ s 48000 497ff //raw 4bpp
 c raw
 s 70000 75bff //raw 4bpp gfx
     //c rle_smet
-f 78000 a3fff //compressed
+    //f 78000 a3fff //compressed
 c raw
 s a4000 a5fff //raw 4bpp gfx
     //c rle_smet
@@ -305,5 +305,5 @@ s 1b0000 1b5fff //raw 4bpp gfx
 s 1b8000 1c7fff //raw 4bpp gfx
 b 4_snes
 c rle_smet
-f 0 2fffff //finder test
+    //f 0 2fffff //finder test
 end
