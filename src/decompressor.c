@@ -520,12 +520,10 @@ Result* decompressLz5(const uint8_t* compressedData, size_t sectionSize) {
         printf("Error: Memory allocation failed.\n");
         return NULL;
     }
-
-    size_t capacity = sectionSize * 8;  // Allocating generously
+    size_t capacity = sectionSize * 8;
     if (capacity < 0x2000) {
-        capacity = 0x2000;  // Minimum capacity to handle large decompressions
+        capacity = 0x2000;
     }
-
     result->output = malloc(capacity);
     if (!result->output) {
         printf("Error: Memory allocation failed.\n");
@@ -533,67 +531,144 @@ Result* decompressLz5(const uint8_t* compressedData, size_t sectionSize) {
         return NULL;
     }
     result->size = 0;
-
     while (data < end) {
-        uint8_t flags = *data++;  // Get flags byte
-
-        // Process 8 operations (1 bit for each byte)
-        for (int bit = 7; bit >= 0; bit--) {
+        uint8_t header = *data++;
+        if (header == 0xFF) {
+            break;
+        }
+        uint8_t  cmd;
+        uint32_t length;
+        if ((header & 0xE0) == 0xE0) {
             if (data >= end) {
-                return result;  // End of data
+                printf("Error: Unexpected end of data in long-length header.\n");
+                break;
             }
-
-            // Ensure we have enough space in the output buffer
-            if (result->size >= capacity - 32) {
-                size_t newCapacity = capacity * 2;
-                uint8_t* newBuf = realloc(result->output, newCapacity);
-                if (!newBuf) {
-                    printf("Error: Memory reallocation failed.\n");
-                    free(result->output);
-                    free(result);
-                    return NULL;
+            uint8_t header2 = *data++;
+            cmd    = (header >> 2) & 0x07;
+            length = ((header & 0x03) << 8) | header2;
+            length = length + 1;
+        } else {
+            cmd    = header >> 5;
+            length = (header & 0x1F);
+            length = length + 1;
+        }
+        if (result->size + length > capacity) {
+            size_t newCapacity = capacity * 2;
+            while (result->size + length > newCapacity) {
+                newCapacity = newCapacity * 2;
+            }
+            uint8_t* newBuf = realloc(result->output, newCapacity);
+            if (!newBuf) {
+                printf("Error: Memory reallocation failed.\n");
+                free(result->output);
+                free(result);
+                return NULL;
+            }
+            result->output = newBuf;
+            capacity       = newCapacity;
+        }
+        switch (cmd) {
+            case 0: { /* Direct copy */
+                if ((size_t)(end - data) < length) {
+                    printf("Error: Direct copy overrun in LZ5.\n");
+                    length = (uint32_t)(end - data);
                 }
-                result->output = newBuf;
-                capacity = newCapacity;
+                memcpy(result->output + result->size, data, length);
+                result->size += length;
+                data         += length;
+                break;
             }
-
-            if (flags & (1 << bit)) {
-                // Literal byte
-                result->output[result->size++] = *data++;
-            } else {
-                // Backreference: 2 bytes for offset and length
+            case 1: { /* Byte fill */
+                if (data >= end) {
+                    printf("Error: Byte fill missing value in LZ5.\n");
+                    break;
+                }
+                uint8_t value = *data++;
+                memset(result->output + result->size, value, length);
+                result->size += length;
+                break;
+            }
+            case 2: { /* Word fill */
                 if (end - data < 2) {
-                    printf("Error: Unexpected end of data in LZ5 backreference.\n");
-                    return result;
+                    printf("Error: Word fill missing values in LZ5.\n");
+                    break;
                 }
-
                 uint8_t b1 = *data++;
                 uint8_t b2 = *data++;
-
-                // Offset: the backreference offset is encoded in the lower 12 bits of b1 and b2
-                uint32_t offset = ((uint32_t)(b2 & 0xF0) << 4) | b1;
-
-                // Length: encoded in the lower 4 bits of b2 (plus a fixed length of 3)
-                uint32_t length = (b2 & 0x0F) + 3;
-
-                if (offset >= result->size) {
-                    printf("Error: Invalid LZ5 offset (%u >= %zu).\n", offset, result->size);
-                    return result;
+                uint32_t i;
+                for (i = 0; i < length; i++) {
+                    if (i & 1) {
+                        result->output[result->size++] = b2;
+                    } else {
+                        result->output[result->size++] = b1;
+                    }
                 }
-
-                // Overlap-safe copy (same as other LZ algorithms)
-                for (uint32_t i = 0; i < length; i++) {
-                    result->output[result->size] = result->output[result->size - offset - 1];
-                    result->size++;
-                }
+                break;
             }
-
-            // If we consumed all input, exit early
-            if (data >= end) {
-                return result;
+            case 3: { /* Increasing fill */
+                if (data >= end) {
+                    printf("Error: Increasing fill missing value in LZ5.\n");
+                    break;
+                }
+                uint8_t value = *data++;
+                uint32_t i;
+                for (i = 0; i < length; i++) {
+                    result->output[result->size++] = (uint8_t)(value + i);
+                }
+                break;
+            }
+            case 4:
+            case 5: { /* Absolute repeat / XOR repeat */
+                if (end - data < 2) {
+                    printf("Error: Repeat missing address in LZ5.\n");
+                    break;
+                }
+                uint8_t lo = *data++;
+                uint8_t hi = *data++;
+                uint16_t addr = (uint16_t)(lo | (hi << 8));
+                if ((size_t)addr >= result->size) {
+                    printf("Error: Repeat address OOB (%u >= %zu).\n",
+                           (unsigned)addr, result->size);
+                    break;
+                }
+                uint32_t i;
+                for (i = 0; i < length; i++) {
+                    uint8_t b = result->output[addr + i];
+                    if (cmd == 5) {
+                        b = b ^ 0xFF;
+                    }
+                    result->output[result->size++] = b;
+                }
+                break;
+            }
+            case 6:
+            case 7: { /* Negative repeat / Negative XOR repeat */
+                if (data >= end) {
+                    printf("Error: Negative repeat missing offset.\n");
+                    break;
+                }
+                uint8_t back = *data++;
+                if (back == 0 || (size_t)back > result->size) {
+                    printf("Error: LZ5 negative repeat OOB.\n");
+                    break;
+                }
+                size_t start = result->size - back;
+                uint32_t i;
+                for (i = 0; i < length; i++) {
+                    uint8_t b = result->output[start + i];
+                    if (cmd == 7) {
+                        b = b ^ 0xFF;
+                    }
+                    result->output[result->size++] = b;
+                }
+                break;
+            }
+            default: {
+                printf("Error: Unknown LZ5 command %u.\n", cmd);
+                data = end;
+                break;
             }
         }
     }
-
     return result;
 }

@@ -2,12 +2,12 @@
 hash c457644ccfb93f8978326e728931800283821e531edc409fca9c0167495319c4
 b 2_nes
 p 1 h
-s 2000 3fff //seg1
-s 4100 438f //seg2
-s 8000 efff //seg3
-s 12000 12fff //seg4
-s 14800 157ff //seg5
-s 16000 17fff //seg6
+. 2000 3fff //seg1
+. 4100 438f //seg2
+. 8000 efff //seg3
+. 12000 12fff //seg4
+. 14800 157ff //seg5
+. 16000 17fff //seg6
 end
 
 
@@ -15,11 +15,11 @@ end
 hash 3841ff3e5e2fc98f14c7ef4bdc8361fee2dd47cecb2ee21417515124e1f2a5b9
 b 1
 p 1 h
-s 4000 4fff
+. 4000 4fff
 b 2_nes
-s 5000 57ff
+. 5000 57ff
 b 1
-s 5800 5fff
+. 5800 5fff
 end
 
 
@@ -27,7 +27,7 @@ end
 hash c4b1bde698c2090646d967392052a9b3e5c911dcbc5b88b8d1b05e9324f11396
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -35,7 +35,7 @@ end
 hash 3493f7621d964af7a56c407718ef1d056c6c46d4e4c6b3c48364d58a1b97a06a
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -43,7 +43,7 @@ end
 hash 8e844d77da01f86ace52823f1f974c9230f09e6a6cbf33a07abfe9beeff00292
 b 2_nes
 p 1 h
-s 8000 9fff
+. 8000 9fff
 end
 
 
@@ -51,11 +51,11 @@ end
 hash 4f6fa63277b7a114a24e8d67175ff3f7b993fa5db569d8b689ec20ccf1b0c0d3
 b 2_nes
 p 1 h
-s 0 7f5f //seg1
+. 0 7f5f //seg1
 b 1
-s c000 1773f //seg2
+. c000 1773f //seg2
 b 2_nes
-s 18000 191cf //seg3
+. 18000 191cf //seg3
 end
 
 
@@ -63,23 +63,23 @@ end
 hash bd578147b15c610e0ceafc7e27a87a3bf96e65af3b31aa98ae6924fc27a2d797
 b 1
 p 1 h
-s 8056 8465 //seg1
+. 8056 8465 //seg1
 b 2_nes
-s 8466 9065
+. 8466 9065
 p 2 h
-s 9066 ac65
+. 9066 ac65
 p 1 h
-s ac66 bff5
+. ac66 bff5
 p 2 h
-s c03d c13c //seg2
+. c03d c13c //seg2
 p 1 h
-s c13d ffec
-s 1006f 13fee //seg3
-s 14051 17fc0 //seg4
-s 180fb 1bfaa //seg5
-s 1c097 1fd86 //seg6
-s 2001a 20d19 //seg7
-s 2477f 248de //seg8
+. c13d ffec
+. 1006f 13fee //seg3
+. 14051 17fc0 //seg4
+. 180fb 1bfaa //seg5
+. 1c097 1fd86 //seg6
+. 2001a 20d19 //seg7
+. 2477f 248de //seg8
 end
 
 
@@ -87,14 +87,14 @@ end
 hash df696ce2af90b18ca2b57468bdc525afce371bb1868152eb2cbbe1d62252f617
 b 2_nes
 p 1 h
-s 6200 719f //seg1
-s 8000 917f //seg2
+. 6200 719f //seg1
+. 8000 917f //seg2
 b 1
-s 9180 9589
+. 9180 9589
 b 2_nes
-s 958a a059
+. 958a a059
 p 4 v
-s c000 13fff //seg3
+. c000 13fff //seg3
 end
 
 
@@ -102,7 +102,7 @@ end
 hash e868400409c70876b98dad2cca87b8e9ee31877b0cccbbd8405be5c54922722a
 b 2_nes
 p 1 h
-s 8000 9fff
+. 8000 9fff
 end
 
 
@@ -110,8 +110,8 @@ end
 hash 9f54aafa367247b99c344ba9a0c58ad8fa8aceeeae1c304b8fefc9985c3c118c
 b 2_nes
 p 2 v
-s 0 5fff
-s 8000 ffff
+. 0 5fff
+. 8000 ffff
 end
 
 
@@ -119,8 +119,8 @@ end
 hash 28cdd5af3c441f361cfa3a21ec97a1ab08691dd5d73f7a10a372fbd1fffb8ba7
 b 2_nes
 p 2 v
-s 0 5fff
-s 8000 ffff
+. 0 5fff
+. 8000 ffff
 end
 
 
@@ -128,7 +128,7 @@ end
 hash 3a3708c4bf67ff54ea95204b15adb6cac5358a4b722f45a9fa735d6ec0da3b49
 b 2_nes
 p 1 h
-s 40000 5ffff
+. 40000 5ffff
 end
 
 
@@ -136,7 +136,7 @@ end
 hash 8aed01a409fd1e6f61fbe41421fe4a1da7242c7d6d6e26594bc026669d561247
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -144,7 +144,7 @@ end
 hash 9040f16eb22946f3b505dc9ccd7ac7ee5c6544580cfdc3f9f71cbc07755d1fc9
 b 2_nes
 p 1 h
-s 20000 23fff
+. 20000 23fff
 end
 
 
@@ -158,7 +158,7 @@ end
 hash c4d4ff0bd283656c63d9a30dfc7dc6d2956744730a3641ba2c8f9f8e7204d9a1
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -166,7 +166,7 @@ end
 hash 7934c8620f90ace5cd357d233a7c68687efb78cca7f3f95be48f3965f9e24c9a
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -174,7 +174,7 @@ end
 hash 35fff8fa349361f879e419d303edd371d4f2f9d7a7912421343baa694fd471e9
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -182,7 +182,7 @@ end
 hash 3b6055cedd2afb75ddf56f9100c9c9d393d42e18afa5e3c9b24454a0f995fe28
 b 2_nes
 p 1 h
-s 40000 7ffff
+. 40000 7ffff
 end
 
 
@@ -190,7 +190,7 @@ end
 hash 6da6c8ac123df0f51e6f1b2ba79cb067d3352262532604ab08cf5dd587e84006
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -198,7 +198,7 @@ end
 hash d272fd3f15a3eb1f191fc488551373486f77bc7d39fad246bd4cea5eb1c91440
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -206,7 +206,7 @@ end
 hash b3e09c94e33e0293672c1405c60fc69b2ab1564c8a4ee988e3ab6ada51484eea
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -214,7 +214,7 @@ end
 hash e92938b2379008222e093d0b9674607f4483da931061946e675c8a1ed6c8254e
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -222,7 +222,7 @@ end
 hash 005c48a5984e3b75e069ef78d736266b12f7f6b102d88d90172ba9ae480b378b
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -230,7 +230,7 @@ end
 hash 314a546c20d6aa44e699c011bf04afd4f9d472d2af40d82836f76612cc606da8
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -238,7 +238,7 @@ end
 hash 22e92af92aed2d8d7bddb60732963642788b3ea9341592ce2c66a542a3d7ce7d
 b 2_nes
 p 1 h
-s 40000 7ffff
+. 40000 7ffff
 end
 
 
@@ -246,7 +246,7 @@ end
 hash 0c92894d0df0d890ddc437f1557dc0d6adfb81263c25c40841a1e83cd9d21732
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -254,7 +254,7 @@ end
 hash df2609c80e818bb95983b30a3ac1435ea2332ac83e29fde469f397e1d5a2db93
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -270,7 +270,7 @@ hash 60061c0042741f7c1e53ad8f738c27ffd9057310ff5d556662b3667e5700e751
 hash 1d54a70fac4635e2dc8855296daaaa85e80be71ba1703c5859c6583b7dddeaaa
 b 2_nes
 p 1 h
-s 80000 9ffff
+. 80000 9ffff
 end
 
 
@@ -278,7 +278,7 @@ end
 hash 38e5253131d264395a302d0910316f94bec00f60db616caa7a53806f08c5b5f9
 b 2_nes
 p 1 h
-s 80000 9ffff
+. 80000 9ffff
 end
 
 
@@ -286,7 +286,7 @@ end
 hash 53bfc94fce46a25188f84f102810406f686a7fb13fb5e4ae8f13760106acb969
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -294,7 +294,7 @@ end
 hash e8dc8c0441c54d09a1cfe0c112a3137bb6d709989b23e6528f8e30360e1ad910
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -302,7 +302,7 @@ end
 hash 0b16539dccc9a914ad7ca908234842dbcdb9bad3860a503421c77bc17b34cbad
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -310,7 +310,7 @@ end
 hash 5ee479ef04d80366a75dd144cbeb47d0347ee82025d1b65dd358e1f6498c9a39
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -318,7 +318,7 @@ end
 hash 9d82d83207a460258e833d430536d03c79ab8372435c614afb3c52e6b4325b68
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -326,7 +326,7 @@ end
 hash 4a4aeb204802fe00b801bf9f2d270e3def26e08fcafbbbaa9ec8bbca029550c4
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -334,7 +334,7 @@ end
 hash 185e4adb2cbcb71ebf0fd3f6af767f2215f93916cd2ccf932ce5864d3953239a
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -342,7 +342,7 @@ end
 hash 599d9ed820218edada6f6f14fda1d0d21bad50cca28664f6604c171a72327adc
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -350,7 +350,7 @@ end
 hash 0e862077f390348b8e109caa8189ff5ecdf3fac53eefc204369fae880e077d19b
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -358,7 +358,7 @@ end
 hash 58d0f0e504b8450e7d2dfbe11948a244143bfe3065f7e78524633cce8ac73103
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -366,8 +366,8 @@ end
 hash a0bc241936acf1993a300ab21c197a2647b6c072cfbb8e3f83424a9ab6655cc7
 b 2_nes
 p 1 h
-s 0 7b5f //segstart 1
-s c000 c9ff //segstart 2
+. 0 7b5f //segstart 1
+. c000 c9ff //segstart 2
 end
 
 
@@ -375,7 +375,7 @@ end
 hash ba954a009fbbd2b6de6f87e008e01145d842dd16b3f25625a994d58d420055bc
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -383,7 +383,7 @@ end
 hash 30db64a2f6f796308dfeefbf6f0b648176cf6c982fbb5158c5408a899d6355c3
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -391,7 +391,7 @@ end
 hash c5e47c0479f500b86995fc8d09e132f5ba3f54cfd9a2a601ea3848bb60871a20
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -399,7 +399,7 @@ end
 hash c37934b3eda806366d24cc3205ec656d6ac30faa30cb2172bdbc17503146dcae
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -407,7 +407,7 @@ end
 hash 12d3119e25f7b40a7ccc546f5d92edaad86fb0083facf6dd61db512bac45f99d
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -415,7 +415,7 @@ end
 hash f2fd40a1207d504d140da9df73029002572c61be86d1ebfeaabad88475c833fa
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -423,7 +423,7 @@ end
 hash 24f7bb802a0ddce0648ea9f156db42b3eaf4cc6598ce852ffac9f849bf92abee
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -431,7 +431,7 @@ end
 hash efa323475fa4567dbf88fc1f7dc8e072ba4ebc7de11e94e22022e7e95325c938
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -439,7 +439,7 @@ end
 hash 15b52b417006aeb18a2b8bcba9d89be89980ed8e1f7e78502921e637de7d0423
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -447,7 +447,7 @@ end
 hash 322d6be47ed539c3dd3c1c92398e9842c3922d7c13914b9c72752ddec377145c
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -455,7 +455,7 @@ end
 hash 03db3d003eaa91e1434093ea259a82b9f2d5ed5b02404f9feba05819f69f81c4
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -463,7 +463,7 @@ end
 hash 227e8a900206d0f8c67b7cb09eaee25f181085623b42bd9694dc30986d955f27
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -471,7 +471,7 @@ end
 hash 4fb12ad1c791c7ee8d5ec824eff871d71b43b92c4e93b45ed0b60f022459b917
 b 2_nes
 p 1 h
-s 20000 5ffff
+. 20000 5ffff
 end
 
 
@@ -479,7 +479,7 @@ end
 hash 21b10e8d4cf775aa1f4027c4afb4f64e72e221a506a485cf4ffdf98bed01a524
 b 2_nes
 p 1 h
-s 40000 5ffff
+. 40000 5ffff
 end
 
 
@@ -487,7 +487,7 @@ end
 hash 1b5857f9fd57d6f50d8d1e57db67203155fb2974ae426deac3398efef1dbf042
 b 2_nes
 p 1 h
-s 0 bfff
+. 0 bfff
 end
 
 
@@ -495,7 +495,7 @@ end
 hash 0702704138e11bf3441f6bdd1ec03d59a7bf06ddb3c3a6607102f8ca394476b5
 b 2_nes
 p 1 h
-s 20000 27fff
+. 20000 27fff
 end
 
 
@@ -503,7 +503,7 @@ end
 hash 616d753986be5ddf359f5d914168d972724de9fd3cbf8e8118fc4cc34d637144
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -511,7 +511,7 @@ end
 hash 6d0215929f2dfeeecdeee4dd50b8aec07f279a8ab8df1dc4e877bbcad3db0d37
 b 2_nes
 p 1 h
-s 20000 27fff
+. 20000 27fff
 end
 
 
@@ -519,7 +519,7 @@ end
 hash fb1059806d503225093126145fc3cad0da773bcb81ea83165f7ee2e4b9ca6fd3
 b 2_nes
 p 1 h
-s 8000 27fff
+. 8000 27fff
 end
 
 
@@ -527,7 +527,7 @@ end
 hash 42b21cc066490b78afca98224d642507a4dbb74c1483c3d63fa85ffc883fe640
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -535,7 +535,7 @@ end
 hash b82c1234165cd725d8e7f3e51926bceb834744eb49ad915bd3ea8b76fa465eb1
 b 2_nes
 p 1 h
-s 8000 27fff
+. 8000 27fff
 end
 
 
@@ -547,7 +547,7 @@ hash 99d13c5a1d0a3c9ee1f31a8718744635a1c4b0a58cb7133e4c56203821484101
 hash caa7f0a9aa265625cc375ea6fe21d410b661476b5a665344eda1c5a9dff404f4
 b 2_nes
 p 1 h
-s 20000 5ffff
+. 20000 5ffff
 end
 
 
@@ -555,7 +555,7 @@ end
 hash c4c7bcbf9b9b95c3b8dd58adf5d51256cad3aec11bd609aaacae3ec2a829b286
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -563,7 +563,7 @@ end
 hash c70f0f5d4054ce7c4850259879c9823add73ccc234ddcf96d95681bb78bd2c58
 b 2_nes
 p 1 h
-s 40000 5ffff
+. 40000 5ffff
 end
 
 
@@ -571,51 +571,51 @@ end
 hash 60b1aebdc0a19afc5d3e7dc4f09d8a968580e007197461a8a142656702c27f0d
 b 2_nes
 p 2 v
-s 3501 3b00 //seg1
+. 3501 3b00 //seg1
 p 1 h
-s 4008 5007 //seg2
+. 4008 5007 //seg2
 p 2 v
-s 5008 6007
+. 5008 6007
 p 1 h
-s 6008 6907
+. 6008 6907
 p 2 v
-s 6908 6f07
+. 6908 6f07
 p 1 h
-s 6f08 74a7
+. 6f08 74a7
 p 2 v
-s 74a8 7a07
+. 74a8 7a07
 p 1 h
-s 7a08 8007
+. 7a08 8007
 p 2 v
-s 8008 8887
+. 8008 8887
 p 1 h
-s 8888 9187
+. 8888 9187
 p 2 v
-s 9188 9a07
+. 9188 9a07
 p 1 h
-s 9a08 a307
+. 9a08 a307
 p 2 v
-s a308 ab87
+. a308 ab87
 p 1 h
-s ab88 b487
+. ab88 b487
 p 2 v
-s b488 c007
+. b488 c007
 p 1 h
-s c008 c907
+. c008 c907
 p 2 v
-s c908 d187
+. c908 d187
 p 1 h
-s d188 da87
+. d188 da87
 p 2 v
-s da88 e307
+. da88 e307
 p 1 h
-s e308 f507
+. e308 f507
 p 2 v
-s f508 f907
+. f508 f907
 p 1 h
-s f908 ff07
+. f908 ff07
 p 2 v
-s 1aec8 1b3e7 //seg3
+. 1aec8 1b3e7 //seg3
 end
 
 
@@ -623,7 +623,7 @@ end
 hash ff5b96853cf67171918aad5157661dc223e0002e0373e2580cee2e207bb0a682
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -631,7 +631,7 @@ end
 hash fec392d252eda8203bfaee45c95ccfc8c1689b90ab6de5cce3f45320d9c69c74
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -639,7 +639,7 @@ end
 hash 4c95afeda9a92842933c174983fee954cf40d1301d32f6169f6653f1e5cdc10f
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -647,18 +647,18 @@ end
 hash 722096b8929442310bc268f9cfea10b26cff8a7e900197b54c73b4a8603b5d96
 b 2_nes
 p 1 h
-s 77e a9d
-s 8900 d25f
-s 18300 1c62f
-s 1f6d8 1fc67
-s 20cef 21bde
-s 28d8e 295ed
-s 291de 295dd
-s 29652 29901
-s 29a8e 29dfd
-s 29e00 2efff
-s 38d08 3a177
-s 3a528 3aa27
+. 77e a9d
+. 8900 d25f
+. 18300 1c62f
+. 1f6d8 1fc67
+. 20cef 21bde
+. 28d8e 295ed
+. 291de 295dd
+. 29652 29901
+. 29a8e 29dfd
+. 29e00 2efff
+. 38d08 3a177
+. 3a528 3aa27
 end
 
 
@@ -666,7 +666,7 @@ end
 hash 5cb8d03a90732d01737a401e8dc87a3d594ab2f901970f309fe551c0013ac5da
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -674,7 +674,7 @@ end
 hash 752eb500a872ce4dedfa419d673b738bde8342bdbe5304411b6d19607b155a5f
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -685,7 +685,7 @@ hash 4b088e1e78981308da68883cf8292337ff8d899bf82a78d17e7a7af2745846e7
 hash 3b4f4c86e074d150e4763bf696011337a8a0b82b9ba7091b8dd38e4cd5373b2c
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -693,7 +693,7 @@ end
 hash d73a9a1fae7396754c19eecd6aa9e44d02c230df8efed0bafd86aa1cb0dd2a23
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -701,7 +701,7 @@ end
 hash cd1a9bc6c9e2181668fea96db14bc67fbbf9bf1572eef2bb074e5912a0dd54c9
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -709,7 +709,7 @@ end
 hash 1c811b67d3e211f95ced51f3725c36fe45562d75d0a553b66dc3fb0b10e61ff1
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -717,7 +717,7 @@ end
 hash 7ae9746aa5c24c9c048b842879d93cae58c1c52be2ce1c3fbc749ab7ca2210bb
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -725,7 +725,7 @@ end
 hash 3addebdec132929ecad2a8612a4ba54ccc39b9ada2295692f836c6b48d015054
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -733,10 +733,10 @@ end
 hash a978de5d5f343eacb0a6f12427327ecbe9b2e9cf881569aec7b838bd44237d84
 b 2_nes
 p 1 h
-s 0 7f3f
-s be00 ffff
-s 139c0 13fef
-s 14030 140ef
+. 0 7f3f
+. be00 ffff
+. 139c0 13fef
+. 14030 140ef
 end
 
 
@@ -744,7 +744,7 @@ end
 hash dd83b05d9f77c9b8932fc99eca4ccf9d90b03e74f7ca24c1a25e93fbe340c44f
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -760,7 +760,7 @@ hash 0f9eb607392b6846c99d236198cfb3517ed0c9776b43ab0f5791d612499c3aed
 hash 64c4a4b718e60a8527c28b53f7aedfce448a013f4dd80c11815ef35f7426f7a4
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -768,7 +768,7 @@ end
 hash 261c7fb3ed73bc1ddcf93f3cbc2f315f7eb908c54ca137044e71492f2938d21f
 b 2_nes
 p 1 h
-s 20000 27fff
+. 20000 27fff
 end
 
 
@@ -776,7 +776,7 @@ end
 hash be12cff13a06e0b5de2dad4d431f7cf9a6aa73be45cdbd952dfd03a9d23571b6
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -784,39 +784,39 @@ end
 hash fd822408e52a2330af1fe35feae429be5bd504cba2d0298213d4192cd461460a
 b 2_nes
 p 2 v
-s 140 173f //seg1
+. 140 173f //seg1
 p 1 h
-s 1740 1d3f
+. 1740 1d3f
 p 2 h
-s 4953 4e92 //seg2
+. 4953 4e92 //seg2
 p 1 h
-s 724d 789c //seg3
+. 724d 789c //seg3
 b 1
-s 7aa8 7e5f //seg4
+. 7aa8 7e5f //seg4
 b 2_nes
-s 7e60 7ebf //seg5
-s 8b4e ba9d //seg6
-s cd0c ff8b //seg7
-s 115ef 13c9e //seg8
-s 14ec0 1728f //seg9
-s 1d1c8 1fd17 //seg10
-s 2287f 23c7e //seg11
-s 24b88 27cf7 //seg12
-s 28d58 2bf07 //seg13
-s 2cb78 2fee7 //seg14
+. 7e60 7ebf //seg5
+. 8b4e ba9d //seg6
+. cd0c ff8b //seg7
+. 115ef 13c9e //seg8
+. 14ec0 1728f //seg9
+. 1d1c8 1fd17 //seg10
+. 2287f 23c7e //seg11
+. 24b88 27cf7 //seg12
+. 28d58 2bf07 //seg13
+. 2cb78 2fee7 //seg14
 b 1
-s 30030 300e7 //seg15
+. 30030 300e7 //seg15
 b 2_nes
-s 30218 322e7 //seg16
+. 30218 322e7 //seg16
 b 1
-s 33550 33917 //seg17
+. 33550 33917 //seg17
 b 2_nes
-s 33918 33d17 //seg18
+. 33918 33d17 //seg18
 b 1
-s 33e08 33f87 //seg19
+. 33e08 33f87 //seg19
 b 2_nes
-s 35056 36915 //seg20
-s 389e5 3bde4 //seg21
+. 35056 36915 //seg20
+. 389e5 3bde4 //seg21
 end
 
 
@@ -824,7 +824,7 @@ end
 hash 9cd99bfb1e6f2ccde7b35063793a5879a2273c73e2cd6bed69c72c87b3b5f27c
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -832,7 +832,7 @@ end
 hash 427876021e6c077479a1a1171e013f84ae951197005a317b099df3b6c2862603
 b 2_nes
 p 1 h
-s 8000 ffff
+. 8000 ffff
 end
 
 
@@ -840,7 +840,7 @@ end
 hash 39a86e28afe46af9c7fd2158afc368c873f4a266f03d8d8ced9a752f5caa9434
 b 2_nes
 p 1 h
-s 80000 bffff
+. 80000 bffff
 end
 
 
@@ -852,7 +852,7 @@ hash 1d1fdadb35660db0048f20e056d61dc80726ef9b6d08f49f1799af6b364549db
 hash 222240318f1decd91556d6837260bd8821c7bab7ce6f3143438a076f1dfdd7dd
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -860,10 +860,10 @@ end
 hash 5fe3435b99c10cd641e3f5509ec34e16559fdbd607e11b830f5a2ad572dff50f
 b 2_nes
 p 1 h
-s 80bb fa8a
-s 18122 1acf1
-s 1ad75 1bab4
-s 1bbba 1fa89
+. 80bb fa8a
+. 18122 1acf1
+. 1ad75 1bab4
+. 1bbba 1fa89
 end
 
 
@@ -871,10 +871,10 @@ end
 hash bb834eb82f0ac53114035e6f353434a934d4aa47742644740de5fa8b2b033b5b
 b 2_nes
 p 1 h
-s 80bb fa8a
-s 18122 1acf1
-s 1ad75 1bab4
-s 1bbba 1fa89
+. 80bb fa8a
+. 18122 1acf1
+. 1ad75 1bab4
+. 1bbba 1fa89
 end
 
 
@@ -882,11 +882,11 @@ end
 hash 751d3bf4722ce117d8ab7ff78059f42206ead5299716d91d5ff27d3900d555ad
 b 2_nes
 p 1 h
-s 4000 57ff
-s 6000 77ff
-s 8000 9fff
-s c000 efff
-s 10000 1a7ff
+. 4000 57ff
+. 6000 77ff
+. 8000 9fff
+. c000 efff
+. 10000 1a7ff
 end
 
 
@@ -894,7 +894,7 @@ end
 hash a2efb3b288dedb5844b0ae9ac0cbf40aeb92638eacf860db4671043c53eb7d0c
 b 2_nes
 p 1 h
-s 10000 14fff
+. 10000 14fff
 end
 
 
@@ -902,7 +902,7 @@ end
 hash d1eaf7419760c908053e14716607e994e0c29143885b4ec8b285caf46f7945ba
 b 2_nes
 p 1 h
-s 0 bfff
+. 0 bfff
 end
 
 
@@ -910,7 +910,7 @@ end
 hash 7768ef85519c94dc40d09bc598121825d103fcf1d4927be59f597b0a3509d15f
 b 2_nes
 p 1 h
-s 8000 bfff
+. 8000 bfff
 end
 
 
@@ -918,7 +918,7 @@ end
 hash c972cea7f55db3f92b775bd3878ce477feace79e3325e8bbcdd65fe780e2f50f
 b 2_nes
 p 1 h
-s 8000 bfff
+. 8000 bfff
 end
 
 
@@ -926,7 +926,7 @@ end
 hash a3763e702f8ae0818480cf0a8b2395d3f928c539f75e230ed43fa6b904fe6365
 b 2_nes
 p 1 h
-s 8000 bfff
+. 8000 bfff
 end
 
 
@@ -934,9 +934,9 @@ end
 hash 8593b6ae7b19b2e767ad2c207c5a83dea90030414f45eef4c0dec3c3a5530364
 b 2_nes
 p 1 h
-s 10000 15fff
-s 18000 1dfff
-s 20000 25fff
+. 10000 15fff
+. 18000 1dfff
+. 20000 25fff
 end
 
 
@@ -944,7 +944,7 @@ end
 hash 381fcbe2b714c38fdeb4045d93f0867fe80f4a219077c3dc5a683a05a8b8e78a
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -952,7 +952,7 @@ end
 hash 54526dc9444c0eb4b0e5814f98b5e522bcb9881a6f2c0644fc7a21ca8c03502b
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -960,7 +960,7 @@ end
 hash 0efd33e900759399ed29c36350ed146eb60396d68f67bf29baa48d4d8c77bd23
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -968,7 +968,7 @@ end
 hash 72d1d7a95724256471b00f72033821eea61a67d3fbc7167420326f75523b4970
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -976,7 +976,7 @@ end
 hash 67e76511b467253a3a1a9caacd4febf7a97415c963ce0b4b4bc71539d6d1e528
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -984,7 +984,7 @@ end
 hash 9680b586a90fa4d242abd8a48cc20ab551867e71a7a88b0f05b01056755da3f1
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -992,7 +992,7 @@ end
 hash 20aaf9705d2cc17bac10468544afb250019f43983677b904ca88328f67aa9439
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1000,7 +1000,7 @@ end
 hash e06b95487c293ec2e2d1516ee2c61f2b5b88665a609e64e3689a42934d038792
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1008,7 +1008,7 @@ end
 hash fa143a775995ba35a7bf52bbf89456e363de9811dfff5469a411da8029a01486
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1016,7 +1016,7 @@ end
 hash a08e6b53f1fa593e001719d87e2f203deb24ee1d389a8f3f339d75e9fb7c02f4
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1024,7 +1024,7 @@ end
 hash 1949e556f0d2d8cb8e97a2aeb476d03ab76a4cdfb1f3f3ff95260df410b89fe2
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1032,7 +1032,7 @@ end
 hash 2137d1621d29df50100f4d0fba3bafa0be56ccd0c832e44cd29dd7f0d75b374e
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1040,7 +1040,7 @@ end
 hash a0e0c22920d644e54cba9172cf55d6e8b96699ea1530da02cb4c2a6d2e9cb93a
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1048,7 +1048,7 @@ end
 hash 9d01730c16c2cfd2813a47a8a46d6e02a6ff0bca8e3cdcf5a1771b50af204b80
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1056,7 +1056,7 @@ end
 hash f3601248633f47a0ef10723e42a1072c76dd487d7ddf943e618611bb7cfec737
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1064,7 +1064,7 @@ end
 hash 5afb3469a79ba55b8b3e2c6932b37cbb544d0e15f2d15d1f61616308aa61ba93
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1072,7 +1072,7 @@ end
 hash 9ed6247ab3374e36f340a7841cf6b4b0f1ee2c3fce2d8d3563dd38ab38b1f65e
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1080,7 +1080,7 @@ end
 hash 3b687bf0a8ccd23736bb7ed2e6e75f9d150318d79da22bbf7ff1dd97ab980957
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1088,7 +1088,7 @@ end
 hash d143c472ff7bb30adc8ba90d1be1b0905ca2e37bb4a4dfc6d6297b0284cb9ef2
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1107,51 +1107,51 @@ end
 hash a35e846379ff252594ace83da2a1a1cb0692717b931055d1f6603812f18ad5cd
 b 2_nes
 p 2 v
-s 3501 3b00 //seg1
+. 3501 3b00 //seg1
 p 1 h
-s 4008 5007 //seg2
+. 4008 5007 //seg2
 p 2 v
-s 5008 6007
+. 5008 6007
 p 1 h
-s 6008 6907
+. 6008 6907
 p 2 v
-s 6908 6f07
+. 6908 6f07
 p 1 h
-s 6f08 74a7
+. 6f08 74a7
 p 2 v
-s 74a8 7a07
+. 74a8 7a07
 p 1 h
-s 7a08 8007
+. 7a08 8007
 p 2 v
-s 8008 8887
+. 8008 8887
 p 1 h
-s 8888 9187
+. 8888 9187
 p 2 v
-s 9188 9a07
+. 9188 9a07
 p 1 h
-s 9a08 a307
+. 9a08 a307
 p 2 v
-s a308 ab87
+. a308 ab87
 p 1 h
-s ab88 b487
+. ab88 b487
 p 2 v
-s b488 c007
+. b488 c007
 p 1 h
-s c008 c907
+. c008 c907
 p 2 v
-s c908 d187
+. c908 d187
 p 1 h
-s d188 da87
+. d188 da87
 p 2 v
-s da88 e307
+. da88 e307
 p 1 h
-s e308 f507
+. e308 f507
 p 2 v
-s f508 f907
+. f508 f907
 p 1 h
-s f908 ff07
+. f908 ff07
 p 2 v
-s 1b117 1b636 //seg3
+. 1b117 1b636 //seg3
 end
 
 
@@ -1159,37 +1159,33 @@ end
 hash d41e28b1a33b3b6768e7c39c9fdfb1fda4b49940542d14085911fabd399e1ca9
 b 2_nes
 c rle_konami
-//s 9099 9251 //02 not gfx
 p 2 v
-//f 14003 15fff //05 test the finder feature, has subs
-s 10003 105ad //03
-s 105b0 107a0 //04
-s 107a3 1086b //13
-s 1086e 119cc //08
-s 1b07c 1b15b //15
-s 1b15e 1b261 //16
-s 119cf 119fb //09
-s 119fe 12002 //06
+. 10003 105ad //03
+. 105b0 107a0 //04
+. 107a3 1086b //13
+. 1086e 119cc //08
+. 1b07c 1b15b //15
+. 1b15e 1b261 //16
+. 119cf 119fb //09
+. 119fe 12002 //06
 p 1 h
-//s 12005 12345 //10 just a flipped version, redundant
-s 12007 12345 //0a
-s 12348 123e6 //0f
-s 123e9 1293f //11
-s 12942 12a2c //12
-s 12a2f 138b8 //01
-//f 14003 14a60 //05 has subs
-//s 14a63 1631a //0b has subs
-//s 15253 153df //07 has subs
+. 12007 12345 //0a
+. 12348 123e6 //0f
+. 123e9 1293f //11
+. 12942 12a2c //12
+. 12a2f 138b8 //01
+//. 14003 14a60 //05 has subs
+//. 14a63 1631a //0b has subs
+//. 15253 153df //07 has subs
 //p 2 v
-s 1631d 164ff //19
-s 16502 16813 //1a
+. 1631d 164ff //19
+. 16502 16813 //1a
 //p 1 h
-s 16816 16dde //14
-//s 16de1 1730c //17 has subs
-//s 1730f 1735d //18 not gfx
-//s 18003 18cdb //0c has subs
-//s 18cde 19bd5 //0d has subs
-s 19bd8 1b079 //0e
+. 16816 16dde //14
+//. 16de1 1730c //17 has subs
+//. 18003 18cdb //0c has subs
+//. 18cde 19bd5 //0d has subs
+. 19bd8 1b079 //0e
 end
 
 
@@ -1197,7 +1193,7 @@ end
 hash d5426d3c26dc11200610044e3ff84ed13d09c372460bf09134ac8b770e69d724
 b 2_nes
 p 1 h
-s 40000 5ffff
+. 40000 5ffff
 end
 
 
@@ -1205,7 +1201,7 @@ end
 hash e9f4c9d1b7c66c6af83f2db5d4f704cf5f4b3c86e26a49c05539237807d8875e
 b 2_nes
 p 1 h
-s 4000 5fff
+. 4000 5fff
 end
 
 
@@ -1213,7 +1209,7 @@ end
 hash 24fca0fe86464c807ab5d58a2d56155a3fa1994e9bd78d119e3f8f84c8aee785
 b 2_nes
 p 1 h
-s 80000 bffff
+. 80000 bffff
 end
 
 
@@ -1221,7 +1217,7 @@ end
 hash c6f3d15f8c9b60aff995e7e2559db82a5659a3fc9cf9cb6aa9da0e695e5030f3
 b 2_nes
 p 1 h
-s 80000 bffff
+. 80000 bffff
 end
 
 
@@ -1229,7 +1225,7 @@ end
 hash b9124d9991574d190b8661f11140c5ce319ba050d26609fcf4c0f6349f7602bf
 b 2_nes
 p 1 h
-s 80000 bffff
+. 80000 bffff
 end
 
 
@@ -1237,7 +1233,7 @@ end
 hash e57cded0299931b2e2b6dca0be1f251d0f66c7566a49c38a426085afaa175d68
 b 2_nes
 p 1 h
-s 80000 bffff
+. 80000 bffff
 end
 
 
@@ -1245,7 +1241,7 @@ end
 hash 1250a80faf865aa5ee5585ad7639e5ef2b3fa541554effda5fad2cc5dc2acef5
 b 2_nes
 p 1 h
-s 80000 bffff
+. 80000 bffff
 end
 
 
@@ -1253,7 +1249,7 @@ end
 hash a6b81fec11c24a33fd763db5c28005e760a1614e70c1bb5ccde0bd4242431000
 b 2_nes
 p 1 h
-s 80000 bffff
+. 80000 bffff
 end
 
 
@@ -1261,23 +1257,23 @@ end
 hash 085e5397a3487357c263dfa159fb0fe20a5f3ea8ef82d7af6a7e848d3b9364e8
 b 2_nes
 p 2 v
-s 4db4 56b3 //seg1
+. 4db4 56b3 //seg1
 p 1 h
-s 56b4 5ec3
+. 56b4 5ec3
 p 2 v
-s 807f 877e //seg2
+. 807f 877e //seg2
 p 1 h
-s 877f 8f5e
+. 877f 8f5e
 p 2 v
-s c11b c83a //seg3
+. c11b c83a //seg3
 p 1 h
-s c83b c93a
+. c83b c93a
 p 2 v
-s c93b d08a
+. c93b d08a
 p 1 h
-s d08b d15a
+. d08b d15a
 p 2 v
-s d15b ebda
+. d15b ebda
 end
 
 
@@ -1285,23 +1281,23 @@ end
 hash ec0d4ebf6d2fcecd1d95fef7329954efe79676959bc281ea908b226459bc6dc2
 b 2_nes
 p 2 v
-s 4db4 56b3 //seg1
+. 4db4 56b3 //seg1
 p 1 h
-s 56b4 5ec3
+. 56b4 5ec3
 p 2 v
-s 807f 877e //seg2
+. 807f 877e //seg2
 p 1 h
-s 877f 8f5e
+. 877f 8f5e
 p 2 v
-s c11b c83a //seg3
+. c11b c83a //seg3
 p 1 h
-s c83b c93a
+. c83b c93a
 p 2 v
-s c93b d08a
+. c93b d08a
 p 1 h
-s d08b d15a
+. d08b d15a
 p 2 v
-s d15b ebda
+. d15b ebda
 end
 
 
@@ -1309,15 +1305,15 @@ end
 hash 5314ad0c406161195b6bb100ee11304bab8af121bba85992be896d5cb26b109e
 b 2_nes
 p 1 h
-s 1000 3fff //seg1
+. 1000 3fff //seg1
 p 2 v
-s 5000 7fff //seg2
+. 5000 7fff //seg2
 p 1 h
-s 9000 bfff //seg3
+. 9000 bfff //seg3
 p 2 v
-s d000 e7ff //seg4
+. d000 e7ff //seg4
 p 1 h
-s e800 ffff
+. e800 ffff
 end
 
 
@@ -1325,14 +1321,14 @@ end
 hash 649db8035018f2512ccea70aca6606c3b3a6988cd9ed43953b38dc5103dec7bb
 b 2_nes
 p 1 h
-s 4d60 555f //seg1
-s 8d60 955f //seg2
-s cd60 d55f //seg3
-s 10d60 1155f //seg4
-s 14d60 1555f //seg5
-s 18000 18a9f //seg6
-s 18be0 1989f //seg7
-s 19da0 1b8cf //seg8
+. 4d60 555f //seg1
+. 8d60 955f //seg2
+. cd60 d55f //seg3
+. 10d60 1155f //seg4
+. 14d60 1555f //seg5
+. 18000 18a9f //seg6
+. 18be0 1989f //seg7
+. 19da0 1b8cf //seg8
 end
 
 
@@ -1340,14 +1336,14 @@ end
 hash d2cdc3e8432f104709c17c88b20ceae87780e97cf6a2e3372fd54d0a67972062
 b 2_nes
 p 1 h
-s 4d60 555f //seg1
-s 8d60 955f //seg2
-s cd60 d55f //seg3
-s 10d60 1155f //seg4
-s 14d60 1555f //seg5
-s 18000 18a9f //seg6
-s 18be0 1989f //seg7
-s 19da0 1b8cf //seg8
+. 4d60 555f //seg1
+. 8d60 955f //seg2
+. cd60 d55f //seg3
+. 10d60 1155f //seg4
+. 14d60 1555f //seg5
+. 18000 18a9f //seg6
+. 18be0 1989f //seg7
+. 19da0 1b8cf //seg8
 end
 
 
@@ -1355,7 +1351,7 @@ end
 hash fcb6a0ef3a20c19b356005fbb21dc8009563b1cb5a9aaebc8e9386b4a8c5912e
 b 2_nes
 p 1 h
-s 8000 9fff
+. 8000 9fff
 end
 
 
@@ -1363,7 +1359,7 @@ end
 hash cba920f9394733c82253685d7783f26a3033ba58a94623e9abf7892329b969b9
 b 2_nes
 p 1 h
-s 20000 3ffff
+. 20000 3ffff
 end
 
 
@@ -1371,42 +1367,42 @@ end
 hash af5ac55d6283b709bcd96889708a6e7ad3c77e3bdd377aae796fd87b4b90dc4b
 b 2_nes
 p 1 h
-s 18000 187ef
-s 19f00 1beff
+. 18000 187ef
+. 19f00 1beff
 p 2 v
-s 1c000 1d5ff
+. 1c000 1d5ff
 p 1 h
-s 1d600 1f0ff
+. 1d600 1f0ff
 p 2 v
-s 27800 279ff
+. 27800 279ff
 p 1 h
-s 28000 28a3f
+. 28000 28a3f
 p 2 v
-s 28a40 28fff
+. 28a40 28fff
 p 1 h
-s 29000 2997f
-s 29b00 29d8f
+. 29000 2997f
+. 29b00 29d8f
 p 2 v
-s 2a000 2b1ff
-s 2e100 2e1bf
-s 2f8c0 2f8ff
-s 2f9c0 2f9ff //first tile is garbage
-s 2fac0 2faff
-s 2fba0 2fbff
-s 2fcc0 2fcff //first tile is garbage
-s 2fdc0 2fdff
+. 2a000 2b1ff
+. 2e100 2e1bf
+. 2f8c0 2f8ff
+. 2f9c0 2f9ff //first tile is garbage
+. 2fac0 2faff
+. 2fba0 2fbff
+. 2fcc0 2fcff //first tile is garbage
+. 2fdc0 2fdff
 p 1 h
-s 32f01 33440
+. 32f01 33440
 p 2 v
-s 379e0 379ff
-s 37aa0 37aff
-s 37b80 37bff //first tile is garbage
-s 37cc0 37cff
-s 37dc0 37dff //first tile is garbage
+. 379e0 379ff
+. 37aa0 37aff
+. 37b80 37bff //first tile is garbage
+. 37cc0 37cff
+. 37dc0 37dff //first tile is garbage
 p 1 h
-s 37e00 37f9f
-s 38000 387ef
-s 39f00 3beff //dupe maps inside garbage
+. 37e00 37f9f
+. 38000 387ef
+. 39f00 3beff //dupe maps inside garbage
 end
 
 
@@ -1419,50 +1415,50 @@ end
 hash 1e8966fd8c9baf57c514fbf4d67ddd8c1ffd184be164f99342ccdec62def8db2
 b 2_nes
 p 1 h
-s 56 85
-s 2a6 1095
+. 56 85
+. 2a6 1095
 p 2 h
-s 4006 7005
-s 800a a609
+. 4006 7005
+. 800a a609
 p 1 h
-s d4be cabe
-s dede df2d
-s 105f9 10688
-s 10601 10690
-s 11e8e 12e8d
-s 28006 28245 //start portraits, 4 empty bits between each
-s 2824a 28489
-s 2848e 286cd
-s 286d2 28911
-s 28916 28b55
-s 28b5a 28d99
-s 28d9e 28fdd
-s 28fe2 29231
-s 29236 29465
-s 2946a 296a9
-s 296ae 298ed
-s 298f2 29b31
-s 29b36 29d75
-s 29d7a 29fb9
-s 29fbe 2a1fd
-s 2a202 2a441
-s 2a446 2a685
-s 2a68a 2a8c9
-s 2a8ce 2ab0d
-s 2b1de 2b41d
-s 2b422 2b661
-s 2b666 2b8a5
-s 2b8aa 2bae9
-s 2baee 2bd2d
-s 2bd32 2bf71
+. d4be cabe
+. dede df2d
+. 105f9 10688
+. 10601 10690
+. 11e8e 12e8d
+. 28006 28245 //start portraits, 4 empty bits between each
+. 2824a 28489
+. 2848e 286cd
+. 286d2 28911
+. 28916 28b55
+. 28b5a 28d99
+. 28d9e 28fdd
+. 28fe2 29231
+. 29236 29465
+. 2946a 296a9
+. 296ae 298ed
+. 298f2 29b31
+. 29b36 29d75
+. 29d7a 29fb9
+. 29fbe 2a1fd
+. 2a202 2a441
+. 2a446 2a685
+. 2a68a 2a8c9
+. 2a8ce 2ab0d
+. 2b1de 2b41d
+. 2b422 2b661
+. 2b666 2b8a5
+. 2b8aa 2bae9
+. 2baee 2bd2d
+. 2bd32 2bf71
 p 2 h
-s 2c046 2d985
+. 2c046 2d985
 p 1 h
-s 2e75f 2e78e
+. 2e75f 2e78e
 p 2 h
-s 30046 32a85
+. 30046 32a85
 p 1 h
-s 3b31a 3b729 
+. 3b31a 3b729 
 end
 
 
@@ -1476,12 +1472,12 @@ end
 hash 4a4cf5968932f2e7783e2e46cc2b870e73e1d6e7a874ec4a9f79ec217423ba8a
 b 2_nes
 p 1 h
-s 40000 40fff
-s 41000 410bf
-s 410c0 420cf
-s 45ff0 465df
-s 52700 5334f
-s 55000 55fef
+. 40000 40fff
+. 41000 410bf
+. 410c0 420cf
+. 45ff0 465df
+. 52700 5334f
+. 55000 55fef
 end
 
 

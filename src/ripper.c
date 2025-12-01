@@ -304,6 +304,10 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 		context->bitplaneType = FOUR_BPP_SNES;
 		context->tileLength = 32;
 	}
+	else if (strcmp(args->bitplaneType, "4_snes_mode7") == 0) {
+		context->bitplaneType = FOUR_BPP_SNES_MODE7;
+		context->tileLength = 32;
+	}
 	else if (strcmp(args->bitplaneType, "5") == 0) {
 		context->bitplaneType = FIVE_BPP;
 		context->tileLength = 40;
@@ -459,6 +463,21 @@ uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int
 				 | ((uint64_t)sectionData[y * 2 + 16] << 8) // p2
 				 | ((uint64_t)sectionData[y * 2 + 1]  << 16)// p1
 				 | ((uint64_t)sectionData[y * 2 + 17] << 24);// p3
+		}
+		case FOUR_BPP_SNES_MODE7: {
+			// Each pixel is 4 bits, with 2 interleaved planes (in Mode 7 format)
+			uint64_t out = 0;
+
+			// Assuming the interleaving follows the pattern where each "chunk" in the data consists of interleaved 4BPP pixels
+			// The pattern and format must be based on how Super Metroid structures its Mode 7 data.
+			for (int k = 0; k < 8; k++) {
+			uint32_t tile = (uint32_t)sectionData[y * 2 + k]; // Fetch the interleaved tile data
+
+			// Unpack the 4 bits for each plane (2 planes, each 4 bits)
+			out |= (uint64_t)((tile & 0xF) << (4 * k));       // Plane 0 (first 4 bits of each byte)
+			out |= (uint64_t)((tile >> 4 & 0xF) << (4 * (k + 8))); // Plane 1 (next 4 bits of each byte)
+			}
+			return out;
 		}
         case EIGHT_BPP_SNES: {
             uint64_t out = 0;
@@ -618,7 +637,7 @@ int ripSection(Rom* rom, ExtractionArguments* arguments) {
 		strcmp(compressionType, "lz1") == 0 ||
 		strcmp(compressionType, "lz2") == 0 ||
 		strcmp(compressionType, "lz2le") == 0 ||
-		strcmp(compressionType, "lz3") == 0) ||
+		strcmp(compressionType, "lz3") == 0 ||
 		strcmp(compressionType, "lz5") == 0)
 	{
 		size_t sectionSize = context.sectionEnd - context.sectionStart + 1;

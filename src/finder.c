@@ -185,10 +185,20 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
     }
     int totalMatches = 0;
     int start = originalStart;
+    int candidateIndex = 0;  // Initialize candidate index
+
     while (start <= originalEnd) {
-		//int advanced = 0; //comment this out if you don't want to increment past candidates
         for (int i = 0; i < ffCount; ++i) {
+            // --- Progress printout ---
+            printf("  f: Checking FF %d / %d (at %X)\n", i + 1, ffCount, ffLocations[i]);
             int endAddr = ffLocations[i];
+            
+            // Skip the current 0xFF byte if it's followed by another 0xFF byte
+            if (endAddr + 1 < originalEnd && romBytes[endAddr + 1] == 0xFF) {
+                printf("  f: Skipping 0xFF at %X because the next byte is also 0xFF\n", endAddr);
+                continue;
+            }
+            
             if (endAddr < start)
                 continue;
             if (endAddr > originalEnd)
@@ -236,9 +246,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 continue;
             }
             int totalTiles = (decompressedData->size / context.tileLength);
-			//tailor below lines to your snes game's graphic block sizes if known
-			int qualifierTileCount = totalTiles; //comment this out if using below line
-            //int qualifierTileCount = (totalTiles == 16 || totalTiles == 32 || totalTiles == 64 || totalTiles == 128 || totalTiles == 256 || totalTiles == 512);
+            int qualifierTileCount = (totalTiles % 16 == 0); // Modify this for your specific game
             if (!qualifierTileCount) {
                 printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
                 free(decompressedData->output);
@@ -247,41 +255,31 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 continue;
             }
             double freq = computeFrequencyOfChange(sheet, width, height);
-            int qualifierFrequency = (freq >= 2.0 && freq <= 5.0);
+            int qualifierFrequency = (freq >= 1.5 && freq <= 5.0);
             uint32_t checksumHash = computeChecksum(sheet, width * height * 4);
             int qualifierChecksum = !hasChecksum(checksumHash);
             if (qualifierChecksum) {
                 storeChecksum(checksumHash);
             }
-			//comment out qualifiers if you feel they interfere.
-			//qualifierChecksum in particular is troublesome when 0xFF precedes term byte
+
             if (qualifierTileCount && qualifierFrequency && qualifierChecksum) {
                 char filename[512];
-#ifdef _MSC_VER
-                _snprintf_s(filename, sizeof(filename), _TRUNCATE,
-                            "%s%x_%x.png", outputFolder, start, endAddr);
-#else
+                // Format the candidate index with leading zeros
                 snprintf(filename, sizeof(filename),
-                         "%s%x_%x.png", outputFolder, start, endAddr);
-#endif
+                         "%s[%04d]%x_%x.png", outputFolder, candidateIndex++, start, endAddr);
                 printf("  f: candidate %x-%x, freq=%.2f, checksum match, writing \"%s\".\n",
                        start, endAddr, freq, filename);
                 if (!stbi_write_png(filename, width, height, 4, sheet, width * 4)) {
                     printf("  Error: Failed to write \"%s\".\n", filename);
                 } else {
                     ++totalMatches;
-                    //start = endAddr + 1; //comment this out if you don't want to increment past candidates
-                    //advanced = 1; //comment this out if you don't want to increment past candidates
                 }
             }
             free(sheet);
             free(decompressedData->output);
             free(decompressedData);
-            //if (advanced) //comment this out if you don't want to increment past candidates
-                //break; //comment this out if you don't want to increment past candidates
         }
-        //if (!advanced) //comment this out if you don't want to increment past candidates
-            start++;
+        start++;
     }
     printf("f: Finished scan. %d matching compressed graphic range(s) saved.\n", totalMatches);
     free(checksumHashes);

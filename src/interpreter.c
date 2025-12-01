@@ -33,8 +33,8 @@ if (token == NULL) \
 }
 
 char *updateToken(char* string) {
-	char* token = stringTokenize(string, " \n", tokenContext);
-	return token;
+    char* token = stringTokenize(string, " \n\t:,", tokenContext);
+    return token;
 }
 
 void pushTokenContext(void) {
@@ -296,7 +296,7 @@ char* token = updateToken(database);
 		CHECK_COMMAND("p", handlePatternCommand);
 		CHECK_COMMAND("r", handleDeduplicatorCommand);
 		CHECK_COMMAND("k", handleClearDeduplicatorCommand);
-		CHECK_COMMAND("s", handleSectionCommand);
+		CHECK_COMMAND(".", handleSectionCommand);
 		CHECK_COMMAND("f", handleFindCompressedCommand);
 		if (strcmp(token, "end") == 0)
 			break;

@@ -15,19 +15,19 @@ The easiest way to build this tool on Windows is by using TCC (TinyCC), a super 
 
 ## Using the "f" finder command
 
-If you have a working decompression routine, and you know the BPP format of the data you're trying to rip, it is possible for this tool to help you find compressed graphics blocks without disassembly. It scans from an incrementing starting position up to every 0xFF byte until all starting positions are exhausted. To filter out false candidates, there are a series of qualifiers in "finder.c" that can be commented in or out. Those qualifiers are "Total Tiles", "Frequency of Change" (between pixels), and Checksum. It is also possible to advance the starting byte past a successful candidate. This speeds up discovery of sequential blocks once you find the starting position of the first block.
+If you have a working decompression routine, and you know the BPP format of the data you're trying to rip, it is possible for this tool to help you find compressed graphics blocks without disassembly. It scans from an incrementing starting position up to every 0xFF byte until all starting positions are exhausted. To filter out false candidates, there are a series of qualifiers in "finder.c" that can be commented in or out. Those qualifiers are "Total Tiles", "Frequency of Change" (between pixels), and Checksum.
 
 ## Graphics database commands
 ```
 //trailing comments are supported
 hash {}
 c {} (compression type, default = raw)
-b {1/2/3/4/5/6/7/8} (bitplane type, default = 2)
+b {} (bitplane type)
 p {1/2/4/8/16} {h/v} (pattern size and direction, default = 1 h)
 r {true/false} (tile deduplicator, default = true)
 k (clear tile deduplicator cache)
 f {} {} (compressed gfx finder start and end)
-s {} {} (section start and end)
+. {} {} (section start and end)
 end
 ```
 
@@ -41,24 +41,10 @@ nesrip.exe filename
 * `raw`: Uncompressed
 * `rle_konami`: RLE_Konami
 * `lzss`: LZSS
+* `lz1`: LZ1
 * `lz2`: LZ2
-
-## Version History
-
-* 0.3
-	* Added bitplane types
-	* Added 1bpp bitplane
-	* Added tile redundancy checks
-* 0.2
-	* Made ROM headers be ignored from any operation.
-	* Hashes are now case insensitive.
-	* Made output files go into a folder named after the input ROM.
-	* Added batch files for processing multiple ROMs.
-	* Added pattern directionnality.
-	* Sheets will now extend vertically instead of splitting in multiple sheets.
-	* Added a pattern size of 16 to allow for fully vertical 128x128 sections.
-* 0.1
-	* Initial Release.
+* `lz3`: LZ3
+* `lz5`: LZ5
 
 ## Credits
 
