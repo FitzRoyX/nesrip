@@ -160,7 +160,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
         return 0;
     const char* compressionType = context.args->compressionType;
     if (strcmp(compressionType, "raw") == 0) {
-        printf("Error: f command is only supported for compressed types.\n");
+        printf("FINDER: f command is only supported for compressed types.\n");
         return 0;
     }
     int originalStart = context.sectionStart;
@@ -176,26 +176,32 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
         }
     }
     if (ffCount == 0) {
-        printf("f: No 0xFF bytes found in specified range.\n");
+        printf("FINDER: No 0xFF bytes found in specified range.\n");
         return 0;
     }
     if (ffCount >= MAX_FF_LOCATIONS) {
-        printf("f: Warning, hit 0xFF location limit (%d); some candidates may be skipped.\n",
+        printf("FINDER: Warning, hit 0xFF location limit (%d); some candidates may be skipped.\n",
                MAX_FF_LOCATIONS);
     }
+
     int totalMatches = 0;
     int start = originalStart;
     int candidateIndex = 0;  // Initialize candidate index
 
+    int totalAddresses = originalEnd - originalStart + 1; // Total addresses in range
+
     while (start <= originalEnd) {
         for (int i = 0; i < ffCount; ++i) {
-            // --- Progress printout ---
-            printf("  f: Checking FF %d / %d (at %X)\n", i + 1, ffCount, ffLocations[i]);
+            // --- Progress printout with two decimal places ---
+            double progress = ((double)(start - originalStart) / totalAddresses) * 100;
+            printf("FINDER: Checking 0xFF at %d / %d (AT %X). Progress=%.2f%%\n", 
+                   i + 1, ffCount, ffLocations[i], progress);
+            
             int endAddr = ffLocations[i];
             
             // Skip the current 0xFF byte if it's followed by another 0xFF byte
             if (endAddr + 1 < originalEnd && romBytes[endAddr + 1] == 0xFF) {
-                printf("  f: Skipping 0xFF at %X because the next byte is also 0xFF\n", endAddr);
+                printf("FINDER: Skipping 0xFF at %X because next byte is also 0xFF\n", endAddr);
                 continue;
             }
             
@@ -220,6 +226,8 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 decompressedData = decompressLz3(sectionData, sectionSize);
             } else if (strcmp(compressionType, "lz5") == 0) {
                 decompressedData = decompressLz5(sectionData, sectionSize);
+            } else if (strcmp(compressionType, "dm2") == 0) {
+                decompressedData = decompressDm2(sectionData, sectionSize);
             }
             if (!decompressedData || !decompressedData->output || decompressedData->size == 0) {
                 if (decompressedData) {
@@ -248,7 +256,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
             int totalTiles = (decompressedData->size / context.tileLength);
             int qualifierTileCount = (totalTiles % 16 == 0); // Modify this for your specific game
             if (!qualifierTileCount) {
-                printf("  f: candidate %X-%X has %d tiles, skipping.\n", start, endAddr, totalTiles);
+                printf("FINDER: Candidate %X-%X skipped due to having %d tiles.\n", start, endAddr, totalTiles);
                 free(decompressedData->output);
                 free(decompressedData);
                 free(sheet);
@@ -267,10 +275,10 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
                 // Format the candidate index with leading zeros
                 snprintf(filename, sizeof(filename),
                          "%s[%04d]%x_%x.png", outputFolder, candidateIndex++, start, endAddr);
-                printf("  f: candidate %x-%x, freq=%.2f, checksum match, writing \"%s\".\n",
+                printf("FINDER: Candidate %x-%x freq=%.2f, checksum, writing \"%s\".\n",
                        start, endAddr, freq, filename);
                 if (!stbi_write_png(filename, width, height, 4, sheet, width * 4)) {
-                    printf("  Error: Failed to write \"%s\".\n", filename);
+                    printf("FINDER: Failed to write \"%s\".\n", filename);
                 } else {
                     ++totalMatches;
                 }
@@ -281,7 +289,7 @@ int findCompressedGraphics(Rom* rom, ExtractionArguments* arguments) {
         }
         start++;
     }
-    printf("f: Finished scan. %d matching compressed graphic range(s) saved.\n", totalMatches);
+    printf("FINDER: Finished scan. %d matching compressed graphic range(s) saved.\n", totalMatches);
     free(checksumHashes);
     return 1;
 }

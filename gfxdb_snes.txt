@@ -204,6 +204,15 @@ b 8_snes_mode7
 end
 
 
+//Super Mario Kart (U).sfc
+hash 2ada8919688087be60a6a48cace8f877add60c45d2e5d09e2442faa55be62a49
+b 4_snes
+p 1 h
+c lz5
+f 0 7ffff
+end
+
+
 //Super Mario World (U).sfc
 hash 0838e531fe22c077528febe14cb3ff7c492f1f5fa8de354192bdff7137c27f5b
 b 4_snes
@@ -272,7 +281,6 @@ end
  
 //Super Metroid (J)(U).sfc //0-2fffff this is the full range of rom
 hash 12b77c4bc9c1832cee8881244659065ee1d84c70c3d29e6eaf92e6798cc2ca72
-r false
 b 4_snes
 . 38564 3c963 //animated tiles!
 p 2 h
@@ -304,7 +312,9 @@ b 4_snes
 . bd7fc be7dd //ending samus shooting!
 . be7de beefe //another font!
 b 8_snes_mode7
+i odd
 . bf987 c0303 //post credits samus beam! interleaved
+i none
 b 4_snes
 . c0304 c35c0 //ending zebes explosion!
 c raw
@@ -348,6 +358,8 @@ c lz5
 . 1fd414 20060a //tourian tileset!
 . 20060b 203003 //utility room tourian entrance tileset!
 . 203004 206229 //ceres tileset!
+b 8_snes_mode7
+i odd
 . 20622a 208da8 //ceres elevator tileset! interleaved
 . 208da9 20b6f5 //ceres ridley room tileset! interleaved
 end

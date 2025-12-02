@@ -21,6 +21,8 @@ Rom readRom(char* romName) {
         databaseFilename = "gfxdb_nes.txt";
     } else if (strstr(romName, ".sfc") || strstr(romName, ".smc")) {
         databaseFilename = "gfxdb_snes.txt";
+    } else if (strstr(romName, ".dat")) {
+        databaseFilename = "gfxdb_dos.txt";
     } else {
         printf("Unsupported ROM extension for: %s\n", romName);
         result.size = -1;

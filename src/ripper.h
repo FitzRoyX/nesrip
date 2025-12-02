@@ -12,7 +12,6 @@ typedef enum BitPlaneType {
 	THREE_BPP_SNES,
 	THREE_BPP_SNES_MODE7,
 	FOUR_BPP_SNES,
-	FOUR_BPP_SNES_MODE7,
 	FIVE_BPP,
 	SIX_BPP,
 	SEVEN_BPP,
@@ -25,6 +24,7 @@ typedef struct ExtractionArguments {
 	//String arguments
 	char* compressionType;
 	char* bitplaneType;
+	char* interleaveType;
 	char* patternSizeString;
 	char* patternDirectionString;
 	char* deduplicator;
@@ -41,6 +41,7 @@ typedef struct ExtractionContext {
     int sectionStart;
     int sectionEnd;
     BitplaneType bitplaneType;
+    int interleaveType;
     int patternSize;
     int patternDirection;
     int deduplicator;
@@ -71,5 +72,6 @@ int writeLine(ExtractionContext* context, int y, uint64_t data);
 void initPatternChains();
 void cleanupPatternChains();
 int ripSection(Rom* rom, ExtractionArguments* arguments);
+int ripDm2GraphicsDat(Rom* rom, ExtractionArguments* arguments);
 
 #endif

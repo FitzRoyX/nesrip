@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
+#include <math.h>
 #include "globals.h"
 #include "decompressor.h"
 #include "logger.h"
@@ -185,6 +186,7 @@ ColorizerPalette palettes[MAX_PALETTES];
 ColorizerSheet colorSheet;
 int colorSheetIndex = 0;
 
+
 int allocTilesheet(ExtractionContext* context, int tileCount) {
 	int width = 128;
 	int tilesPerRow = 16 * context->patternSize;
@@ -302,10 +304,6 @@ int getSectionDetails(Rom* rom, ExtractionContext* context) {
 	}
 	else if (strcmp(args->bitplaneType, "4_snes") == 0) {
 		context->bitplaneType = FOUR_BPP_SNES;
-		context->tileLength = 32;
-	}
-	else if (strcmp(args->bitplaneType, "4_snes_mode7") == 0) {
-		context->bitplaneType = FOUR_BPP_SNES_MODE7;
 		context->tileLength = 32;
 	}
 	else if (strcmp(args->bitplaneType, "5") == 0) {
@@ -428,57 +426,28 @@ int addToHash(ExtractionContext* context, int y, uint64_t data) {
 }
 
 uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int y) {
-	switch (context->bitplaneType) {
-		case ONE_BPP: {
-			return sectionData[y];
+    switch (context->bitplaneType) {
+        case ONE_BPP:
+            return sectionData[y];
+        case TWO_BPP_NES:
+            return (uint64_t)sectionData[y] | ((uint64_t)sectionData[y + 8] << 8);
+        case TWO_BPP_SNES:
+            return (uint64_t)sectionData[y * 2] | ((uint64_t)sectionData[y * 2 + 1] << 8);
+        case THREE_BPP_SNES:
+            return (uint64_t)sectionData[y * 2] | ((uint64_t)sectionData[y * 2 + 1] << 8) | ((uint64_t)sectionData[y + 16] << 16);
+        case THREE_BPP_SNES_MODE7: {
+            uint32_t val = (uint32_t)sectionData[y * 3 + 2] | ((uint32_t)sectionData[y * 3 + 1] << 8) | ((uint32_t)sectionData[y * 3 + 0] << 16);
+            uint64_t out = 0;
+            for (int k = 0; k < 8; k++) {
+                uint32_t bits = (val >> (3 * k)) & 7; // extract 3 bits
+                out |= (uint64_t)(bits & 1) << (0  + k); // plane 0
+                out |= (uint64_t)(bits & 2) << (7  + k); // plane 1
+                out |= (uint64_t)(bits & 4) << (14 + k); // plane 2
+            }
+            return out;
 		}
-		case TWO_BPP_NES: {
-			return (uint64_t)sectionData[y]
-				 | ((uint64_t)sectionData[y + 8] << 8);
-		}
-		case TWO_BPP_SNES: {
-			return (uint64_t)sectionData[y * 2]
-				 | ((uint64_t)sectionData[y * 2 + 1] << 8);
-		}
-		case THREE_BPP_SNES: {
-			return (uint64_t)sectionData[y * 2]
-				 | ((uint64_t)sectionData[y * 2 + 1] << 8)
-				 | ((uint64_t)sectionData[y + 16] << 16);
-		}
-		case THREE_BPP_SNES_MODE7: {
-			uint32_t val = (uint32_t)sectionData[y * 3 + 2]
-			 | ((uint32_t)sectionData[y * 3 + 1] << 8)
-			 | ((uint32_t)sectionData[y * 3 + 0] << 16);
-			uint64_t out = 0;
-			for (int k = 0; k < 8; k++) {
-				uint32_t bits = (val >> (3 * k)) & 7; // extract 3 bits
-				out |= (uint64_t)(bits & 1) << (0  + k); // plane 0
-				out |= (uint64_t)(bits & 2) << (7  + k); // plane 1
-				out |= (uint64_t)(bits & 4) << (14 + k); // plane 2
-			}
-			return out;
-		}
-		case FOUR_BPP_SNES: {
-			return  (uint64_t)sectionData[y * 2 + 0] // p0
-				 | ((uint64_t)sectionData[y * 2 + 16] << 8) // p2
-				 | ((uint64_t)sectionData[y * 2 + 1]  << 16)// p1
-				 | ((uint64_t)sectionData[y * 2 + 17] << 24);// p3
-		}
-		case FOUR_BPP_SNES_MODE7: {
-			// Each pixel is 4 bits, with 2 interleaved planes (in Mode 7 format)
-			uint64_t out = 0;
-
-			// Assuming the interleaving follows the pattern where each "chunk" in the data consists of interleaved 4BPP pixels
-			// The pattern and format must be based on how Super Metroid structures its Mode 7 data.
-			for (int k = 0; k < 8; k++) {
-			uint32_t tile = (uint32_t)sectionData[y * 2 + k]; // Fetch the interleaved tile data
-
-			// Unpack the 4 bits for each plane (2 planes, each 4 bits)
-			out |= (uint64_t)((tile & 0xF) << (4 * k));       // Plane 0 (first 4 bits of each byte)
-			out |= (uint64_t)((tile >> 4 & 0xF) << (4 * (k + 8))); // Plane 1 (next 4 bits of each byte)
-			}
-			return out;
-		}
+        case FOUR_BPP_SNES:
+            return (uint64_t)sectionData[y * 2 + 0] | ((uint64_t)sectionData[y * 2 + 16] << 8) | ((uint64_t)sectionData[y * 2 + 1] << 16) | ((uint64_t)sectionData[y * 2 + 17] << 24);
         case EIGHT_BPP_SNES: {
             uint64_t out = 0;
             for (int i = 0; i < 8; i++) {
@@ -487,26 +456,20 @@ uint64_t getLineData(ExtractionContext* context, unsigned char* sectionData, int
             }
             return out;
 		}
-		case EIGHT_BPP_SNES_MODE7: {
-			return ((uint64_t)sectionData[y * 8 + 0] << 56)
-				 | ((uint64_t)sectionData[y * 8 + 1] << 48)
-				 | ((uint64_t)sectionData[y * 8 + 2] << 40)
-				 | ((uint64_t)sectionData[y * 8 + 3] << 32)
-				 | ((uint64_t)sectionData[y * 8 + 4] << 24)
-				 | ((uint64_t)sectionData[y * 8 + 5] << 16)
-				 | ((uint64_t)sectionData[y * 8 + 6] << 8)
-				 | ((uint64_t)sectionData[y * 8 + 7]);
-		}
-		default: {
-			return 0;
-		}
-	}
+        case EIGHT_BPP_SNES_MODE7:
+            return ((uint64_t)sectionData[y * 8 + 0] << 56) | ((uint64_t)sectionData[y * 8 + 1] << 48) | ((uint64_t)sectionData[y * 8 + 2] << 40) |
+                   ((uint64_t)sectionData[y * 8 + 3] << 32) | ((uint64_t)sectionData[y * 8 + 4] << 24) | ((uint64_t)sectionData[y * 8 + 5] << 16) |
+                   ((uint64_t)sectionData[y * 8 + 6] << 8) | ((uint64_t)sectionData[y * 8 + 7]);
+        default:
+            return 0;
+    }
 }
 
+// This function processes the tile data
 void processTile(ExtractionContext* context, unsigned char* sectionData, int (*callback)(ExtractionContext*, int, uint64_t)) {
-	for (int y = 0; y < 8; y++)
-		if (callback(context, y, getLineData(context, sectionData, y)))
-			return;
+    for (int y = 0; y < 8; y++)
+        if (callback(context, y, getLineData(context, sectionData, y)))
+            return;
 }
 
 int isTileMatch(ExtractionContext* context, unsigned char* tileDataA, unsigned char* tileDataB) {
@@ -608,184 +571,399 @@ void cleanupPatternChains() {
 	}
 }
 
+// Function to decompress data based on compression type
+Result* decompressData(const char* compressionType, unsigned char* sectionData, size_t sectionSize) {
+    if (strcmp(compressionType, "rle_konami") == 0)
+        return decompressRleKonami(sectionData, sectionSize);
+    else if (strcmp(compressionType, "lzss") == 0)
+        return decompressLzss(sectionData, sectionSize);
+    else if (strcmp(compressionType, "lz1") == 0)
+        return decompressLz1(sectionData, sectionSize);
+    else if (strcmp(compressionType, "lz2") == 0)
+        return decompressLz2(sectionData, sectionSize);
+    else if (strcmp(compressionType, "lz2le") == 0)
+        return decompressLz2LE(sectionData, sectionSize);
+    else if (strcmp(compressionType, "lz3") == 0)
+        return decompressLz3(sectionData, sectionSize);
+    else if (strcmp(compressionType, "lz5") == 0)
+        return decompressLz5(sectionData, sectionSize);
+    else if (strcmp(compressionType, "dm2") == 0)
+        return decompressDm2(sectionData, sectionSize);
+    return NULL;
+}
+
+unsigned char* deinterleaveData(unsigned char* data, size_t size, const char* interleaveType, size_t* filteredSize) {
+    if (strcmp(interleaveType, "none") == 0) {
+        // If interleaving type is "none", return the data as is
+        *filteredSize = size;
+        return data;
+    }
+
+    int mode = (strcmp(interleaveType, "even") == 0) ? 0 : 1; // Mode for "even" or "odd"
+    if (!data || size == 0) {
+        *filteredSize = 0;
+        return NULL;
+    }
+
+    size_t count;
+    unsigned char* out;
+    // Deinterleave processing
+    switch (mode) {
+        case 0: // even (keep even indexed bytes)
+            count = (size + 1) / 2;
+            out = malloc(count);
+            for (size_t i = 0, j = 0; i < size; i += 2, j++) {
+                out[j] = data[i];
+            }
+            break;
+        case 1: // odd (keep odd indexed bytes)
+            count = size / 2;
+            out = malloc(count);
+            for (size_t i = 1, j = 0; i < size; i += 2, j++) {
+                out[j] = data[i];
+            }
+            break;
+        default:
+            *filteredSize = 0;
+            return NULL;
+    }
+
+    if (!out) {
+        printf("Error: malloc failed in deinterleaveData.\n");
+        *filteredSize = 0;
+        return NULL;
+    }
+
+    *filteredSize = count;
+    return out;
+}
+
+// Function to process the tiles
+void processTilesInSection(ExtractionContext* context, unsigned char* data, size_t size) {
+    unsigned char* dataPtr = data;
+    unsigned char* dataEnd = data + size;
+
+    while (dataPtr < dataEnd) {
+        if (context->deduplicator) {
+            context->workingHash = 0;
+            processTile(context, dataPtr, &addToHash);
+
+            if (!checkHasTileMatch(context, dataPtr, context->workingHash))
+                processTile(context, dataPtr, &writeLine);
+            else
+                drawDeduplicatedTile(context);
+        } else {
+            processTile(context, dataPtr, &writeLine);
+        }
+        incrementTilePos(context);
+        dataPtr += context->tileLength;
+    }
+}
+
+// Function to finalize the section and handle output
+void finalizeSection(ExtractionContext* context, int tileCount) {
+    colorSheetIndex += tileCount;
+    appendSectionToOutput(context->sheet, 128, context->maxY + 1);
+    free(context->sheet);
+    cleanupPatternChains();
+    initPatternChains();
+}
+
 int ripSection(Rom* rom, ExtractionArguments* arguments) {
-	ExtractionContext context = {
-		rom,
-		arguments
-	};
+    // Check if this is a .dat file - if so, use DM2-specific extraction
+    if (databaseFilename && strstr(databaseFilename, "dos.txt")) {
+        const char* compressionType = arguments->compressionType;
+        if (compressionType && strcmp(compressionType, "dm2") == 0) {
+            return ripDm2GraphicsDat(rom, arguments);
+        }
+    }
 
-	printf("Ripping section %s to %s.\n",
-		   context.args->sectionStartString,
-		   context.args->sectionEndString);
+    ExtractionContext context = {
+        rom,
+        arguments
+    };
 
-	if (!getSectionDetails(rom, &context))
-		return 0;
+    printf("Ripping section %s to %s.\n", context.args->sectionStartString, context.args->sectionEndString);
 
-	int tileCount = 0;
-	unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
-	unsigned char* endPointer   = (unsigned char*)rom->data + context.sectionEnd;
+    if (!getSectionDetails(rom, &context))
+        return 0;
 
-	const char* compressionType = context.args->compressionType;
+    unsigned char* sectionData = (unsigned char*)rom->data + context.sectionStart;
+    unsigned char* endPointer   = (unsigned char*)rom->data + context.sectionEnd;
+    const char* compressionType = context.args->compressionType;
 
-	//
-	// =====================================================================
-	//  COMPRESSED BRANCH
-	// =====================================================================
-	//
-	if (strcmp(compressionType, "rle_konami") == 0 ||
-		strcmp(compressionType, "lzss") == 0 ||
-		strcmp(compressionType, "lz1") == 0 ||
-		strcmp(compressionType, "lz2") == 0 ||
-		strcmp(compressionType, "lz2le") == 0 ||
-		strcmp(compressionType, "lz3") == 0 ||
-		strcmp(compressionType, "lz5") == 0)
-	{
-		size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
-		Result* decompressedData = NULL;
+    // Handle the decompressed formats
+    if (strcmp(compressionType, "rle_konami") == 0 ||
+        strcmp(compressionType, "lzss") == 0 ||
+        strcmp(compressionType, "lz1") == 0 ||
+        strcmp(compressionType, "lz2") == 0 ||
+        strcmp(compressionType, "lz2le") == 0 ||
+        strcmp(compressionType, "lz3") == 0 ||
+        strcmp(compressionType, "lz5") == 0 ||
+        strcmp(compressionType, "dm2") == 0) {
 
-		// --- dispatch correct decompressor ---
-		if (strcmp(compressionType, "rle_konami") == 0) {
-			decompressedData = decompressRleKonami(sectionData, sectionSize);
-		} else if (strcmp(compressionType, "lzss") == 0) {
-			decompressedData = decompressLzss(sectionData, sectionSize);
-		} else if (strcmp(compressionType, "lz1") == 0) {
-			decompressedData = decompressLz1(sectionData, sectionSize);
-		} else if (strcmp(compressionType, "lz2") == 0) {
-			decompressedData = decompressLz2(sectionData, sectionSize);
-		} else if (strcmp(compressionType, "lz2le") == 0) {
-			decompressedData = decompressLz2LE(sectionData, sectionSize);
-		} else if (strcmp(compressionType, "lz3") == 0) {
-			decompressedData = decompressLz3(sectionData, sectionSize);
-		} else if (strcmp(compressionType, "lz5") == 0) {
-			decompressedData = decompressLz5(sectionData, sectionSize);
-		}
+        size_t sectionSize = context.sectionEnd - context.sectionStart + 1;
+        Result* decompressedData = decompressData(compressionType, sectionData, sectionSize);
 
-		if (!decompressedData) {
-			printf("Error: Failed to decompress the section.\n");
-			return 0;
-		}
+        if (!decompressedData) {
+            printf("Error: Failed to decompress the section.\n");
+            return 0;
+        }
 
-		// tile count based on REAL tile size
-		tileCount = decompressedData->size / context.tileLength;
-		if (decompressedData->size % context.tileLength != 0) {
-			printf("Warning: Decompressed data is not a multiple of %d bytes, "
-				   "truncating the extra bytes.\n",
-				   context.tileLength);
-		}
+        // Deinterleave if necessary
+        unsigned char* decompressedPtr = decompressedData->output;
+        size_t filteredSize = 0;
+        decompressedPtr = deinterleaveData(decompressedPtr, decompressedData->size, interleaveType, &filteredSize);
+        decompressedData->output = decompressedPtr;
+        decompressedData->size = filteredSize;
 
-		if (allocTilesheet(&context, tileCount)) {
-			free(decompressedData->output);
-			free(decompressedData);
-			return 0;
-		}
+        // Tile count based on REAL tile size
+        int tileCount = decompressedData->size / context.tileLength;
+        if (decompressedData->size % context.tileLength != 0) {
+            printf("Warning: Decompressed data is not a multiple of %d bytes, truncating the extra bytes.\n", context.tileLength);
+        }
 
-		if (context.sheet == NULL) {
-			free(decompressedData->output);
-			free(decompressedData);
-			return 0;
-		}
+        // Allocate tilesheet
+        if (allocTilesheet(&context, tileCount)) {
+            free(decompressedData->output);
+            free(decompressedData);
+            return 0;
+        }
 
-		// process tiles
-		unsigned char* decompressedPtr = decompressedData->output;
-		unsigned char* decompressedEnd = decompressedData->output + decompressedData->size;
+        if (context.sheet == NULL) {
+            free(decompressedData->output);
+            free(decompressedData);
+            return 0;
+        }
 
-		while (decompressedPtr < decompressedEnd) {
-			if (context.deduplicator) {
-				context.workingHash = 0;
-				processTile(&context, decompressedPtr, &addToHash);
+        // Process tiles
+        processTilesInSection(&context, decompressedData->output, decompressedData->size);
 
-				if (!checkHasTileMatch(&context, decompressedPtr, context.workingHash))
-					processTile(&context, decompressedPtr, &writeLine);
-				else
-					drawDeduplicatedTile(&context);
-			} else {
-				processTile(&context, decompressedPtr, &writeLine);
-			}
+        free(decompressedData->output);
+        free(decompressedData);
 
-			incrementTilePos(&context);
-			decompressedPtr += context.tileLength;
-		}
+        // Finalize section processing
+        finalizeSection(&context, tileCount);
 
-		free(decompressedData->output);
-		free(decompressedData);
-	}
+    } else if (strcmp(compressionType, "raw") == 0) { // Handling the "raw" case
+        size_t sectionSize = (context.sectionEnd - context.sectionStart) + 1;
 
-	//
-	// =====================================================================
-	//  RAW BRANCH
-	// =====================================================================
-	//
-	else if (strcmp(compressionType, "raw") == 0)
-	{
-		size_t sectionSize = (context.sectionEnd - context.sectionStart) + 1;
+        // Check if the section can be divided into complete tiles
+        if (sectionSize % context.tileLength != 0) {
+            printf("Warning: Targeted section has some extra bytes that cannot "
+                   "be used to make a full tile. Rounding down section end address.\n");
 
-		if (sectionSize % context.tileLength != 0) {
-			printf("Warning: Targeted section has some extra bytes that cannot "
-				   "be used to make a full tile.\n Rounding down section end address.\n");
+            context.sectionEnd -= (sectionSize % context.tileLength);
+            sectionSize = (context.sectionEnd - context.sectionStart) + 1;
+        }
 
-			context.sectionEnd -= (sectionSize % context.tileLength);
-			sectionSize = (context.sectionEnd - context.sectionStart) + 1;
-		}
+        // Deinterleave raw section data if necessary
+        sectionData = deinterleaveData(sectionData, sectionSize, interleaveType, &sectionSize);
 
-		tileCount = sectionSize / context.tileLength;
+        // Tile count based on section size
+        int tileCount = sectionSize / context.tileLength;
 
-		if (allocTilesheet(&context, tileCount))
-			return 0;
+        // Allocate tilesheet
+        if (allocTilesheet(&context, tileCount))
+            return 0;
 
-		if (context.sheet == NULL)
-			return 0;
+        if (context.sheet == NULL)
+            return 0;
 
-		while (sectionData <= endPointer - (context.tileLength - 1)) {
-			if (context.deduplicator) {
-				context.workingHash = 0;
-				processTile(&context, sectionData, &addToHash);
+        // Process raw tiles directly
+        processTilesInSection(&context, sectionData, sectionSize);
 
-				if (!checkHasTileMatch(&context, sectionData, context.workingHash))
-					processTile(&context, sectionData, &writeLine);
-				else
-					drawDeduplicatedTile(&context);
-			} else {
-				processTile(&context, sectionData, &writeLine);
-			}
+        // Finalize section processing
+        finalizeSection(&context, tileCount);
+    } else {
+        // Handle unknown compression types
+        printf("Error: Unknown compression type \"%s\".\n", compressionType);
+        return 0;
+    }
 
-			incrementTilePos(&context);
-			sectionData += context.tileLength;
-		}
-	}
+    return 1;
+}
 
-	//
-	// =====================================================================
-	//  UNKNOWN COMPRESSION
-	// =====================================================================
-	//
-	else {
-		printf("Error: Unknown compression type \"%s\".\n", compressionType);
-		return 0;
-	}
 
-	//
-	// =====================================================================
-	//  FINAL OUTPUT + CLEANUP
-	// =====================================================================
-	//
-	colorSheetIndex += tileCount;
 
-	appendSectionToOutput(context.sheet, 128, context.maxY + 1);
 
-	free(context.sheet);
 
-	// cleanup pattern chains if decompressed formats were used
-	if (strcmp(compressionType, "rle_konami") == 0 ||
-		strcmp(compressionType, "lzss") == 0 ||
-		strcmp(compressionType, "lz1") == 0 ||
-		strcmp(compressionType, "lz2") == 0 ||
-		strcmp(compressionType, "lz2le") == 0 ||
-		strcmp(compressionType, "lz3") == 0 ||
-		strcmp(compressionType, "lz5") == 0)
-	{
-		cleanupPatternChains();
-		initPatternChains();
-	}
 
-	return 1;
+/*
+ * DM2 Graphics.dat Directory Entry Structure
+ * Based on documentation at:
+ * http://dmweb.free.fr/community/documentation/file-formats/dungeon-master-ii-data-files-notes/
+ * 
+ * Directory format:
+ * - Offset 0x00-0x13: Header (20 bytes)
+ * - Offset 0x00-0x01: Entry count (big-endian word)
+ * - Offset 0x14: First entry starts
+ * - Each entry: 8 bytes
+ *   * Bytes 0-3: Offset (big-endian dword)
+ *   * Bytes 4-7: Size (big-endian dword)
+ */
+typedef struct {
+    uint32_t offset;
+    uint32_t size;
+} Dm2Entry;
+
+int ripDm2GraphicsDat(Rom* rom, ExtractionArguments* arguments) {
+    if (!rom || !rom->data || rom->size < 0x14) {
+        printf("Error: Invalid ROM data for DM2 extraction.\n");
+        return 0;
+    }
+
+    const uint8_t* data = (const uint8_t*)rom->data;
+    uint16_t entryCount = (data[0] << 8) | data[1];
+
+    if (entryCount == 0 || entryCount > 10000) {
+        printf("Error: Invalid entry count: %d\n", entryCount);
+        return 0;
+    }
+
+    printf("DM2: Found %d entries in graphics.dat\n", entryCount);
+
+    const uint8_t* directory = data + 0x14;
+    const char* outFolder = (arguments && arguments->outputFolder) ? arguments->outputFolder : outputFolder;
+    if (!outFolder) {
+        printf("Error: Output folder not set.\n");
+        return 0;
+    }
+
+    // Process each entry
+    for (uint16_t i = 0; i < entryCount; i++) {
+        const uint8_t* entryData = directory + (i * 8);
+        uint32_t entryOffset = entryData[0] | (entryData[1] << 8) | (entryData[2] << 16) | (entryData[3] << 24);
+        uint32_t entrySize = entryData[4] | (entryData[5] << 8) | (entryData[6] << 16) | (entryData[7] << 24);
+
+        printf("Processing Entry %d: Size %u, Offset %u\n", i, entrySize, entryOffset);
+
+        if (entrySize == 0 || entryOffset + entrySize > rom->size) {
+            printf("Skipping Entry %d: Invalid size or offset\n", i);
+            continue;
+        }
+
+        const uint8_t* imgData = data + entryOffset;
+
+        int formatType = 0;
+        int width = 0, height = 0, bpp = 0;
+        const uint8_t* compressedBody = NULL;
+        size_t compressedBodySize = 0;
+
+        // Try C4 format first (7-byte header)
+        if (entrySize >= 7) {
+            uint16_t widthRaw = imgData[0] | (imgData[1] << 8);
+            uint16_t heightRaw = imgData[2] | (imgData[3] << 8);
+            width = widthRaw & 0x3FF;  // Lower 10 bits
+            height = heightRaw & 0x3FF; // Lower 10 bits
+
+            // Check if this looks like C4 format (reasonable width and height)
+            if (width >= 8 && height >= 8 && width <= 1024 && height <= 1024) {
+                formatType = 1; // C4
+                bpp = 4;
+                compressedBody = imgData + 7;
+                compressedBodySize = entrySize - 7;
+            }
+        }
+
+        // If not C4, try C8 format (8-byte header)
+        if (formatType == 0 && entrySize >= 8) {
+            uint16_t widthRaw = imgData[0] | (imgData[1] << 8);
+            uint16_t heightRaw = imgData[2] | (imgData[3] << 8);
+            if (widthRaw > 0 && widthRaw <= 1024 && heightRaw > 0 && heightRaw <= 1024) {
+                formatType = 2; // C8
+                width = widthRaw;
+                height = heightRaw;
+                bpp = 8;
+                compressedBody = imgData + 8;
+                compressedBodySize = entrySize - 8;
+            }
+        }
+
+        // Handle unknown formats
+        if (formatType == 0 || width == 0 || height == 0) {
+            printf("Skipping Entry %d: Unknown format\n", i);
+            continue;
+        }
+
+        // Decompress the body (if compressed)
+        const uint8_t* pixelData = compressedBody;
+        size_t pixelDataSize = compressedBodySize;
+
+        // Decompression for C4, C8
+        if (formatType != 3) {
+            Result* decompressed = decompressDm2(compressedBody, compressedBodySize);
+            if (!decompressed || !decompressed->output || decompressed->size == 0) {
+                printf("Skipping Entry %d: Decompression failed\n", i);
+                continue;
+            }
+            pixelData = decompressed->output;
+            pixelDataSize = decompressed->size;
+            free(decompressed->output);
+            free(decompressed);
+        }
+
+        // Allocate RGBA buffer
+        unsigned char* rgbaData = malloc(width * height * 4);
+        if (!rgbaData) {
+            printf("Skipping Entry %d: Memory allocation failed\n", i);
+            continue;
+        }
+
+        // Initialize to transparent black
+        memset(rgbaData, 0, width * height * 4);
+
+        // Convert pixel data to RGBA
+        if (bpp == 4) {
+            int scanlinePitch = (width + 1) / 2;
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int byteIndex = y * scanlinePitch + (x / 2);
+                    if (byteIndex >= pixelDataSize) continue;
+
+                    uint8_t pixelValue;
+                    if ((x % 2) == 0) {
+                        pixelValue = (pixelData[byteIndex] >> 4) & 0x0F;
+                    } else {
+                        pixelValue = pixelData[byteIndex] & 0x0F;
+                    }
+
+                    int rgbaIndex = (y * width + x) * 4;
+                    rgbaData[rgbaIndex + 0] = paletteData[pixelValue * 4 + 0];
+                    rgbaData[rgbaIndex + 1] = paletteData[pixelValue * 4 + 1];
+                    rgbaData[rgbaIndex + 2] = paletteData[pixelValue * 4 + 2];
+                    rgbaData[rgbaIndex + 3] = 255; // Fully opaque
+                }
+            }
+        } else if (bpp == 8) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int pixelIndex = y * width + x;
+                    if (pixelIndex >= pixelDataSize) continue;
+
+                    uint8_t pixelValue = pixelData[pixelIndex];
+
+                    int rgbaIndex = (y * width + x) * 4;
+                    int paletteIndex = (pixelValue % 16) * 4;
+                    rgbaData[rgbaIndex + 0] = paletteData[paletteIndex + 0];
+                    rgbaData[rgbaIndex + 1] = paletteData[paletteIndex + 1];
+                    rgbaData[rgbaIndex + 2] = paletteData[paletteIndex + 2];
+                    rgbaData[rgbaIndex + 3] = 255;
+                }
+            }
+        }
+
+        // Save as PNG
+        char filename[512];
+        snprintf(filename, sizeof(filename), "%s%d.png", outFolder, i);
+        if (!stbi_write_png(filename, width, height, 4, rgbaData, width * 4)) {
+            printf("Failed to save PNG for Entry %d\n", i);
+        } else {
+            printf("Saved Entry %d to %s\n", i, filename);
+        }
+
+        free(rgbaData);
+    }
+
+    return 1;
 }

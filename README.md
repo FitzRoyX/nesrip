@@ -49,7 +49,7 @@ nesrip.exe filename
 ## Credits
 
 Matys Guéroult - Lead programmer<br>
-FitzRoyX - Designer/commissioner of tool, database maintainer, budding programmer<br>
+FitzRoyX - Designer/commissioner of tool, database maintainer, novice programmer<br>
 Invertego - Colorizer programmer<br>
 Richard Wheeler - Programmer<br>
 

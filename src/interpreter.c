@@ -9,7 +9,6 @@
 #include "interpreter.h"
 #include "finder.h" 
 
-extern char* deduplicator;
 int foundRom = false;
 char* tokenContextStack[2];
 char** tokenContext = &tokenContextStack[0];
@@ -181,6 +180,15 @@ int handleHashCommand(char *hashString) {
 	return 0;
 }
 
+int handleInterleaveCommand(void) {
+    char* token;
+    PULL_TOKEN("Interleave", token);
+    if (interleaveOverride)
+        return 0;
+    interleaveType = token;  // Set the deinterleave type to the token
+    return 0;
+}
+
 int handlePatternCommand(void) {
 	char* size, * direction;
 	PULL_TOKEN("Pattern", size);
@@ -199,6 +207,7 @@ int handleSectionCommand(void) {
 	ExtractionArguments args = {
 		compressionType,
 		bitplaneType,
+		interleaveType,
 		patternSize,
 		patternDirection,
 		deduplicator,
@@ -216,6 +225,7 @@ int handleFindCompressedCommand(void) {
 	ExtractionArguments args = {
 		compressionType,
 		bitplaneType,
+		interleaveType,
 		patternSize,
 		patternDirection,
 		deduplicator,
@@ -292,6 +302,7 @@ char* token = updateToken(database);
 			continue;
 		}
 		CHECK_COMMAND("c", handleCompressionCommand);
+		CHECK_COMMAND("i", handleInterleaveCommand);
 		CHECK_COMMAND("b", handleBitplaneCommand);
 		CHECK_COMMAND("p", handlePatternCommand);
 		CHECK_COMMAND("r", handleDeduplicatorCommand);

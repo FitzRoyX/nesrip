@@ -16,6 +16,7 @@ Result* decompressLz2(const uint8_t* compressedData, size_t sectionSize);
 Result* decompressLz2LE(const uint8_t* compressedData, size_t sectionSize);
 Result* decompressLz3(const uint8_t* compressedData, size_t sectionSize);
 Result* decompressLz5(const uint8_t* compressedData, size_t sectionSize);
+Result* decompressDm2(const uint8_t* compressedData, size_t sectionSize);
 
 #endif
 

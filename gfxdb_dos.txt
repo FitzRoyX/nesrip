@@ -1,0 +1,8 @@
+//Dungeon Master II - The Legend of Skullkeep
+//GRAPHICS.DAT
+hash c387ee42ad1b340b8bf6287f6be0e611c8221d9cb97c1758e3404aaedc0c3346
+r false
+c dm2
+b 4_snes
+. 0 83d50c
+end
